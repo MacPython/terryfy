@@ -8,7 +8,7 @@ env:
   - TEST='macports_py26'
 
 install:
-  - sh ./install_brew.sh
+  - sh ./install.sh
 
 script:
   - nosetests .
