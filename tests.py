@@ -4,3 +4,7 @@ def test_basic():
 
 def test_numpy_installed():
     import numpy
+
+
+def test_matplotlib_installed():
+    import matplotlib
