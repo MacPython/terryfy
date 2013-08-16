@@ -1,17 +1,19 @@
 language: 
   - objective-c
 
-env:
+# os:
+#   macos
+
+# env:
 #   - PYTHON=python PYSUF='' PYVER=2.6
-  - PYTHON=python PYSUF='' PYVER=2.7
+#   - PYTHON=python PYSUF='' PYVER=2.7
 
 install:
   - brew update
   - brew install python freetype
-  - brew install python-numpy
   - pip install numpy
-#   - brew install pkg-config
-#   - pip install matplotlib
+  - brew install pkg-config
+  - pip install matplotlib
 
 script:
   - nosetests .
