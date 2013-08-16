@@ -8,6 +8,8 @@ then
 
     pip install nose numpy
     brew install freetype libpng pkg-config
+
+    pip install matplotlib
 elif [ "$TEST" == "brew_system" ]
 then
     brew update
@@ -16,6 +18,8 @@ then
 
     pip install nose numpy
     brew install freetype libpng pkg-config
+
+    pip install matplotlib
 elif [ "$TEST" == "brew_py3" ]
 then
     brew update
@@ -24,6 +28,8 @@ then
 
     pip3 install nose numpy
     brew install freetype libpng pkg-config
+
+    pip3 install matplotlib
 elif [ "$TEST" == "macports_py26" ]
 then
     MACPORTS="MacPorts-2.2.0"
@@ -48,8 +54,8 @@ then
     sudo port install python$Mm $PY-nose $PY-pip $PY-numpy libpng freetype
     sudo port select python python$M_dot_m
     sudo port select nosetests nosetests-$M_dot_m
+
+    pip install matplotlib
 else
     echo "Unknown test setting ($TEST)"
 fi
-
-pip install matplotlib
