@@ -2,9 +2,10 @@ language:
   - objective-c
 
 env:
-  - TEST='brew_system'  PYTHON=python
-  - TEST='brew_py'      PYTHON=python
-  - TEST='brew_py3'     PYTHON=python3
+  - TEST='brew_system'
+  - TEST='brew_py'
+  - TEST='brew_py3'
+  - TEST='macports_py26'
 
 install:
   - sh ./install_brew.sh
