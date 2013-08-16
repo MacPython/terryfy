@@ -14,13 +14,13 @@ elif [ "$TEST" == "brew_system" ]
 then
     brew update
 
-    # use system python
+    # use system python, numpy
 
     sudo easy_install pip
-    sudo pip install nose numpy
     brew install freetype libpng pkg-config
 
-    sudo pip install matplotlib
+    # remove for mpl       
+    pip install nose matplotlib
 elif [ "$TEST" == "brew_py3" ]
 then
     brew update
