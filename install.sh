@@ -56,11 +56,13 @@ then
     export PATH=$PREFIX/bin:$PATH
     sudo port -v selfupdate
 
-    sudo port install python$Mm $PY-nose $PY-pip $PY-numpy libpng freetype
+    sudo port install python$Mm $PY-numpy libpng freetype
     sudo port select --set python python$Mm
+
+    # remove for mpl
+    sudo port install $PY-nose $PY-pip  # remove for mpl
     alias nosetestes nosetestes-$M_dot_m
     alias pip pip-$M_dot_m
-
     pip install matplotlib
 else
     echo "Unknown test setting ($TEST)"
