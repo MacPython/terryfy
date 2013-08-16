@@ -1,0 +1,11 @@
+language: erlang
+
+env:
+  - PYTHON=python PYSUF='' PYVER=2.6
+  - PYTHON=python PYSUF='' PYVER=2.7
+
+install:
+  - sudo apt-get update
+
+script:
+  - nosetests .
