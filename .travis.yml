@@ -1,15 +1,15 @@
 language: 
   - objective-c
-  - erlang
 
 env:
   - PYTHON=python PYSUF='' PYVER=2.6
-  - PYTHON=python PYSUF='' PYVER=2.7
+#   - PYTHON=python PYSUF='' PYVER=2.7
 
 install:
-  - sudo apt-get update
-  - sudo apt-get install $PYTHON-numpy
-  - sudo apt-get install $PYTHON-nose
+  - sudo brew update
+  - sudo brew install python freetype
+  - sudo brew install python-numpy
+  - sudo pip install numpy
 
 script:
   - nosetests .
