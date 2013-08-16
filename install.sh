@@ -17,10 +17,10 @@ then
     # use system python
 
     sudo easy_install pip
-    pip install nose numpy
+    sudo pip install nose numpy
     brew install freetype libpng pkg-config
 
-    pip install matplotlib
+    sudo pip install matplotlib
 elif [ "$TEST" == "brew_py3" ]
 then
     brew update
