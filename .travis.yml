@@ -1,8 +1,8 @@
 language: 
-  - objective-c
+  - erlang
 
-# os:
-#   macos
+os:
+  - macos
 
 # env:
 #   - PYTHON=python PYSUF='' PYVER=2.6
@@ -10,7 +10,7 @@ language:
 
 install:
   - brew update
-  - brew install python freetype
+  - brew install python freetype libpng
   - pip install numpy
   - brew install pkg-config
   - pip install matplotlib
