@@ -2,14 +2,16 @@ language:
   - objective-c
 
 env:
-  - PYTHON=python PYSUF='' PYVER=2.6
-#   - PYTHON=python PYSUF='' PYVER=2.7
+#   - PYTHON=python PYSUF='' PYVER=2.6
+  - PYTHON=python PYSUF='' PYVER=2.7
 
 install:
-  - sudo brew update
-  - sudo brew install python freetype
-  - sudo brew install python-numpy
-  - sudo pip install numpy
+  - brew update
+  - brew install python freetype
+  - brew install python-numpy
+  - pip install numpy
+#   - brew install pkg-config
+#   - pip install matplotlib
 
 script:
   - nosetests .
