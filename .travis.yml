@@ -1,4 +1,6 @@
-language: objective-c
+language: 
+  - objective-c
+  - erlang
 
 env:
   - PYTHON=python PYSUF='' PYVER=2.6
