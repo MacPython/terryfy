@@ -1,8 +1,5 @@
 language: 
-  - erlang
-
-os:
-  - macos
+  - objective-c
 
 # env:
 #   - PYTHON=python PYSUF='' PYVER=2.6
