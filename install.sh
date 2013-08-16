@@ -6,9 +6,11 @@ then
 
     brew install python
 
-    pip install nose numpy
+    pip install numpy
     brew install freetype libpng pkg-config
 
+    # remove for mpl
+    pip install nose  
     pip install matplotlib
 elif [ "$TEST" == "brew_system" ]
 then
@@ -27,9 +29,11 @@ then
 
     brew install python3
 
-    pip3 install nose numpy
+    pip3 install numpy
     brew install freetype libpng pkg-config
 
+    # remove for mpl
+    pip3 install nose  
     pip3 install matplotlib
 elif [ "$TEST" == "macports_py26" ]
 then
