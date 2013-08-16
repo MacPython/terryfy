@@ -54,6 +54,7 @@ then
     sudo port install python$Mm $PY-nose $PY-pip $PY-numpy libpng freetype
     sudo port select python python$M_dot_m
     sudo port select nosetests nosetests-$M_dot_m
+    sudo port select pip pip-$M_dot_m
 
     pip install matplotlib
 else
