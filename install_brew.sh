@@ -9,7 +9,7 @@ then
     pip install nose numpy
 #    brew install freetype libpng pkg-config
 #    pip install matplotlib
-elif [ "$TEST" == "brew_sys" ]
+elif [ "$TEST" == "brew_system" ]
 then
     brew update
 
