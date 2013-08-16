@@ -6,7 +6,7 @@ then
 
     brew install python
 
-    pip install numpy
+    pip install nose numpy
 #    brew install freetype libpng pkg-config
 #    pip install matplotlib
 elif [ "$TEST" == "brew_sys" ]
@@ -15,7 +15,7 @@ then
 
     # use system python
 
-    pip install numpy
+    pip install nose numpy
 #    brew install freetype libpng pkg-config
 #    pip install matplotlib
 elif [ "$TEST" == "brew_py3" ]
@@ -24,7 +24,7 @@ then
 
     brew install python3
 
-    pip3 install numpy
+    pip3 install nose numpy
 #    brew install freetype libpng pkg-config
 #    pip install matplotlib
 else
