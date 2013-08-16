@@ -16,6 +16,7 @@ then
 
     # use system python
 
+    sudo easy_install pip
     pip install nose numpy
     brew install freetype libpng pkg-config
 
