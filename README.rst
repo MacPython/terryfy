@@ -15,12 +15,15 @@ uses Mac OS X 10.8.2
 
 It targets:
 
-    - system python (2.7) and numpy
-    - brew python 2.7 / PyPI numpy
-    - brew python 3.3 / PyPI numpy
-    - macports python 2.6, numpy
-    - macports python 2.7, numpy
-    - macports python 3.2, numpy
-    - macports python 3.3, numpy
+    * system python (2.7) and numpy
+    * brew python 2.7 / PyPI numpy
+    * brew python 3.3 / PyPI numpy
+    * macports python 2.6, numpy
+    * macports python 2.7, numpy
+    * macports python 3.2, numpy
+    * macports python 3.3, numpy
 
-Eventually, this will try to get all the backends installed.
+In addition to testing on these common environments, this will document
+installation proceedures on these common platforms.
+
+Eventually, this will try to get all the backends installed
