@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/mrterry/mpl_on_travis_mac.png
+   :target: https://travis-ci.org/mrterry/mpl_on_travis_mac
+
 Lerning Travis CI by breaking things
 ====================================
 
