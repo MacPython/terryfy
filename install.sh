@@ -22,7 +22,7 @@ then
     brew install freetype libpng pkg-config
 
     # remove for mpl       
-    pip install nose matplotlib
+    sudo pip install nose matplotlib
 elif [ "$TEST" == "brew_py3" ]
 then
     brew update
