@@ -8,7 +8,7 @@ env:
   - TEST='macports_py26'
 
 install:
-  - sh ./install.sh
+  - source ./install.sh
 
 script:
   - echo $PATH
