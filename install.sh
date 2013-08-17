@@ -63,8 +63,8 @@ then
     sudo port install $PY-nose $PY-pip  # remove for mpl
     which nosetests-$M_dot_m
     which pip
-    ln -s $PREFIX/bin/nosetests-$M_dot_m $PREFIX/bin/nosetests
-    ln -s $PREFIX/bin/pip-$M_dot_m $PREFIX/bin/pip
+    sudo ln -s $PREFIX/bin/nosetests-$M_dot_m $PREFIX/bin/nosetests
+    sudo ln -s $PREFIX/bin/pip-$M_dot_m $PREFIX/bin/pip
     pip install matplotlib
 else
     echo "Unknown test setting ($TEST)"
