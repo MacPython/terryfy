@@ -6,6 +6,9 @@ env:
   - TEST='brew_py'
   - TEST='brew_py3'
   - TEST='macports_py26'
+  - TEST='macports_py27'
+  - TEST='macports_py32'
+  - TEST='macports_py33'
 
 install:
   - source ./install.sh
