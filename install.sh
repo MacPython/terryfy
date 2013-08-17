@@ -112,6 +112,6 @@ else
 fi
 
 # remove for matplotlib
-PIP install nose matplotlib
+$PIP install nose matplotlib
 which nosetests
 echo $PATH
