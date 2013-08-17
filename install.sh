@@ -114,4 +114,5 @@ fi
 # remove for matplotlib
 $PIP install nose matplotlib
 which nosetests
+ls /usr/local/bin/nose*
 echo $PATH
