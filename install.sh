@@ -14,6 +14,7 @@ function install_macports {
 
     export PATH=$PREFIX/bin:$PATH
     sudo port -v selfupdate
+    sudo port install pkgconfig libpng freetype
 }
 
 
