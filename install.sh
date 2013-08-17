@@ -61,8 +61,8 @@ then
 
     # remove for mpl
     sudo port install $PY-nose $PY-pip  # remove for mpl
-    alias nosetests nosetests-$M_dot_m
-    alias pip pip-$M_dot_m
+    alias nosetests="nosetests-$M_dot_m"
+    alias pip="pip-$M_dot_m"
     pip install matplotlib
 else
     echo "Unknown test setting ($TEST)"
