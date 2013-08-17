@@ -79,6 +79,7 @@ then
 
     VERSION="2.6"
     port_install_python $VERSION
+    sudo pip install nose
     sudo pip install matplotlib
 
 elif [ "$TEST" == "macports_py27" ]
