@@ -117,7 +117,10 @@ fi
 
 # remove for matplotlib
 $PIP install matplotlib
+
+echo "NOSETESTS"
 echo $NOSETESTS
+echo "which nose"
 which $NOSETESTS
 echo "what is in /usr/local/bin"
 ls /usr/local/bin/nose*
