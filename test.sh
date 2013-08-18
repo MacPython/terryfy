@@ -2,10 +2,10 @@ echo "which nose"
 which nosetests
 
 echo "what is in /usr/local/bin"
-ls /usr/local/bin/nose*
+ls /usr/local/bin/*
 
 echo "what is in /opt/local/bin"
-ls /opt/local/bin/nose*
+ls /opt/local/bin/*
 
 echo $PATH
 
@@ -33,6 +33,3 @@ then
 else
     echo "Unknown test setting ($TEST)"
 fi
-
-ls /usr/local/bin/*
-ls /opt/local/bin/*
