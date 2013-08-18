@@ -29,8 +29,6 @@ function port_install_python {
 
     # remove for mpl
     sudo port install $PY-nose $PY-pip  # remove for mpl
-    sudo ln -s $PREFIX/bin/nosetests-$M_dot_m $PREFIX/bin/nosetests
-    sudo ln -s $PREFIX/bin/pip-$M_dot_m $PREFIX/bin/pip
 }
 
 
@@ -44,6 +42,7 @@ then
     brew install freetype libpng pkg-config
 
     PIP="sudo pip"
+    NOSETESTS="nosetests"
 
 elif [ "$TEST" == "brew_py" ]
 then
@@ -55,6 +54,7 @@ then
     brew install freetype libpng pkg-config
 
     PIP="pip"
+    NOSETESTS="nosetests"
 
 elif [ "$TEST" == "brew_py3" ]
 then
@@ -66,6 +66,7 @@ then
     brew install freetype libpng pkg-config
 
     PIP="pip3"
+    NOSETESTS="nosetests"
 
 elif [ "$TEST" == "macports_py26" ]
 then
@@ -74,8 +75,8 @@ then
 
     VERSION="2.6"
     port_install_python $VERSION
-
-    PIP="sudo pip"
+    PIP="pip-$VERSION"
+    NOSETESTS="nosetests-$VERSION"
 
 elif [ "$TEST" == "macports_py27" ]
 then
@@ -84,8 +85,8 @@ then
 
     VERSION="2.7"
     port_install_python $VERSION
-
-    PIP="sudo pip"
+    PIP="pip-$VERSION"
+    NOSETESTS="nosetests-$VERSION"
 
 elif [ "$TEST" == "macports_py32" ]
 then
@@ -94,8 +95,8 @@ then
 
     VERSION="3.2"
     port_install_python $VERSION
-
-    PIP="sudo pip"
+    PIP="pip-$VERSION"
+    NOSETESTS="nosetests-$VERSION"
 
 elif [ "$TEST" == "macports_py33" ]
 then
@@ -104,15 +105,19 @@ then
 
     VERSION="3.3"
     port_install_python $VERSION
-
-    PIP="sudo pip"
+    PIP="pip-$VERSION"
+    NOSETESTS="nosetests-$VERSION"
 
 else
     echo "Unknown test setting ($TEST)"
 fi
 
 # remove for matplotlib
-$PIP install nose matplotlib
-which nosetests
+$PIP install matplotlib
+echo $NOSETESTS
+which $NOSETESTS
+echo "what is in /usr/local/bin"
 ls /usr/local/bin/nose*
+echo "what is in /opt/local/bin"
+ls /opt/local/bin/nose*
 echo $PATH
