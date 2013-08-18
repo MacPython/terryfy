@@ -42,6 +42,7 @@ then
     brew install freetype libpng pkg-config
 
     PIP="sudo pip"
+    $PIP install nose
     NOSETESTS="nosetests"
 
 elif [ "$TEST" == "brew_py" ]
@@ -54,6 +55,7 @@ then
     brew install freetype libpng pkg-config
 
     PIP="pip"
+    $PIP install nose
     NOSETESTS="nosetests"
 
 elif [ "$TEST" == "brew_py3" ]
@@ -66,6 +68,7 @@ then
     brew install freetype libpng pkg-config
 
     PIP="pip3"
+    $PIP install nose
     NOSETESTS="nosetests"
 
 elif [ "$TEST" == "macports_py26" ]
