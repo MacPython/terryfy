@@ -14,5 +14,4 @@ install:
   - source ./install.sh
 
 script:
-  - echo $PATH
-  - nosetests .
+  - source ./test.sh

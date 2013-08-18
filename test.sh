@@ -1,0 +1,4 @@
+echo $PATH
+echo $NOSETESTS
+
+$NOSETESTS .

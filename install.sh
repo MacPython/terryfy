@@ -76,7 +76,7 @@ then
     VERSION="2.6"
     port_install_python $VERSION
     PIP="pip-$VERSION"
-    NOSETESTS="nosetests-$VERSION"
+    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
 
 elif [ "$TEST" == "macports_py27" ]
 then
@@ -86,7 +86,7 @@ then
     VERSION="2.7"
     port_install_python $VERSION
     PIP="pip-$VERSION"
-    NOSETESTS="nosetests-$VERSION"
+    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
 
 elif [ "$TEST" == "macports_py32" ]
 then
@@ -96,7 +96,7 @@ then
     VERSION="3.2"
     port_install_python $VERSION
     PIP="pip-$VERSION"
-    NOSETESTS="nosetests-$VERSION"
+    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
 
 elif [ "$TEST" == "macports_py33" ]
 then
@@ -106,7 +106,7 @@ then
     VERSION="3.3"
     port_install_python $VERSION
     PIP="pip-$VERSION"
-    NOSETESTS="nosetests-$VERSION"
+    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
 
 else
     echo "Unknown test setting ($TEST)"
