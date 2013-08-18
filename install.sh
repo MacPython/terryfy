@@ -76,7 +76,7 @@ then
     VERSION="2.6"
     port_install_python $VERSION
 
-    pip-2.6 install matplotlib
+    sudo pip-2.6 install matplotlib
 
 elif [ "$TEST" == "macports_py27" ]
 then
@@ -85,7 +85,8 @@ then
 
     VERSION="2.7"
     port_install_python $VERSION
-    pip-2.7 install matplotlib
+
+    sudo pip-2.7 install matplotlib
 
 elif [ "$TEST" == "macports_py32" ]
 then
@@ -94,7 +95,8 @@ then
 
     VERSION="3.2"
     port_install_python $VERSION
-    pip-3.2 install matplotlib
+
+    sudo pip-3.2 install matplotlib
 
 elif [ "$TEST" == "macports_py33" ]
 then
@@ -103,7 +105,8 @@ then
 
     VERSION="3.3"
     port_install_python $VERSION
-    pip-3.3 install matplotlib
+
+    sudo pip-3.3 install matplotlib
 
 else
     echo "Unknown test setting ($TEST)"
