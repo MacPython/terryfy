@@ -41,9 +41,8 @@ then
     sudo easy_install pip
     brew install freetype libpng pkg-config
 
-    PIP="sudo pip"
-    $PIP install nose
-    NOSETESTS="nosetests"
+    sudo pip install nose
+    sudo pip install matplotlib
 
 elif [ "$TEST" == "brew_py" ]
 then
@@ -54,9 +53,8 @@ then
     pip install numpy
     brew install freetype libpng pkg-config
 
-    PIP="pip"
-    $PIP install nose
-    NOSETESTS="nosetests"
+    pip install nose
+    pip install matplotlib
 
 elif [ "$TEST" == "brew_py3" ]
 then
@@ -67,9 +65,8 @@ then
     pip3 install numpy
     brew install freetype libpng pkg-config
 
-    PIP="pip3"
-    $PIP install nose
-    NOSETESTS="nosetests"
+    pip3 install nose
+    pip3 install matplotlib
 
 elif [ "$TEST" == "macports_py26" ]
 then
@@ -78,8 +75,8 @@ then
 
     VERSION="2.6"
     port_install_python $VERSION
-    PIP="pip-$VERSION"
-    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
+
+    pip-2.6 install matplotlib
 
 elif [ "$TEST" == "macports_py27" ]
 then
@@ -88,8 +85,7 @@ then
 
     VERSION="2.7"
     port_install_python $VERSION
-    PIP="pip-$VERSION"
-    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
+    pip-2.7 install matplotlib
 
 elif [ "$TEST" == "macports_py32" ]
 then
@@ -98,8 +94,7 @@ then
 
     VERSION="3.2"
     port_install_python $VERSION
-    PIP="pip-$VERSION"
-    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
+    pip-3.2 install matplotlib
 
 elif [ "$TEST" == "macports_py33" ]
 then
@@ -108,22 +103,9 @@ then
 
     VERSION="3.3"
     port_install_python $VERSION
-    PIP="pip-$VERSION"
-    NOSETESTS=$PREFIX/bin/nosetests-$VERSION
+    pip-3.3 install matplotlib
 
 else
     echo "Unknown test setting ($TEST)"
 fi
 
-# remove for matplotlib
-$PIP install matplotlib
-
-echo "NOSETESTS"
-echo $NOSETESTS
-echo "which nose"
-which $NOSETESTS
-echo "what is in /usr/local/bin"
-ls /usr/local/bin/nose*
-echo "what is in /opt/local/bin"
-ls /opt/local/bin/nose*
-echo $PATH
