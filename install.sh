@@ -68,7 +68,7 @@ then
     pip3 install nose
         # pip chokes on auto-installing python-dateutil
         # install it first, an manually
-        pip3 install python-dateutil
+        pip3 -vvv install python-dateutil
     pip3 install matplotlib
 
 elif [ "$TEST" == "macports_py26" ]
