@@ -85,9 +85,9 @@ then
 
         # debug
         # trouble activating python27, what is in macports?
-        mkdir -p $PREFIX
+        sudo mkdir -p $PREFIX
         echo "what is in $PREFIX"
-        ls $PREFIX/*
+        sudo ls $PREFIX/*
 
     install_macports $PREFIX
     port_install_python $VERSION
