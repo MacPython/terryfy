@@ -71,9 +71,9 @@ then
 elif [ "$TEST" == "macports_py26" ]
 then
     PREFIX=/opt/local
-    install_macports $PREFIX
-
     VERSION="2.6"
+
+    install_macports $PREFIX
     port_install_python $VERSION
 
     sudo pip-2.6 install matplotlib
@@ -81,24 +81,25 @@ then
 elif [ "$TEST" == "macports_py27" ]
 then
     PREFIX=/opt/local
-    mkdir -p $PREFIX
-    echo "what is in $PREFIX"
-    ls $PREFIX/*
-    install_macports $PREFIX
-
     VERSION="2.7"
+
+        # debug
+        # trouble activating python27, what is in macports?
+        mkdir -p $PREFIX
+        echo "what is in $PREFIX"
+        ls $PREFIX/*
+
+    install_macports $PREFIX
     port_install_python $VERSION
-        # experimental, install from macports
-        sudo port install py27-dateutil
 
     sudo pip-2.7 install matplotlib
 
 elif [ "$TEST" == "macports_py32" ]
 then
     PREFIX=/opt/local
-    install_macports $PREFIX
-
     VERSION="3.2"
+
+    install_macports $PREFIX
     port_install_python $VERSION
 
     sudo pip-3.2 install matplotlib
@@ -106,10 +107,11 @@ then
 elif [ "$TEST" == "macports_py33" ]
 then
     PREFIX=/opt/local
-    install_macports $PREFIX
-
     VERSION="3.3"
+
+    install_macports $PREFIX
     port_install_python $VERSION
+
         # experimental, install from macports
         sudo port install py33-dateutil
 
