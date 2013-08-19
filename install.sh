@@ -81,6 +81,9 @@ then
 elif [ "$TEST" == "macports_py27" ]
 then
     PREFIX=/opt/local
+    mkdir -p $PREFIX
+    echo "what is in $PREFIX"
+    ls $PREFIX/*
     install_macports $PREFIX
 
     VERSION="2.7"
