@@ -1,14 +1,3 @@
-echo "which nose"
-which nosetests
-
-echo "what is in /usr/local/bin"
-ls /usr/local/bin/*
-
-echo "what is in /opt/local/bin"
-ls /opt/local/bin/*
-
-echo $PATH
-
 if [ "$TEST" == "brew_system" ]
 then
     nosetests .
