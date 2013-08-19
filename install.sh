@@ -88,6 +88,7 @@ then
 
         # debug
         # trouble activating python27, what is in macports?
+        which port
         sudo mkdir -p $PREFIX
         echo "what is in $PREFIX"
         sudo ls $PREFIX/*
@@ -115,9 +116,8 @@ then
     install_macports $PREFIX
     port_install_python $VERSION
 
-    # auto install chokes on python-dateutil
-    # install from macports instead
-    sudo port install py33-dateutil
+        # experimental, install from macports
+        sudo port install py33-dateutil
 
     sudo pip-3.3 install matplotlib
 
