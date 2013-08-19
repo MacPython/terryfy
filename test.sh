@@ -14,7 +14,7 @@ then
     nosetests .
 elif [ "$TEST" == "brew_py" ]
 then
-    nosetest .
+    nosetests .
 elif [ "$TEST" == "brew_py3" ]
 then
     nosetests .
