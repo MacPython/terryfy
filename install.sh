@@ -115,8 +115,9 @@ then
     install_macports $PREFIX
     port_install_python $VERSION
 
-        # experimental, install from macports
-        sudo port install py33-dateutil
+    # auto install chokes on python-dateutil
+    # install from macports instead
+    sudo port install py33-dateutil
 
     sudo pip-3.3 install matplotlib
 
