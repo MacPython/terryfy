@@ -88,6 +88,8 @@ then
 
     VERSION="2.7"
     port_install_python $VERSION
+        # experimental, install from macports
+        sudo port install py27-dateutil
 
     sudo pip-2.7 install matplotlib
 
@@ -108,6 +110,8 @@ then
 
     VERSION="3.3"
     port_install_python $VERSION
+        # experimental, install from macports
+        sudo port install py33-dateutil
 
     sudo pip-3.3 install matplotlib
 
