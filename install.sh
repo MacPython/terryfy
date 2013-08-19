@@ -88,7 +88,12 @@ then
 
         # debug
         # trouble activating python27, what is in macports?
+        echo "what is in /Applications?"
+        sudo ls /Applications
+
         which port
+        sudo which port
+
         sudo mkdir -p $PREFIX
         echo "what is in $PREFIX"
         sudo ls $PREFIX/*
