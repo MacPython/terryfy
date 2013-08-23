@@ -24,20 +24,14 @@ function port_install_python {
     Mm=`echo $M_dot_m | tr -d '.'`
     PY="py$Mm"
 
-    sudo port install python$Mm $PY-numpy libpng freetype
-    sudo port select --set python python$Mm
+    FORCE=""
+    if [ -z "$2" ]; then
+        echo ""
+    elif [ "$2" == "force" ]; then
+        FORCE="-f"
+    fi
 
-    # remove for mpl
-    sudo port install $PY-nose $PY-pip  # remove for mpl
-}
-
-function port_force_install_python {
-    #major.minor version
-    M_dot_m=$1
-    Mm=`echo $M_dot_m | tr -d '.'`
-    PY="py$Mm"
-
-    sudo port install -f python$Mm
+    sudo port install $FORCE python$Mm
     sudo port install $PY-numpy libpng freetype
     sudo port select --set python python$Mm
 
@@ -113,7 +107,7 @@ then
         sudo ls $PREFIX/*
 
     install_macports $PREFIX
-    port_force_install_python $VERSION
+    port_install_python $VERSION force
 
     sudo pip-2.7 install matplotlib
 
