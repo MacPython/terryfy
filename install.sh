@@ -42,6 +42,9 @@ function port_install_python {
 
     # remove for mpl
     sudo port install $PY-nose $PY-pip  # remove for mpl
+
+    export PIP=pip-$M_dot_m
+    export NOSETESTS=/opt/local/bin/nosetests-$M_dot_m
 }
 
 
@@ -119,6 +122,7 @@ then
 
     sudo pip install nose
     sudo pip install matplotlib
+    export NOSETESTS=nosetests
 
 elif [ "$TEST" == "brew_py" ]
 then
@@ -131,6 +135,7 @@ then
 
     pip install nose
     pip install matplotlib
+    export NOSETESTS=nosetests
 
 elif [ "$TEST" == "brew_py3" ]
 then
@@ -146,6 +151,7 @@ then
         # install it first, an manually
         pip3 -vvv install python-dateutil
     pip3 install matplotlib
+    export NOSETESTS=nosetests
 
 elif [ "$TEST" == "macports_py26" ]
 then
@@ -155,7 +161,7 @@ then
     install_macports $PREFIX
     port_install_python $VERSION
 
-    sudo pip-2.6 install matplotlib
+    $PIP install matplotlib
 
 elif [ "$TEST" == "macports_py27" ]
 then
@@ -177,7 +183,7 @@ then
     install_macports $PREFIX
     port_install_python $VERSION force
 
-    sudo pip-2.7 install matplotlib
+    $PIP install matplotlib
 
 elif [ "$TEST" == "macports_py32" ]
 then
@@ -187,7 +193,7 @@ then
     install_macports $PREFIX
     port_install_python $VERSION
 
-    sudo pip-3.2 install matplotlib
+    $PIP install matplotlib
 
 elif [ "$TEST" == "macports_py33" ]
 then
@@ -201,7 +207,7 @@ then
     # install from macports instead
     sudo port install py33-dateutil
 
-    sudo pip-3.3 install matplotlib
+    $PIP install matplotlib
 
 elif [ "$TEST" == "macpython27_10.8" ]
 then
@@ -224,6 +230,7 @@ then
     sudo pip install numpy
     sudo pip install nose
     sudo pip install matplotlib
+    export NOSETESTS=nosetests-2.7
 
 elif [ "$TEST" == "macpython33_10.8" ]
 then
@@ -248,6 +255,8 @@ then
     sudo pip install numpy
     sudo pip install nose
     sudo pip install matplotlib
+
+    export NOSETESTS=nosetests
 
 else
     echo "Unknown test setting ($TEST)"
