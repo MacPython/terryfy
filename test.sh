@@ -1,3 +1,5 @@
+which $NOSETESTS
+
 if [ "$TEST" == "brew_system" ]
 then
     $NOSETESTS .
