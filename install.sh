@@ -162,7 +162,12 @@ then
         $PIP -vvv install python-dateutil
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
-
+    echo "____ nosing"
+    which nosetests
+    which nosetests3
+    which nosetests3.3
+    which nosetests-3.3
+    echo "____ no nosing"
     export NOSETESTS=nosetests
 
 elif [ "$TEST" == "macports_py26" ]
