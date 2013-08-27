@@ -122,6 +122,8 @@ then
 
     sudo pip install nose
     sudo pip install matplotlib
+    require_success "Failed to install matplotlib"
+
     export NOSETESTS=nosetests
 
 elif [ "$TEST" == "brew_py" ]
@@ -135,6 +137,8 @@ then
 
     pip install nose
     pip install matplotlib
+    require_success "Failed to install matplotlib"
+
     export NOSETESTS=nosetests
 
 elif [ "$TEST" == "brew_py3" ]
@@ -151,6 +155,8 @@ then
         # install it first, an manually
         pip3 -vvv install python-dateutil
     pip3 install matplotlib
+    require_success "Failed to install matplotlib"
+
     export NOSETESTS=nosetests
 
 elif [ "$TEST" == "macports_py26" ]
@@ -162,6 +168,7 @@ then
     port_install_python $VERSION
 
     $PIP install matplotlib
+    require_success "Failed to install matplotlib"
 
 elif [ "$TEST" == "macports_py27" ]
 then
@@ -184,6 +191,7 @@ then
     port_install_python $VERSION force
 
     $PIP install matplotlib
+    require_success "Failed to install matplotlib"
 
 elif [ "$TEST" == "macports_py32" ]
 then
@@ -194,6 +202,7 @@ then
     port_install_python $VERSION
 
     $PIP install matplotlib
+    require_success "Failed to install matplotlib"
 
 elif [ "$TEST" == "macports_py33" ]
 then
@@ -230,6 +239,8 @@ then
     sudo pip install numpy
     sudo pip install nose
     sudo pip install matplotlib
+    require_success "Failed to install matplotlib"
+
     export NOSETESTS=nosetests-2.7
 
 elif [ "$TEST" == "macpython33_10.8" ]
@@ -255,6 +266,7 @@ then
     sudo pip install numpy
     sudo pip install nose
     sudo pip install matplotlib
+    require_success "Failed to install matplotlib"
 
     export NOSETESTS=nosetests
 
