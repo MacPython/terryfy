@@ -2,6 +2,8 @@ language:
   - objective-c
 
 env:
+  - TEST='macpython27_10.8'
+  - TEST='macpython33_10.8'
   - TEST='brew_system'
   - TEST='brew_py'
   - TEST='brew_py3'
