@@ -22,6 +22,8 @@ It targets:
     * macports python 2.7, numpy
     * macports python 3.2, numpy
     * macports python 3.3, numpy
+    * python.org python 2.7
+    * python.ort python 3.3
 
 In addition to testing on these common environments, this will document
 installation proceedures on these common platforms.
