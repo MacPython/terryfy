@@ -43,7 +43,7 @@ function port_install_python {
     # remove for mpl
     sudo port install $PY-nose $PY-pip  # remove for mpl
 
-    export PIP=pip-$M_dot_m
+    export PIP="sudo pip-$M_dot_m"
     export NOSETESTS=/opt/local/bin/nosetests-$M_dot_m
 }
 
