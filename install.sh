@@ -111,6 +111,17 @@ function install_xquartz {
 }
 
 
+function install_mac_numpy {
+    NUMPY=$1
+    PY=$2
+    MAC=$3
+    curl -L http://downloads.sourceforge.net/project/numpy/NumPy/$NUMPY/numpy-$NUMPY-py$PY-python.org-macosx$MAC.dmg > numpy.dmg
+    hdiutil attach numpy.dmg
+    sudo installer -pkg /Volumes/numpy/numpy-$NUMPY-py$PY.mpkg/ -target /
+    require_success "Failed to install numpy"
+}
+
+
 if [ "$TEST" == "brew_system" ]
 then
     brew update
@@ -281,6 +292,34 @@ then
 
     export NOSETESTS=nosetests
 
+elif [ "$TEST" == "macpython27_10.8_numpy" ]
+then
+    PY_VERSION="2.7.5"
+    FT_VERSION="2.5.0.1"
+    PNG_VERSION="1.6.3"
+    XQUARTZ_VERSION="2.7.4"
+    install_mac_python $PY_VERSION
+    install_tkl_85
+    install_libpng $PNG_VERSION
+    install_freetype $FT_VERSION
+    install_mac_numpy 1.7.1 2.7 10.6
+
+    which python
+    curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
+    sudo python ez_setup.py
+
+    sudo easy_install pip
+    which pip
+    which pip-2.7
+    sudo pip install nose
+    sudo pip install matplotlib
+    require_success "Failed to install matplotlib"
+
+    export NOSETESTS=nosetests-2.7
+
+elif [ "$TEST" == "macpython33_10.8_numpy" ]
+then
+    exit "numpy does not distribute python 3 binaries"
 else
     echo "Unknown test setting ($TEST)"
 fi

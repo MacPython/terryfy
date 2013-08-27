@@ -24,6 +24,9 @@ then
 elif [ "$TEST" == "macpython27_10.8" ]
 then
     $NOSETESTS .
+elif [ "$TEST" == "macpython27_10.8_numpy" ]
+then
+    $NOSETESTS .
 elif [ "$TEST" == "macpython33_10.8" ]
 then
     $NOSETESTS .
