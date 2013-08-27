@@ -131,9 +131,11 @@ then
     brew update
 
     brew install python
+    require_success "Failed to install python"
 
     pip install numpy
     brew install freetype libpng pkg-config
+    require_success "Failed to install matplotlib dependencies"
 
     pip install nose
     pip install matplotlib
@@ -146,9 +148,10 @@ then
     brew update
 
     brew install python3
+    require_success "Failed to install python"
 
-    pip3 install numpy
     brew install freetype libpng pkg-config
+    require_success "Failed to install matplotlib dependencies"
 
     pip3 install nose
         # pip chokes on auto-installing python-dateutil
