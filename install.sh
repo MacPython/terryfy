@@ -165,7 +165,15 @@ then
     brew install freetype libpng pkg-config
     require_success "Failed to install matplotlib dependencies"
 
-    PIP=pip
+    if [ -z "$VENV" ] ; then
+        PIP=pip
+    else
+        pip install virtualenv
+        virtualenv $HOME/venv
+        source $HOME/venv/bin/activate
+        PIP=pip
+    fi
+
     $PIP install numpy
     $PIP install nose
     $PIP install matplotlib
