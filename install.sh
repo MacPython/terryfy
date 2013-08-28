@@ -2,7 +2,7 @@
 
 
 function install_macports {
-    PREFIX=$1
+    PREFIX=/opt/local
     MACPORTS="MacPorts-2.2.0"
     curl https://distfiles.macports.org/MacPorts/$MACPORTS.tar.gz > $MACPORTS.tar.gz --insecure
     tar -xzf $MACPORTS.tar.gz
@@ -196,10 +196,9 @@ then
 
 elif [ "$TEST" == "macports_py26" ]
 then
-    PREFIX=/opt/local
     VERSION="2.6"
 
-    install_macports $PREFIX
+    install_macports
     port_install_python $VERSION noforce
 
     $PIP install matplotlib
@@ -207,45 +206,35 @@ then
 
 elif [ "$TEST" == "macports_py27" ]
 then
-    PREFIX=/opt/local
     VERSION="2.7"
+    echo ""
+    echo ""
+    echo "installing python $VERSION"
+    echo ""
+    echo ""
 
-        # debug
-        # trouble activating python27, what is in macports?
-        echo "what is in /Applications?"
-        sudo ls /Applications
-
-        which port
-        sudo which port
-
-        sudo mkdir -p $PREFIX
-        echo "what is in $PREFIX"
-        sudo ls $PREFIX/*
-
-    install_macports $PREFIX
-    port_install_python $VERSION force
+    install_macports
+    port_install_python $VERSION force $VENV
 
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
 
 elif [ "$TEST" == "macports_py32" ]
 then
-    PREFIX=/opt/local
     VERSION="3.2"
 
-    install_macports $PREFIX
-    port_install_python $VERSION noforce
+    install_macports
+    port_install_python $VERSION noforce $VENV
 
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
 
 elif [ "$TEST" == "macports_py33" ]
 then
-    PREFIX=/opt/local
     VERSION="3.3"
 
-    install_macports $PREFIX
-    port_install_python $VERSION noforce
+    install_macports
+    port_install_python $VERSION noforce $VENV
 
     # auto install chokes on python-dateutil
     # install from macports instead
