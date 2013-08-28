@@ -2,27 +2,31 @@ language:
   - objective-c
 
 env:
-  - TEST='macpython27_10.8_numpy'
   - TEST='macpython27_10.8'
+  - TEST='macpython27_10.8_numpy'
   - TEST='macpython33_10.8'
 
   - TEST='brew_system'
+  - TEST='brew_system' VENV='1'
+
   - TEST='brew_py'
+  - TEST='brew_py' VEVN='1'
+
   - TEST='brew_py3'
+  - TEST='brew_py3' VENV='1'
 
   - TEST='macports_py26'
+  - TEST='macports_py26' VENV='1'
+
   - TEST='macports_py27'
+  - TEST='macports_py27' VENV='1'
+
   - TEST='macports_py32'
+  - TEST='macports_py32' VENV='1'
+
   - TEST='macports_py33'
+  - TEST='macports_py33' VENV='1'
 
-  - TEST='brew_system_venv'
-  - TEST='brew_py_venv'
-  - TEST='brew_py3_venv'
-
-  - TEST='macports_py26_venv'
-  - TEST='macports_py27_venv'
-  - TEST='macports_py32_venv'
-  - TEST='macports_py33_venv'
 
 install:
   - source ./install.sh
