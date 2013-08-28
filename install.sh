@@ -171,6 +171,7 @@ then
         # pip chokes on auto-installing python-dateutil
         # install it first, an manually
         $PIP -vvv install python-dateutil
+        require_success "Failed to install python-dateutil"
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
     echo "____ nosing"
