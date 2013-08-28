@@ -236,9 +236,10 @@ then
     install_macports
     port_install_python $VERSION noforce $VENV
 
-    # auto install chokes on python-dateutil
-    # install from macports instead
+    # pip chokes on auto-installing mpl deependencies (python-dateutil)
+    # install it first, and manually
     sudo port install py33-dateutil
+    require_success "Failed to install python-dateutil"
 
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
