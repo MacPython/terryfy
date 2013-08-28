@@ -183,13 +183,24 @@ then
     brew install freetype libpng pkg-config
     require_success "Failed to install matplotlib dependencies"
 
-    PIP=pip3
+    if [ -z "$VENV" ] ; then
+        PIP=pip3
+    else
+        PIP=pip3
+
+        $PIP install virtualenv
+        virtualenv3 $HOME/venv
+        source $HOME/venv/bin/activate
+    fi
+
     $PIP install numpy
-    $PIP install nose
-        # pip chokes on auto-installing python-dateutil
-        # install it first, an manually
-        $PIP install python-dateutil
-        require_success "Failed to install python-dateutil"
+    $PIP install -U nose
+
+    # pip chokes on auto-installing python-dateutil
+    # install it first, an manually
+    $PIP install python-dateutil
+    require_success "Failed to install python-dateutil"
+
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
     export NOSETESTS=nosetests
