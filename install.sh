@@ -25,12 +25,25 @@ function port_install_python {
     M_dot_m=$1
     Mm=`echo $M_dot_m | tr -d '.'`
     PY="py$Mm"
+    FORCE=$2
 
-    FORCE=""
-    if [ -z "$2" ]; then
-        echo ""
-    elif [ "$2" == "force" ]; then
+    echo ""
+    echo ""
+    echo "installing python $M_dot_m"
+    echo ""
+    echo ""
+
+    echo "$FORCE"
+
+    if [ "$FORCE" == "noforce" ]; then
+        FORCE=""
+        echo "+++ no forcing"
+    elif [ "$FORCE" == "force" ]; then
+        echo "+++ forcing"
         FORCE="-f"
+    else
+        echo "this is force $FORCE"
+        exit "weird force option"
     fi
 
     sudo port install $FORCE python$Mm
@@ -149,8 +162,18 @@ then
     sudo easy_install pip
     brew install freetype libpng pkg-config
 
-    sudo pip install nose
-    sudo pip install matplotlib
+    if [ -z "$VENV" ]; then
+        # not in a virtual env
+        PIP="sudo pip"
+    else
+        sudo pip install virtualenv
+        virtualenv $HOME/venv --system-site-packages
+        source $HOME/venv/bin/activate
+        PIP=pip
+    fi
+
+    $PIP install nose
+    $PIP install matplotlib
     require_success "Failed to install matplotlib"
 
     export NOSETESTS=nosetests
