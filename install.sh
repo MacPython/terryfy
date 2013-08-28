@@ -38,13 +38,31 @@ function port_install_python {
 
     sudo port install $PY-numpy libpng freetype
     require_success "Failed to install matplotlib dependencies"
-    sudo port select --set python python$Mm
 
-    # remove for mpl
-    sudo port install $PY-nose $PY-pip  # remove for mpl
+    if [ -z "$3" ]; then
+        VENV=0
+    elif [ "$3" == "venv" ]; then
+        VENV=1
+    fi
+    echo "VENV is $VENV"
+    
+    if [ "$VENV" == 0 ]; then
+        sudo port install $PY-nose
+        sudo port install $PY-pip
 
-    export PIP="sudo pip-$M_dot_m"
-    export NOSETESTS=/opt/local/bin/nosetests-$M_dot_m
+        export PIP="sudo pip-$M_dot_m"
+        export NOSETESTS=/opt/local/bin/nosetests-$M_dot_m
+    elif [ "$VENV" == 1 ]; then
+        sudo port install $PY-virtualenv
+        virtualenv-$M_dot_m $HOME/venv --system-site-packages
+        source $HOME/venv/bin/activate
+
+        # pip comes for free, but make sure nose is installed in the venv
+        pip install -U nose
+
+        export PIP=pip
+        export NOSETESTS=nosetests
+    fi
 }
 
 
@@ -170,16 +188,10 @@ then
     $PIP install nose
         # pip chokes on auto-installing python-dateutil
         # install it first, an manually
-        $PIP -vvv install python-dateutil
+        $PIP install python-dateutil
         require_success "Failed to install python-dateutil"
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
-    echo "____ nosing"
-    which nosetests
-    which nosetests3
-    which nosetests3.3
-    which nosetests-3.3
-    echo "____ no nosing"
     export NOSETESTS=nosetests
 
 elif [ "$TEST" == "macports_py26" ]
@@ -188,7 +200,7 @@ then
     VERSION="2.6"
 
     install_macports $PREFIX
-    port_install_python $VERSION
+    port_install_python $VERSION noforce
 
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
@@ -222,7 +234,7 @@ then
     VERSION="3.2"
 
     install_macports $PREFIX
-    port_install_python $VERSION
+    port_install_python $VERSION noforce
 
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
@@ -233,13 +245,14 @@ then
     VERSION="3.3"
 
     install_macports $PREFIX
-    port_install_python $VERSION
+    port_install_python $VERSION noforce
 
     # auto install chokes on python-dateutil
     # install from macports instead
     sudo port install py33-dateutil
 
     $PIP install matplotlib
+    require_success "Failed to install matplotlib"
 
 elif [ "$TEST" == "macpython27_10.8" ]
 then
@@ -321,6 +334,116 @@ then
 elif [ "$TEST" == "macpython33_10.8_numpy" ]
 then
     exit "numpy does not distribute python 3 binaries"
+elif [ "$TEST" == "brew_system_venv" ]
+then
+    brew update
+
+    # use system python, numpy
+
+    sudo easy_install pip
+    brew install freetype libpng pkg-config
+
+    sudo pip install virtualenv
+    virtualenv $HOME/venv
+    source $HOME/venv/bin/activate
+
+    pip install numpy
+    pip install nose
+    pip install matplotlib
+    require_success "Failed to install matplotlib"
+
+    export NOSETESTS=nosetests
+
+elif [ "$TEST" == "brew_py_venv" ]
+then
+    brew update
+
+    brew install python
+    brew install freetype libpng pkg-config
+
+    pip install virtualenv
+    virtualenv $HOME/venv
+    source $HOME/venv/bin/activate
+
+    pip install numpy
+    pip install nose
+    pip install matplotlib
+    require_success "Failed to install matplotlib"
+
+    export NOSETESTS=nosetests
+
+elif [ "$TEST" == "brew_py3_venv" ]
+then
+    brew update
+
+    brew install python3
+    brew install freetype libpng pkg-config
+    PIP=pip3
+    which pip3
+
+    $PIP install virtualenv
+    virtualenv3 $HOME/venv
+    source $HOME/venv/bin/activate
+
+    $PIP install numpy
+
+    $PIP install -U nose
+        # pip chokes on auto-installing python-dateutil
+        # install it first, an manually
+        $PIP -vvv install python-dateutil
+    $PIP install matplotlib
+    require_success "Failed to install matplotlib"
+
+    export NOSETESTS=nosetests
+
+elif [ "$TEST" == "macports_py26_venv" ]
+then
+    PREFIX=/opt/local
+    VERSION="2.6"
+
+    install_macports $PREFIX
+    port_install_python $VERSION noforce venv
+
+    $PIP install matplotlib
+    require_success "Failed to install matplotlib"
+
+elif [ "$TEST" == "macports_py27_venv" ]
+then
+    PREFIX=/opt/local
+    VERSION="2.7"
+
+    install_macports $PREFIX
+    port_install_python $VERSION force venv
+
+    $PIP install matplotlib
+    require_success "Failed to install matplotlib"
+
+elif [ "$TEST" == "macports_py32_venv" ]
+then
+    PREFIX=/opt/local
+    VERSION="3.2"
+
+    install_macports $PREFIX
+    port_install_python $VERSION noforce venv
+
+    $PIP install matplotlib
+    require_success "Failed to install matplotlib"
+
+elif [ "$TEST" == "macports_py33_venv" ]
+then
+    PREFIX=/opt/local
+    VERSION="3.3"
+
+    install_macports $PREFIX
+    port_install_python $VERSION noforce venv
+
+    # auto install chokes on python-dateutil
+    # install from macports instead
+#    sudo port install py33-dateutil
+
+    $PIP install matplotlib
+    require_success "Failed to install matplotlib"
+
 else
     echo "Unknown test setting ($TEST)"
 fi
