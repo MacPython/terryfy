@@ -63,6 +63,7 @@ function port_install_python {
         sudo port install $PY-nose
         sudo port install $PY-pip
 
+        export PYTHON=/opt/local/bin/python$M_dot_m
         export PIP="sudo pip-$M_dot_m"
         export NOSETESTS=/opt/local/bin/nosetests-$M_dot_m
     elif [ "$VENV" == 1 ]; then
@@ -73,6 +74,7 @@ function port_install_python {
         # pip comes for free, but make sure nose is installed in the venv
         pip install -U nose
 
+        export PYTHON=python
         export PIP=pip
         export NOSETESTS=nosetests
     fi
@@ -165,11 +167,13 @@ then
     if [ -z "$VENV" ]; then
         # not in a virtual env
         PIP="sudo pip"
+        export PYTHON=/usr/bin/python2.7
     else
         sudo pip install virtualenv
         virtualenv $HOME/venv --system-site-packages
         source $HOME/venv/bin/activate
         PIP=pip
+        export PYTHON=$HOME/venv/bin/python
     fi
 
     $PIP install nose
@@ -190,11 +194,13 @@ then
 
     if [ -z "$VENV" ] ; then
         PIP=pip
+        export PYTHON=/usr/local/bin/python2.7
     else
         pip install virtualenv
         virtualenv $HOME/venv
         source $HOME/venv/bin/activate
         PIP=pip
+        export PYTHON=python
     fi
 
     $PIP install numpy
@@ -216,12 +222,14 @@ then
 
     if [ -z "$VENV" ] ; then
         PIP=pip3
+        export PYTHON=/usr/local/bin/python3.3
     else
         PIP=pip3
 
         $PIP install virtualenv
         virtualenv3 $HOME/venv
         source $HOME/venv/bin/activate
+        export PYTHON=python
     fi
 
     $PIP install numpy
@@ -307,6 +315,7 @@ then
     sudo pip install matplotlib
     require_success "Failed to install matplotlib"
 
+    export PYTHON=/usr/local/python2.7
     export NOSETESTS=nosetests-2.7
 
 elif [ "$TEST" == "macpython33_10.8" ]
@@ -334,6 +343,7 @@ then
     sudo pip install matplotlib
     require_success "Failed to install matplotlib"
 
+    export PYTHON=/usr/local/python3.3
     export NOSETESTS=nosetests
 
 elif [ "$TEST" == "macpython27_10.8_numpy" ]
@@ -359,6 +369,7 @@ then
     sudo pip install matplotlib
     require_success "Failed to install matplotlib"
 
+    export PYTHON=/usr/local/python2.7
     export NOSETESTS=nosetests-2.7
 
 elif [ "$TEST" == "macpython33_10.8_numpy" ]
