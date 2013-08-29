@@ -227,9 +227,8 @@ then
     $PIP install numpy
     $PIP install -U nose
 
-    # pip chokes on auto-installing python-dateutil
-    # install it first, an manually
-    $PIP install python-dateutil
+    # dateutil has issues with python 3.3, make sure you get version 2.0
+    $PIP install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
     $PIP install matplotlib
@@ -278,9 +277,8 @@ then
     install_macports
     port_install_python $VERSION noforce $VENV
 
-    # pip chokes on auto-installing mpl deependencies (python-dateutil)
-    # install it first, and manually
-    sudo port install py33-dateutil
+    # dateutil has issues with python 3.3, make sure you get version 2.0
+    $PIP install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
     $PIP install matplotlib
