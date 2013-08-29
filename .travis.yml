@@ -10,7 +10,7 @@ env:
   - TEST='brew_system' VENV='1'
 
   - TEST='brew_py'
-  - TEST='brew_py' VEVN='1'
+  - TEST='brew_py' VENV='1'
 
   - TEST='brew_py3'
   - TEST='brew_py3' VENV='1'
