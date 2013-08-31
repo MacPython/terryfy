@@ -19,6 +19,12 @@ function install_macports {
     require_success "Failed to install matplotlib dependencies"
 }
 
+function install_matplotlib {
+    yes | git clone http://github.com/matplotlib/matplotlib.git
+    $PIP install -e matplotlib
+    require_success "Failed to install matplotlib"
+}
+
 
 function port_install_python {
     #major.minor version
@@ -64,17 +70,17 @@ function port_install_python {
         sudo port install $PY-pip
 
         export PYTHON=/opt/local/bin/python$M_dot_m
-        export PIP="sudo pip-$M_dot_m"
+        export PIP="sudo /opt/local/bin/pip-$M_dot_m"
     elif [ "$VENV" == 1 ]; then
         sudo port install $PY-virtualenv
         virtualenv-$M_dot_m $HOME/venv --system-site-packages
         source $HOME/venv/bin/activate
 
-        # pip comes for free, but make sure nose is installed in the venv
-        pip install -U nose
+        export PYTHON=$HOME/venv/bin/python
+        export PIP=$HOME/venv/bin/pip
 
-        export PYTHON=python
-        export PIP=pip
+        # pip comes for free, but make sure nose is installed in the venv
+        $PIP install -U nose
     fi
 }
 
@@ -161,23 +167,22 @@ then
 
     sudo easy_install pip
     brew install freetype libpng pkg-config
+    require_success "Failed to install matplotlib dependencies"
 
     if [ -z "$VENV" ]; then
         # not in a virtual env
-        PIP="sudo pip"
+        export PIP="sudo pip"
         export PYTHON=/usr/bin/python2.7
     else
         sudo pip install virtualenv
         virtualenv $HOME/venv --system-site-packages
         source $HOME/venv/bin/activate
-        PIP=pip
+        export PIP=$HOME/venv/bin/pip
         export PYTHON=$HOME/venv/bin/python
     fi
 
     $PIP install nose
-    $PIP install matplotlib
-    require_success "Failed to install matplotlib"
-
+    install_matplotlib
 
 elif [ "$TEST" == "brew_py" ]
 then
@@ -190,21 +195,19 @@ then
     require_success "Failed to install matplotlib dependencies"
 
     if [ -z "$VENV" ] ; then
-        PIP=pip
+        export PIP=/usr/local/bin/pip
         export PYTHON=/usr/local/bin/python2.7
     else
         pip install virtualenv
         virtualenv $HOME/venv
         source $HOME/venv/bin/activate
-        PIP=pip
-        export PYTHON=python
+        export PIP=$HOME/venv/bin/pip
+        export PYTHON=$HOME/venv/bin/python
     fi
 
     $PIP install numpy
     $PIP install nose
-    $PIP install matplotlib
-    require_success "Failed to install matplotlib"
-
+    install_matplotlib
 
 elif [ "$TEST" == "brew_py3" ]
 then
@@ -217,15 +220,15 @@ then
     require_success "Failed to install matplotlib dependencies"
 
     if [ -z "$VENV" ] ; then
-        PIP=pip3
+        export PIP=/usr/local/bin/pip3
         export PYTHON=/usr/local/bin/python3.3
     else
-        PIP=pip3
-
-        $PIP install virtualenv
-        virtualenv3 $HOME/venv
+        /usr/local/bin/pip3 install virtualenv
+        /usr/local/bin/virtualenv-3.3 $HOME/venv
         source $HOME/venv/bin/activate
-        export PYTHON=python
+
+        export PIP=$HOME/venv/bin/pip
+        export PYTHON=$HOME/venv/bin/python
     fi
 
     $PIP install numpy
@@ -235,8 +238,7 @@ then
     $PIP install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
-    $PIP install matplotlib
-    require_success "Failed to install matplotlib"
+    install_matplotlib
 
 elif [ "$TEST" == "macports_py26" ]
 then
@@ -245,8 +247,7 @@ then
     install_macports
     port_install_python $VERSION noforce
 
-    $PIP install matplotlib
-    require_success "Failed to install matplotlib"
+    install_matplotlib
 
 elif [ "$TEST" == "macports_py27" ]
 then
@@ -260,8 +261,7 @@ then
     install_macports
     port_install_python $VERSION force $VENV
 
-    $PIP install matplotlib
-    require_success "Failed to install matplotlib"
+    install_matplotlib
 
 elif [ "$TEST" == "macports_py32" ]
 then
@@ -270,8 +270,7 @@ then
     install_macports
     port_install_python $VERSION noforce $VENV
 
-    $PIP install matplotlib
-    require_success "Failed to install matplotlib"
+    install_matplotlib
 
 elif [ "$TEST" == "macports_py33" ]
 then
@@ -284,8 +283,7 @@ then
     $PIP install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
-    $PIP install matplotlib
-    require_success "Failed to install matplotlib"
+    install_matplotlib
 
 elif [ "$TEST" == "macpython27_10.8" ]
 then
@@ -302,12 +300,18 @@ then
     sudo python ez_setup.py
 
     sudo easy_install pip
-    sudo pip install numpy
-    sudo pip install nose
-    sudo pip install matplotlib
-    require_success "Failed to install matplotlib"
+    export PIP="sudo /usr/local/bin/pip"
+    export PYTHON="/usr/local/bin/python2.7"
 
-    export PYTHON=/usr/local/python2.7
+    # pip seems to find the things in /usr/bin/python's path
+    $PIP install -U numpy
+    $PIP install nose
+    # dateutil is in /Library/.../python/Extras/...
+    $PIP install -U python-dateutil
+    require_success "Failed to install python-dateutil"
+
+    install_matplotlib
+
 
 elif [ "$TEST" == "macpython33_10.8" ]
 then
@@ -323,14 +327,14 @@ then
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
     sudo python3 ez_setup.py
 
-    sudo easy_install pip
+    sudo /Library/Frameworks/Python.framework/Versions/3.3/bin/easy_install pip
+    export PIP="sudo /Library/Frameworks/Python.framework/Versions/3.3/bin/pip-3.3"
+    $PIP install -U python-dateutil=2.0
+    $PIP install numpy
+    $PIP install nose
+    install_matplotlib
 
-    sudo pip install numpy
-    sudo pip install nose
-    sudo pip install matplotlib
-    require_success "Failed to install matplotlib"
-
-    export PYTHON=/usr/local/python3.3
+    export PYTHON=/Library/Frameworks/Python.framework/Versions/3.3/bin/python
 
 elif [ "$TEST" == "macpython27_10.8_numpy" ]
 then
@@ -348,11 +352,14 @@ then
     sudo python ez_setup.py
 
     sudo easy_install pip
-    sudo pip install nose
-    sudo pip install matplotlib
-    require_success "Failed to install matplotlib"
+    export PIP="sudo /usr/local/bin/pip"
+    $PIP install nose
+    $PIP install -U python-dateutil
+    require_success "Failed to install python-dateutil"
 
-    export PYTHON=/usr/local/python2.7
+    install_matplotlib
+
+    export PYTHON=/usr/local/bin/python2.7
 
 elif [ "$TEST" == "macpython33_10.8_numpy" ]
 then
