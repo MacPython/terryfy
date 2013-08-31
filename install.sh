@@ -1,6 +1,16 @@
 #!/usr/bin/env sh
 
 
+function require_success {
+    STATUS=$?
+    MESSAGE=$1
+    if [ "$STATUS" != "0" ]; then
+        echo $MESSAGE
+        exit $STATUS
+    fi
+}
+
+
 function install_macports {
     PREFIX=/opt/local
     MACPORTS="MacPorts-2.2.0"
@@ -113,16 +123,6 @@ function install_freetype {
     sudo make install
     require_success "Failed to install freetype $FT_VERSION" 
     cd ..
-}
-
-
-function require_success {
-    STATUS=$?
-    MESSAGE=$1
-    if [ "$STATUS" != "0" ]; then
-        echo $MESSAGE
-        exit $STATUS
-    fi
 }
 
 
