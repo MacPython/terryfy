@@ -36,7 +36,7 @@ function install_matplotlib {
 }
 
 
-function port_install_python {
+function install_macports_python {
     #major.minor version
     M_dot_m=$1
     Mm=`echo $M_dot_m | tr -d '.'`
@@ -252,11 +252,6 @@ then
 elif [ "$TEST" == "macports_py27" ]
 then
     VERSION="2.7"
-    echo ""
-    echo ""
-    echo "installing python $VERSION"
-    echo ""
-    echo ""
 
     install_macports
     install_macports_python $VERSION force $VENV
@@ -279,7 +274,7 @@ then
     install_macports
     install_macports_python $VERSION noforce $VENV
 
-    # dateutil has issues with python 3.3, make sure you get version 2.0
+    # dateutil 2.1 has issues with python 3.3, make sure you get version 2.0
     $PIP install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
@@ -363,7 +358,7 @@ then
 
 elif [ "$TEST" == "macpython33_10.8_numpy" ]
 then
-    exit "numpy does not distribute python 3 binaries"
+    exit "numpy does not distribute python 3 binaries,  yet"
 
 else
     echo "Unknown test setting ($TEST)"
