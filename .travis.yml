@@ -3,8 +3,9 @@ language:
 
 env:
   - TEST='macpython27_10.8'
-  - TEST='macpython27_10.8_numpy'
+  - TEST='macpython27_10.8' BIN_NUMPY='1'
   - TEST='macpython33_10.8'
+#   - TEST='macpython33_10.8' BIN_NUMPY='1'
 
   - TEST='brew_system'
   - TEST='brew_system' VENV='1'

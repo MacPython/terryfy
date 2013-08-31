@@ -292,21 +292,25 @@ then
     install_freetype $FT_VERSION
 
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
-    sudo python ez_setup.py
+    sudo $PYTHON ez_setup.py
 
-    sudo easy_install pip
-    export PIP="sudo /usr/local/bin/pip"
-    export PYTHON="/usr/local/bin/python2.7"
+    sudo /Library/Frameworks/Python.framework/Versions/2.7/bin/easy_install pip
+    export PIP="sudo /Library/Frameworks/Python.framework/Versions/2.8/bin/pip-2.7"
 
-    # pip seems to find the things in /usr/bin/python's path
-    $PIP install -U numpy
+    # pip gets confused as to which PYTHONPATH it is supposed to look at
+    # make sure to upgrade default-installed packges so that they actually
+    # show up in $PYTHON's search path
+    if [ -z "$BIN_NUMPY" ] ; then
+        $PIP install -U numpy
+    else
+        install_mac_numpy 1.7.1 2.7 10.6
+    fi
+
     $PIP install nose
-    # dateutil is in /Library/.../python/Extras/...
     $PIP install -U python-dateutil
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
-
 
 elif [ "$TEST" == "macpython33_10.8" ]
 then
@@ -324,41 +328,19 @@ then
 
     sudo /Library/Frameworks/Python.framework/Versions/3.3/bin/easy_install pip
     export PIP="sudo /Library/Frameworks/Python.framework/Versions/3.3/bin/pip-3.3"
+
+    if [ -z "$BIN_NUMPY" ] ; then
+
+        $PIP install numpy
+    else
+        exit "numpy does not distribute python 3 binaries,  yet"
+    fi
+
+    $PIP install nose
     $PIP install -U python-dateutil=2.0
-    $PIP install numpy
-    $PIP install nose
-    install_matplotlib
-
-    export PYTHON=/Library/Frameworks/Python.framework/Versions/3.3/bin/python
-
-elif [ "$TEST" == "macpython27_10.8_numpy" ]
-then
-    PY_VERSION="2.7.5"
-    FT_VERSION="2.5.0.1"
-    PNG_VERSION="1.6.3"
-    XQUARTZ_VERSION="2.7.4"
-    install_mac_python $PY_VERSION
-    install_tkl_85
-    install_libpng $PNG_VERSION
-    install_freetype $FT_VERSION
-    install_mac_numpy 1.7.1 2.7 10.6
-
-    curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
-    sudo python ez_setup.py
-
-    sudo easy_install pip
-    export PIP="sudo /usr/local/bin/pip"
-    $PIP install nose
-    $PIP install -U python-dateutil
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
-
-    export PYTHON=/usr/local/bin/python2.7
-
-elif [ "$TEST" == "macpython33_10.8_numpy" ]
-then
-    exit "numpy does not distribute python 3 binaries,  yet"
 
 else
     echo "Unknown test setting ($TEST)"
