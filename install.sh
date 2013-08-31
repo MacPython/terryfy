@@ -245,7 +245,7 @@ then
     VERSION="2.6"
 
     install_macports
-    port_install_python $VERSION noforce
+    install_macports_python $VERSION noforce
 
     install_matplotlib
 
@@ -259,7 +259,7 @@ then
     echo ""
 
     install_macports
-    port_install_python $VERSION force $VENV
+    install_macports_python $VERSION force $VENV
 
     install_matplotlib
 
@@ -268,7 +268,7 @@ then
     VERSION="3.2"
 
     install_macports
-    port_install_python $VERSION noforce $VENV
+    install_macports_python $VERSION noforce $VENV
 
     install_matplotlib
 
@@ -277,7 +277,7 @@ then
     VERSION="3.3"
 
     install_macports
-    port_install_python $VERSION noforce $VENV
+    install_macports_python $VERSION noforce $VENV
 
     # dateutil has issues with python 3.3, make sure you get version 2.0
     $PIP install python-dateutil==2.0
