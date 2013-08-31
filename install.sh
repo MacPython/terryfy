@@ -65,7 +65,6 @@ function port_install_python {
 
         export PYTHON=/opt/local/bin/python$M_dot_m
         export PIP="sudo pip-$M_dot_m"
-        export NOSETESTS=/opt/local/bin/nosetests-$M_dot_m
     elif [ "$VENV" == 1 ]; then
         sudo port install $PY-virtualenv
         virtualenv-$M_dot_m $HOME/venv --system-site-packages
@@ -76,7 +75,6 @@ function port_install_python {
 
         export PYTHON=python
         export PIP=pip
-        export NOSETESTS=nosetests
     fi
 }
 
@@ -180,7 +178,6 @@ then
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
 
-    export NOSETESTS=nosetests
 
 elif [ "$TEST" == "brew_py" ]
 then
@@ -208,7 +205,6 @@ then
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
 
-    export NOSETESTS=nosetests
 
 elif [ "$TEST" == "brew_py3" ]
 then
@@ -241,7 +237,6 @@ then
 
     $PIP install matplotlib
     require_success "Failed to install matplotlib"
-    export NOSETESTS=nosetests
 
 elif [ "$TEST" == "macports_py26" ]
 then
@@ -316,7 +311,6 @@ then
     require_success "Failed to install matplotlib"
 
     export PYTHON=/usr/local/python2.7
-    export NOSETESTS=nosetests-2.7
 
 elif [ "$TEST" == "macpython33_10.8" ]
 then
@@ -344,7 +338,6 @@ then
     require_success "Failed to install matplotlib"
 
     export PYTHON=/usr/local/python3.3
-    export NOSETESTS=nosetests
 
 elif [ "$TEST" == "macpython27_10.8_numpy" ]
 then
@@ -370,7 +363,6 @@ then
     require_success "Failed to install matplotlib"
 
     export PYTHON=/usr/local/python2.7
-    export NOSETESTS=nosetests-2.7
 
 elif [ "$TEST" == "macpython33_10.8_numpy" ]
 then
