@@ -298,13 +298,10 @@ then
     install_libpng $PNG_VERSION
     install_freetype $FT_VERSION
 
-    which python
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
     sudo python ez_setup.py
 
     sudo easy_install pip
-    which pip
-    which pip-2.7
     sudo pip install numpy
     sudo pip install nose
     sudo pip install matplotlib
@@ -326,12 +323,8 @@ then
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
     sudo python3 ez_setup.py
 
-    which easy_install
     sudo easy_install pip
-    which pip
-    which pip3
-    which pip-3.3
-    which pip3.3
+
     sudo pip install numpy
     sudo pip install nose
     sudo pip install matplotlib
@@ -351,13 +344,10 @@ then
     install_freetype $FT_VERSION
     install_mac_numpy 1.7.1 2.7 10.6
 
-    which python
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
     sudo python ez_setup.py
 
     sudo easy_install pip
-    which pip
-    which pip-2.7
     sudo pip install nose
     sudo pip install matplotlib
     require_success "Failed to install matplotlib"
