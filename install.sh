@@ -110,6 +110,8 @@ function install_mac_python {
     hdiutil attach python-$PY_VERSION.dmg -mountpoint /Volumes/Python
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
     require_success "Failed to install Python.org Python $PY_VERSION" 
+    M_dot_m=${PY_VERSION:0:3}
+    export PYTHON=/usr/local/python$M_dot_m
 }
 
 
