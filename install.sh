@@ -340,7 +340,7 @@ then
     fi
 
     $PIP install nose
-    $PIP install -U python-dateutil=2.0
+    $PIP install -U python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
