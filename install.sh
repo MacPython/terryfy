@@ -327,7 +327,7 @@ then
     install_freetype $FT_VERSION
 
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
-    sudo $PYTHON/python3 ez_setup.py
+    sudo $PYTHON ez_setup.py
 
     PREFIX=/Library/Frameworks/Python.framework/Versions/3.3
     sudo $PREFIX/bin/easy_install pip
