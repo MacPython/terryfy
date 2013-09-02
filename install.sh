@@ -296,8 +296,9 @@ then
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
     sudo $PYTHON ez_setup.py
 
-    sudo /Library/Frameworks/Python.framework/Versions/2.7/bin/easy_install pip
-    export PIP="sudo /Library/Frameworks/Python.framework/Versions/2.8/bin/pip-2.7"
+    PREFIX=/Library/Frameworks/Python.framework/Versions/2.7
+    sudo $PREFIX/bin/easy_install-2.7 pip
+    export PIP="sudo $PREFIX/bin/pip-2.7"
 
     # pip gets confused as to which PYTHONPATH it is supposed to look at
     # make sure to upgrade default-installed packges so that they actually
@@ -326,13 +327,13 @@ then
     install_freetype $FT_VERSION
 
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
-    sudo python3 ez_setup.py
+    sudo $PYTHON/python3 ez_setup.py
 
-    sudo /Library/Frameworks/Python.framework/Versions/3.3/bin/easy_install pip
-    export PIP="sudo /Library/Frameworks/Python.framework/Versions/3.3/bin/pip-3.3"
+    PREFIX=/Library/Frameworks/Python.framework/Versions/3.3
+    sudo $PREFIX/bin/easy_install pip
+    export PIP="sudo $PREFIX/bin/pip-3.3"
 
     if [ -z "$BIN_NUMPY" ] ; then
-
         $PIP install numpy
     else
         exit "numpy does not distribute python 3 binaries,  yet"
