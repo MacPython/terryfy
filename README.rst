@@ -4,9 +4,10 @@
 Testing Matplotlib on MacOS X on Travis-CI
 ==========================================
 
-This repo will facilitate build and test matplotlib, on MacOS X for a wide range of
-installation methods and Python versions.  The repo tests on Mac OS 10.8 as
-provided by the Travis-CI 
+This repo will facilitate building and testing
+`matplotlib (master) <https://github.com/matplotlib/matplotlib/tree/master>`_
+on MacOS X for a wide range of installation methods and Python versions.  The
+repo tests on Mac OS 10.8 as provided by the Travis-CI 
 `Mac environment <http://about.travis-ci.org/docs/user/osx-ci-environment/>`_
 Mac OS X testing environment.
 
