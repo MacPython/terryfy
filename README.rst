@@ -15,7 +15,7 @@ Unless denoted otherwise, python dependencies are auto-installed by pip.
 Testing matrix:
 
 +---------------+----------------+--------------+----------------+------------------------+-----------------+----------------------------+
-| Python Source | Python Version | libpng       | freetype       | numpy                  | dateutil [#du]_ | virtual environment [#ve]_ |
+| Python Source | Python Version | libpng       | freetype       | numpy                  | dateutil [#DU]_ | virtual environment [#VE]_ |
 +---------------+----------------+--------------+----------------+------------------------+-----------------+----------------------------+
 | `python.org`_ | 2.7.5          | 1.6.2 source | 2.5.0.1 source | 1.7.1 binary installer |                 | No                         |
 +---------------+----------------+--------------+----------------+------------------------+-----------------+----------------------------+
@@ -56,9 +56,9 @@ Testing matrix:
 .. _brew: brew.sh
 .. _Macports: www.macports.org
 
-.. [#du]: The latest python-dateutil (2.1) fails to install on Python 3.3.  
+.. [#DU] The latest python-dateutil (2.1) fails to install on Python 3.3.  
 
-.. [#ve]: "virtualenv" identifies the classic virtual environment library
+.. [#VE] "virtualenv" identifies the classic virtual environment library
    available to Python 2 and beyond.  "pyvenv" identifies the virtual
    environment library included in the standard library starting with Python
    3.3. 
