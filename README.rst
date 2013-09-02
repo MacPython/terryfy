@@ -10,7 +10,7 @@ provided by the Travis-CI
 `Mac environment <http://about.travis-ci.org/docs/user/osx-ci-environment/>`_
 Mac OS X testing environment.
 
-Unless denoted otherwise, python dependencies are auto-installed by pip.  
+Unless denoted otherwise, Python dependencies are auto-installed by pip.
 
 Testing matrix:
 
