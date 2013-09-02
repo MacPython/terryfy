@@ -67,5 +67,5 @@ Testing matrix:
    environment library included in the standard library starting with Python
    3.3. 
 
-At present, we install a minimal set of backends.  Backend testing coverate
+At present, we install a minimal set of backends.  Backend testing coverage
 will expand as the repo matures.
