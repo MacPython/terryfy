@@ -29,6 +29,7 @@ function install_macports {
     require_success "Failed to install matplotlib dependencies"
 }
 
+
 function install_matplotlib {
     yes | git clone http://github.com/matplotlib/matplotlib.git
     $PIP install -e matplotlib
@@ -43,19 +44,9 @@ function install_macports_python {
     PY="py$Mm"
     FORCE=$2
 
-    echo ""
-    echo ""
-    echo "installing python $M_dot_m"
-    echo ""
-    echo ""
-
-    echo "$FORCE"
-
     if [ "$FORCE" == "noforce" ]; then
         FORCE=""
-        echo "+++ no forcing"
     elif [ "$FORCE" == "force" ]; then
-        echo "+++ forcing"
         FORCE="-f"
     else
         echo "this is force $FORCE"
@@ -73,7 +64,6 @@ function install_macports_python {
     elif [ "$3" == "venv" ]; then
         VENV=1
     fi
-    echo "VENV is $VENV"
     
     if [ "$VENV" == 0 ]; then
         sudo port install $PY-pip
@@ -161,14 +151,11 @@ if [ "$TEST" == "brew_system" ]
 then
     brew update
 
-    # use system python, numpy
-
     sudo easy_install pip
     brew install freetype libpng pkg-config
     require_success "Failed to install matplotlib dependencies"
 
     if [ -z "$VENV" ]; then
-        # not in a virtual env
         export PIP="sudo pip"
         export PYTHON=/usr/bin/python2.7
     else
@@ -338,4 +325,5 @@ then
 
 else
     echo "Unknown test setting ($TEST)"
+    exit -1
 fi
