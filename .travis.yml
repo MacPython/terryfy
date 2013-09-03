@@ -31,7 +31,7 @@ env:
 
 
 install:
-  - set -x  # echo commands
+  - set -vx  # echo commands
   - source ./install.sh
 
 script:
