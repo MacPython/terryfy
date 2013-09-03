@@ -297,12 +297,12 @@ then
     # make sure to upgrade default-installed packges so that they actually
     # show up in $PYTHON's search path
     if [ -z "$BIN_NUMPY" ] ; then
-        $PIP install -U numpy
+        $PIP install numpy
     else
         install_mac_numpy 1.7.1 2.7 10.6
     fi
 
-    $PIP install -U python-dateutil
+    $PIP install python-dateutil
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
@@ -331,7 +331,7 @@ then
         exit "numpy does not distribute python 3 binaries,  yet"
     fi
 
-    $PIP install -U python-dateutil==2.0
+    $PIP install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
