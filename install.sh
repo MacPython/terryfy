@@ -238,34 +238,27 @@ then
 elif [ "$TEST" == "macports_py26" ]
 then
     VERSION="2.6"
-
     install_macports
     install_macports_python $VERSION noforce
-
     install_matplotlib
 
 elif [ "$TEST" == "macports_py27" ]
 then
     VERSION="2.7"
-
     install_macports
     install_macports_python $VERSION force $VENV
-
     install_matplotlib
 
 elif [ "$TEST" == "macports_py32" ]
 then
     VERSION="3.2"
-
     install_macports
     install_macports_python $VERSION noforce $VENV
-
     install_matplotlib
 
 elif [ "$TEST" == "macports_py33" ]
 then
     VERSION="3.3"
-
     install_macports
     install_macports_python $VERSION noforce $VENV
 
