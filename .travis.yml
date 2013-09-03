@@ -17,18 +17,17 @@ env:
   - TEST='brew_py3'
   - TEST='brew_py3' VENV='1'
 
-  - TEST='macports_py26'
-  - TEST='macports_py26' VENV='1'
+  - TEST='macports' PY='2.6'
+  - TEST='macports' PY='2.6' VENV='1'
 
   - TEST='macports_py27'
   - TEST='macports_py27' VENV='1'
 
-  - TEST='macports_py32'
-  - TEST='macports_py32' VENV='1'
+  - TEST='macports' PY='3.2'
+  - TEST='macports' PY='3.2' VENV='1'
 
   - TEST='macports_py33'
   - TEST='macports_py33' VENV='1'
-
 
 install:
   - set -vx  # echo commands

@@ -155,7 +155,6 @@ if [ "$TEST" == "brew_system" ] ; then
     require_success "Failed to install matplotlib dependencies"
 
     if [ -z "$VENV" ]; then
-        # not in a virtual env
         export PIP="sudo pip"
         export PYTHON=/usr/bin/python2.7
     else
@@ -222,33 +221,26 @@ elif [ "$TEST" == "brew_py3" ] ; then
 
     install_matplotlib
 
-elif [ "$TEST" == "macports_py26" ] ; then
+elif [ "$TEST" == "macports" ] ; then
 
-    VERSION="2.6"
     install_macports
-    install_macports_python $VERSION noforce
+    install_macports_python $PY noforce $VENV
     install_matplotlib
 
 elif [ "$TEST" == "macports_py27" ] ; then
 
-    VERSION="2.7"
+    PY="2.7"
     install_macports
     # python 2.7 has to be force installed for some unknown reason
-    install_macports_python $VERSION force $VENV
+    install_macports_python $PY force $VENV
     install_matplotlib
 
-elif [ "$TEST" == "macports_py32" ] ; then
+elif [ "$TEST" == "macports_py33" ]
+then
+    PY="3.3"
 
-    VERSION="3.2"
     install_macports
-    install_macports_python $VERSION noforce $VENV
-    install_matplotlib
-
-elif [ "$TEST" == "macports_py33" ] ; then
-
-    VERSION="3.3"
-    install_macports
-    install_macports_python $VERSION noforce $VENV
+    install_macports_python $PY noforce $VENV
 
     # dateutil 2.1 has issues with python 3.3, make sure you get version 2.0
     $PIP install python-dateutil==2.0
