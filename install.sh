@@ -292,7 +292,10 @@ then
     if [ -z "$BIN_NUMPY" ] ; then
         $PIP install numpy
     else
-        install_mac_numpy 1.7.1 2.7 10.6
+        PY=${PY_VERSION:0:3}
+        NUMPY=1.7.1
+        OS=10.6
+        install_mac_numpy $NUMPY $PY $OS
     fi
 
     $PIP install python-dateutil
