@@ -29,6 +29,7 @@ function install_macports {
     require_success "Failed to install matplotlib dependencies"
 }
 
+
 function install_matplotlib {
     yes | git clone http://github.com/matplotlib/matplotlib.git
     $PIP install -e matplotlib
@@ -43,22 +44,11 @@ function install_macports_python {
     PY="py$Mm"
     FORCE=$2
 
-    echo ""
-    echo ""
-    echo "installing python $M_dot_m"
-    echo ""
-    echo ""
-
-    echo "$FORCE"
-
     if [ "$FORCE" == "noforce" ]; then
         FORCE=""
-        echo "+++ no forcing"
     elif [ "$FORCE" == "force" ]; then
-        echo "+++ forcing"
         FORCE="-f"
     else
-        echo "this is force $FORCE"
         exit "weird force option"
     fi
 
@@ -73,7 +63,6 @@ function install_macports_python {
     elif [ "$3" == "venv" ]; then
         VENV=1
     fi
-    echo "VENV is $VENV"
     
     if [ "$VENV" == 0 ]; then
         sudo port install $PY-pip
@@ -244,6 +233,7 @@ elif [ "$TEST" == "macports_py27" ] ; then
 
     VERSION="2.7"
     install_macports
+    # python 2.7 has to be force installed for some unknown reason
     install_macports_python $VERSION force $VENV
     install_matplotlib
 
