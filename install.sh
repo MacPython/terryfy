@@ -76,7 +76,6 @@ function install_macports_python {
     echo "VENV is $VENV"
     
     if [ "$VENV" == 0 ]; then
-        sudo port install $PY-nose
         sudo port install $PY-pip
 
         export PYTHON=/opt/local/bin/python$M_dot_m
@@ -88,9 +87,6 @@ function install_macports_python {
 
         export PYTHON=$HOME/venv/bin/python
         export PIP=$HOME/venv/bin/pip
-
-        # pip comes for free, but make sure nose is installed in the venv
-        $PIP install -U nose
     fi
 }
 
@@ -183,7 +179,6 @@ then
         export PYTHON=$HOME/venv/bin/python
     fi
 
-    $PIP install nose
     install_matplotlib
 
 elif [ "$TEST" == "brew_py" ]
@@ -208,7 +203,6 @@ then
     fi
 
     $PIP install numpy
-    $PIP install nose
     install_matplotlib
 
 elif [ "$TEST" == "brew_py3" ]
@@ -234,7 +228,6 @@ then
     fi
 
     $PIP install numpy
-    $PIP install -U nose
 
     # dateutil has issues with python 3.3, make sure you get version 2.0
     $PIP install python-dateutil==2.0
@@ -309,7 +302,6 @@ then
         install_mac_numpy 1.7.1 2.7 10.6
     fi
 
-    $PIP install nose
     $PIP install -U python-dateutil
     require_success "Failed to install python-dateutil"
 
@@ -339,7 +331,6 @@ then
         exit "numpy does not distribute python 3 binaries,  yet"
     fi
 
-    $PIP install nose
     $PIP install -U python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
