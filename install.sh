@@ -182,8 +182,8 @@ elif [ "$TEST" == "brew_py" ] ; then
         export PIP=/usr/local/bin/pip
         export PYTHON=/usr/local/bin/python2.7
     else
-        pip install virtualenv
-        virtualenv $HOME/venv
+        /usr/local/bin/pip install virtualenv
+        /usr/local/bin/virtualenv $HOME/venv
         source $HOME/venv/bin/activate
         export PIP=$HOME/venv/bin/pip
         export PYTHON=$HOME/venv/bin/python
