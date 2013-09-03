@@ -157,11 +157,9 @@ function install_mac_numpy {
 }
 
 
-if [ "$TEST" == "brew_system" ]
-then
-    brew update
+if [ "$TEST" == "brew_system" ] ; then
 
-    # use system python, numpy
+    brew update
 
     sudo easy_install pip
     brew install freetype libpng pkg-config
@@ -181,8 +179,8 @@ then
 
     install_matplotlib
 
-elif [ "$TEST" == "brew_py" ]
-then
+elif [ "$TEST" == "brew_py" ] ; then
+
     brew update
 
     brew install python
@@ -205,8 +203,8 @@ then
     $PIP install numpy
     install_matplotlib
 
-elif [ "$TEST" == "brew_py3" ]
-then
+elif [ "$TEST" == "brew_py3" ] ; then
+
     brew update
 
     brew install python3
@@ -235,29 +233,29 @@ then
 
     install_matplotlib
 
-elif [ "$TEST" == "macports_py26" ]
-then
+elif [ "$TEST" == "macports_py26" ] ; then
+
     VERSION="2.6"
     install_macports
     install_macports_python $VERSION noforce
     install_matplotlib
 
-elif [ "$TEST" == "macports_py27" ]
-then
+elif [ "$TEST" == "macports_py27" ] ; then
+
     VERSION="2.7"
     install_macports
     install_macports_python $VERSION force $VENV
     install_matplotlib
 
-elif [ "$TEST" == "macports_py32" ]
-then
+elif [ "$TEST" == "macports_py32" ] ; then
+
     VERSION="3.2"
     install_macports
     install_macports_python $VERSION noforce $VENV
     install_matplotlib
 
-elif [ "$TEST" == "macports_py33" ]
-then
+elif [ "$TEST" == "macports_py33" ] ; then
+
     VERSION="3.3"
     install_macports
     install_macports_python $VERSION noforce $VENV
@@ -268,8 +266,8 @@ then
 
     install_matplotlib
 
-elif [ "$TEST" == "macpython27_10.8" ]
-then
+elif [ "$TEST" == "macpython27_10.8" ] ; then
+
     PY_VERSION="2.7.5"
     FT_VERSION="2.5.0.1"
     PNG_VERSION="1.6.3"
@@ -303,8 +301,8 @@ then
 
     install_matplotlib
 
-elif [ "$TEST" == "macpython33_10.8" ]
-then
+elif [ "$TEST" == "macpython33_10.8" ] ; then
+
     PY_VERSION="3.3.2"
     FT_VERSION="2.5.0.1"
     PNG_VERSION="1.6.3"
@@ -334,4 +332,5 @@ then
 
 else
     echo "Unknown test setting ($TEST)"
+    exit -1
 fi
