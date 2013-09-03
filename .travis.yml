@@ -5,6 +5,7 @@ env:
   - TEST='macpython27_10.8'
   - TEST='macpython27_10.8' BIN_NUMPY='1'
   - TEST='macpython33_10.8'
+# no python 3 numpy installer
 #   - TEST='macpython33_10.8' BIN_NUMPY='1'
 
   - TEST='brew_system'
@@ -30,6 +31,7 @@ env:
 
 
 install:
+  - set -x  # echo commands
   - source ./install.sh
 
 script:
