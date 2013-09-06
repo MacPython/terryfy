@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/mrterry/mpl_on_travis_mac.png
-   :target: https://travis-ci.org/mrterry/mpl_on_travis_mac
+.. image:: https://travis-ci.org/matplotlib/mpl_mac_testing.png
+   :target: https://travis-ci.org/matplotlib/mpl_on_travis_mac
 
 Testing Matplotlib on MacOS X on Travis-CI
 ==========================================
@@ -7,7 +7,7 @@ Testing Matplotlib on MacOS X on Travis-CI
 This repo will facilitate building and testing
 `matplotlib (master) <https://github.com/matplotlib/matplotlib/tree/master>`_
 on MacOS X for a wide range of installation methods and Python versions.  The
-repo tests on Mac OS 10.8 as provided by the Travis-CI 
+repo tests on Mac OS 10.8 as provided by the Travis-CI
 `Mac environment <http://about.travis-ci.org/docs/user/osx-ci-environment/>`_
 Mac OS X testing environment.
 
@@ -60,12 +60,12 @@ Testing matrix:
 .. _`2.5.0.1 source`: http://sourceforge.net/projects/freetype/files/freetype2/2.5.0/
 .. _`1.7.1 binary installer`: http://sourceforge.net/projects/numpy/files/NumPy/1.7.1/
 
-.. [#DU] The latest python-dateutil (2.1) fails to install on Python 3.3.  
+.. [#DU] The latest python-dateutil (2.1) fails to install on Python 3.3.
 
 .. [#VE] "virtualenv" identifies the classic virtual environment library
    available to Python 2 and beyond.  "pyvenv" identifies the virtual
    environment library included in the standard library starting with Python
-   3.3. 
+   3.3.
 
 At present, we install a minimal set of backends.  Backend testing coverage
 will expand as the repo matures.
