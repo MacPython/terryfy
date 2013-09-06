@@ -2,7 +2,7 @@ language:
   - objective-c
 
 env:
-  global:
+  - global:
     - ARTIFACTS_AWS_REGION=us-east-1
     - ARTIFACTS_S3_BUCKET=matplotlib-test-results
     - secure: "RTMoQnCFDKYyDniegep9nARI5bKroF1TpN/aQf02KwLia0z5IZ4eoiFxTufexgB2afXtpAa2LDZg2+ulD9+SZQ+h7GHibMEVpcOTv4ojy+ekiRAQ6OW9glrcidFoIfISJNrrNZL7mTC6baEhnjjsH0mErpBTcfZSpFpLOSNjpSs="

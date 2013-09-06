@@ -1,3 +1,5 @@
+set -e
+
 echo "python $PYTHON"
 which $PYTHON
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+set -e
 
 function require_success {
     STATUS=$?
@@ -19,7 +20,7 @@ function install_macports {
 
     cd $MACPORTS
     ./configure --prefix=$PREFIX
-    make 
+    make
     sudo make install
     cd ..
 
@@ -63,7 +64,7 @@ function install_macports_python {
     elif [ "$3" == "venv" ]; then
         VENV=1
     fi
-    
+
     if [ "$VENV" == 0 ]; then
         sudo port install $PY-pip
 
@@ -94,7 +95,7 @@ function install_mac_python {
     curl http://python.org/ftp/python/$PY_VERSION/python-$PY_VERSION-macosx10.6.dmg > python-$PY_VERSION.dmg
     hdiutil attach python-$PY_VERSION.dmg -mountpoint /Volumes/Python
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
-    require_success "Failed to install Python.org Python $PY_VERSION" 
+    require_success "Failed to install Python.org Python $PY_VERSION"
     M_dot_m=${PY_VERSION:0:3}
     export PYTHON=/usr/local/bin/python$M_dot_m
 }
@@ -108,7 +109,7 @@ function install_freetype {
     ./configure --enable-shared=no --enable-static=true
     make
     sudo make install
-    require_success "Failed to install freetype $FT_VERSION" 
+    require_success "Failed to install freetype $FT_VERSION"
     cd ..
 }
 
