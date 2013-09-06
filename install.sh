@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-set -e
-
 function require_success {
     STATUS=$?
     MESSAGE=$1
