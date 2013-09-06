@@ -1,7 +1,13 @@
-language: 
+language:
   - objective-c
 
 env:
+  global:
+    - ARTIFACTS_AWS_REGION=us-east-1
+    - ARTIFACTS_S3_BUCKET=matplotlib-test-results
+    - secure: "RTMoQnCFDKYyDniegep9nARI5bKroF1TpN/aQf02KwLia0z5IZ4eoiFxTufexgB2afXtpAa2LDZg2+ulD9+SZQ+h7GHibMEVpcOTv4ojy+ekiRAQ6OW9glrcidFoIfISJNrrNZL7mTC6baEhnjjsH0mErpBTcfZSpFpLOSNjpSs="
+    - secure: "uxYSxs3D3ZOTNjRg0vKk1YsOpG5vWshekMixV4lEuwcSnLJtNHUhZvzoj11GLwqHokTaYXlM1TvFMm7oQBwtW5B+dacnOFar3MJlvu96n+B1CG6ldiIy4uZd+DKR7la0vwK7aTOKyiMK+vWQe8C0kCYBTcN0UiVQn/2nUlFgioM="
+
   - TEST='macpython27_10.8'
   - TEST='macpython27_10.8' BIN_NUMPY='1'
   - TEST='macpython33_10.8'
@@ -34,4 +40,9 @@ install:
   - source ./install.sh
 
 script:
+  - echo $PWD
   - source ./test.sh
+
+after_failure:
+  - echo $PWD
+  - ./travis_upload.sh
