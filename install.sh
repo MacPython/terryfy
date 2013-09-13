@@ -31,6 +31,16 @@ function install_macports {
 
 function install_matplotlib {
     yes | git clone http://github.com/matplotlib/matplotlib.git
+
+    cd matplotlib
+    # print the has and commit message for the last commit. if we're pulling
+    # from master, this could change between builds
+    # TODO: make sure all builds in batch use same revision
+    echo "-------------------------------------------"
+    git log -n 1
+    echo "-------------------------------------------"
+    cd ..
+
     $PIP install -e matplotlib
     require_success "Failed to install matplotlib"
 }
