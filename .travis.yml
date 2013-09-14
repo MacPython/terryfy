@@ -38,6 +38,11 @@ env:
 
 install:
   - set -vx  # echo commands
+  - git clone http://github.com/matplotlib/matplotlib.git
+  - cd matplotlib
+  - git checkout master
+  - git log -n 1
+  - cd ..
   - source ./install.sh
 
 script:
