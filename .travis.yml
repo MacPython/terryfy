@@ -47,7 +47,9 @@ install:
 
 script:
   - echo $PWD
-  - source ./test.sh
+  - mkdir tmp_test_dir
+  - cd tmp_test_dir
+  - source ../test.sh
 
 after_failure:
   - echo $PWD
