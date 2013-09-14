@@ -2,38 +2,39 @@ language:
   - objective-c
 
 env:
-  - global:
+  global:
     - ARTIFACTS_AWS_REGION=us-east-1
     - ARTIFACTS_S3_BUCKET=matplotlib-test-results
-    - secure: "RTMoQnCFDKYyDniegep9nARI5bKroF1TpN/aQf02KwLia0z5IZ4eoiFxTufexgB2afXtpAa2LDZg2+ulD9+SZQ+h7GHibMEVpcOTv4ojy+ekiRAQ6OW9glrcidFoIfISJNrrNZL7mTC6baEhnjjsH0mErpBTcfZSpFpLOSNjpSs="
-    - secure: "uxYSxs3D3ZOTNjRg0vKk1YsOpG5vWshekMixV4lEuwcSnLJtNHUhZvzoj11GLwqHokTaYXlM1TvFMm7oQBwtW5B+dacnOFar3MJlvu96n+B1CG6ldiIy4uZd+DKR7la0vwK7aTOKyiMK+vWQe8C0kCYBTcN0UiVQn/2nUlFgioM="
+    - secure: RTMoQnCFDKYyDniegep9nARI5bKroF1TpN/aQf02KwLia0z5IZ4eoiFxTufexgB2afXtpAa2LDZg2+ulD9+SZQ+h7GHibMEVpcOTv4ojy+ekiRAQ6OW9glrcidFoIfISJNrrNZL7mTC6baEhnjjsH0mErpBTcfZSpFpLOSNjpSs=
+    - secure: uxYSxs3D3ZOTNjRg0vKk1YsOpG5vWshekMixV4lEuwcSnLJtNHUhZvzoj11GLwqHokTaYXlM1TvFMm7oQBwtW5B+dacnOFar3MJlvu96n+B1CG6ldiIy4uZd+DKR7la0vwK7aTOKyiMK+vWQe8C0kCYBTcN0UiVQn/2nUlFgioM=
 
-  - TEST='macpython27_10.8'
-  - TEST='macpython27_10.8' BIN_NUMPY='1'
-  - TEST='macpython33_10.8'
-# no python 3 numpy installer
-#   - TEST='macpython33_10.8' BIN_NUMPY='1'
+  matrix:
+    - TEST='macpython27_10.8'
+    - TEST='macpython27_10.8' BIN_NUMPY='1'
+    - TEST='macpython33_10.8'
+    # no python 3 numpy installer
+    #- TEST='macpython33_10.8' BIN_NUMPY='1'
 
-  - TEST='brew_system'
-  - TEST='brew_system' VENV='1'
+    - TEST='brew_system'
+    - TEST='brew_system' VENV='1'
 
-  - TEST='brew_py'
-  - TEST='brew_py' VENV='1'
+    - TEST='brew_py'
+    - TEST='brew_py' VENV='1'
 
-  - TEST='brew_py3'
-  - TEST='brew_py3' VENV='1'
+    - TEST='brew_py3'
+    - TEST='brew_py3' VENV='1'
 
-  - TEST='macports' PY='2.6'
-  - TEST='macports' PY='2.6' VENV='1'
+    - TEST='macports' PY='2.6'
+    - TEST='macports' PY='2.6' VENV='1'
 
-  - TEST='macports_py27'
-  - TEST='macports_py27' VENV='1'
+    - TEST='macports_py27'
+    - TEST='macports_py27' VENV='1'
 
-  - TEST='macports' PY='3.2'
-  - TEST='macports' PY='3.2' VENV='1'
+    - TEST='macports' PY='3.2'
+    - TEST='macports' PY='3.2' VENV='1'
 
-  - TEST='macports_py33'
-  - TEST='macports_py33' VENV='1'
+    - TEST='macports_py33'
+    - TEST='macports_py33' VENV='1'
 
 install:
   - set -vx  # echo commands
