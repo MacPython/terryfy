@@ -14,6 +14,8 @@ function install_macports {
     PREFIX=/opt/local
     MACPORTS="MacPorts-2.2.0"
     curl https://distfiles.macports.org/MacPorts/$MACPORTS.tar.gz > $MACPORTS.tar.gz --insecure
+    require_success "failed to download macports"
+
     tar -xzf $MACPORTS.tar.gz
 
     cd $MACPORTS
@@ -82,6 +84,8 @@ function install_macports_python {
 function install_tkl_85 {
     TCL_VERSION="8.5.14.0"
     curl http://downloads.activestate.com/ActiveTcl/releases/$TCL_VERSION/ActiveTcl$TCL_VERSION.296777-macosx10.5-i386-x86_64-threaded.dmg > ActiveTCL.dmg
+    require_success "Failed to download TCL $TCL_VERSION"
+
     hdiutil attach ActiveTCL.dmg -mountpoint /Volumes/ActiveTcl
     sudo installer -pkg /Volumes/ActiveTcl/ActiveTcl-8.5.pkg -target /
     require_success "Failed to install ActiveTcl $TCL_VERSION"
@@ -91,6 +95,8 @@ function install_tkl_85 {
 function install_mac_python {
     PY_VERSION=$1
     curl http://python.org/ftp/python/$PY_VERSION/python-$PY_VERSION-macosx10.6.dmg > python-$PY_VERSION.dmg
+    require_success "Failed to download mac python $PY_VERSION"
+
     hdiutil attach python-$PY_VERSION.dmg -mountpoint /Volumes/Python
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
     require_success "Failed to install Python.org Python $PY_VERSION"
@@ -102,6 +108,8 @@ function install_mac_python {
 function install_freetype {
     FT_VERSION=$1
     curl -L http://sourceforge.net/projects/freetype/files/freetype2/2.5.0/freetype-2.5.0.1.tar.bz2/download > freetype.tar.bz2
+    require_success "Failed to download freetype"
+
     tar -xjf freetype.tar.bz2
     cd freetype-$FT_VERSION
     ./configure --enable-shared=no --enable-static=true
@@ -115,6 +123,8 @@ function install_freetype {
 function install_libpng {
     VERSION=$1
     curl -L http://downloads.sourceforge.net/project/libpng/libpng16/$VERSION/libpng-$VERSION.tar.gz > libpng.tar.gz
+    require_success "Failed to download libpng"
+
     tar -xzf libpng.tar.gz
     cd libpng-$VERSION
     ./configure --enable-shared=no --enable-static=true
@@ -128,6 +138,8 @@ function install_libpng {
 function install_xquartz {
     VERSION=$1
     curl http://xquartz.macosforge.org/downloads/SL/XQuartz-$VERSION.dmg > xquartz.dmg
+    require_success "failed to download XQuartz"
+
     hdiutil attach xquartz.dmg -mountpoint /Volumes/XQuartz
     sudo installer -pkg /Volumes/XQuartz/XQuartz.pkg -target /
     require_success "Failed to install XQuartz $VERSION"
@@ -139,6 +151,8 @@ function install_mac_numpy {
     PY=$2
     MAC=$3
     curl -L http://downloads.sourceforge.net/project/numpy/NumPy/$NUMPY/numpy-$NUMPY-py$PY-python.org-macosx$MAC.dmg > numpy.dmg
+    require_success "failed to download numpy"
+
     hdiutil attach numpy.dmg
     sudo installer -pkg /Volumes/numpy/numpy-$NUMPY-py$PY.mpkg/ -target /
     require_success "Failed to install numpy"
@@ -259,6 +273,8 @@ elif [ "$TEST" == "macpython27_10.8" ] ; then
     install_freetype $FT_VERSION
 
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
+    require_success "failed to download setuptools"
+
     sudo $PYTHON ez_setup.py
 
     PREFIX=/Library/Frameworks/Python.framework/Versions/2.7
@@ -294,6 +310,8 @@ elif [ "$TEST" == "macpython33_10.8" ] ; then
     install_freetype $FT_VERSION
 
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
+    require_success "failed to download setuptools"
+
     sudo $PYTHON ez_setup.py
 
     PREFIX=/Library/Frameworks/Python.framework/Versions/3.3
