@@ -2,7 +2,6 @@
 
 set -e
 
-cd ../tmp_test_dir
 echo "Compressing results"
 tar cjf result_images.tar.bz2 result_images
 echo "Uploading results"
