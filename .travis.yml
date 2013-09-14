@@ -56,4 +56,4 @@ script:
 
 after_failure:
   - echo $PWD
-  - ./travis_upload.sh
+  - ../travis_upload.sh
