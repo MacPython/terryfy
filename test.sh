@@ -10,5 +10,8 @@ $PYTHON -c "import sys; print('\n'.join(sys.path))"
 $PYTHON -c "import matplotlib; print(matplotlib.__file__)"
 $PYTHON -c "from matplotlib import font_manager"
 
-echo "testing matplotlib"
-$PYTHON -c "import matplotlib; matplotlib.test()"
+mkdir tmp_test_dir
+cd tmp_test_dir
+
+echo "testing matplotlib using 8 processess"
+$PYTHON ../matplotlib/tests.py -sv --processes=8 --process-timeout=300
