@@ -201,7 +201,7 @@ elif [ "$TEST" == "brew_py" ] ; then
         export PYTHON=$HOME/venv/bin/python
     fi
 
-    $PIP install numpy
+    $PIP --use-mirrors install numpy
     install_matplotlib
 
 elif [ "$TEST" == "brew_py3" ] ; then
@@ -226,10 +226,10 @@ elif [ "$TEST" == "brew_py3" ] ; then
         export PYTHON=$HOME/venv/bin/python
     fi
 
-    $PIP install numpy
+    $PIP --use-mirrors install numpy
 
     # dateutil has issues with python 3.3, make sure you get version 2.0
-    $PIP install python-dateutil==2.0
+    $PIP --use-mirrors install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
@@ -256,7 +256,7 @@ then
     install_macports_python $PY noforce $VENV
 
     # dateutil 2.1 has issues with python 3.3, make sure you get version 2.0
-    $PIP install python-dateutil==2.0
+    $PIP --use-mirrors install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
@@ -285,7 +285,7 @@ elif [ "$TEST" == "macpython27_10.8" ] ; then
     # make sure to upgrade default-installed packges so that they actually
     # show up in $PYTHON's search path
     if [ -z "$BIN_NUMPY" ] ; then
-        $PIP install numpy
+        $PIP --use-mirrors install numpy
     else
         PY=${PY_VERSION:0:3}
         NUMPY=1.7.1
@@ -293,7 +293,7 @@ elif [ "$TEST" == "macpython27_10.8" ] ; then
         install_mac_numpy $NUMPY $PY $OS
     fi
 
-    $PIP install python-dateutil
+    $PIP --use-mirrors install python-dateutil
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
@@ -319,12 +319,12 @@ elif [ "$TEST" == "macpython33_10.8" ] ; then
     export PIP="sudo $PREFIX/bin/pip-3.3"
 
     if [ -z "$BIN_NUMPY" ] ; then
-        $PIP install numpy
+        $PIP --use-mirrors install numpy
     else
         exit "numpy does not distribute python 3 binaries,  yet"
     fi
 
-    $PIP install python-dateutil==2.0
+    $PIP --use-mirrors install python-dateutil==2.0
     require_success "Failed to install python-dateutil"
 
     install_matplotlib
