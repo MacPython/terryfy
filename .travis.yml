@@ -36,6 +36,9 @@ env:
     - TEST='macports_py33'
     - TEST='macports_py33' VENV='1'
 
+before_script:
+  - gem install travis-artifacts
+
 install:
   - set -vx  # echo commands
   - git clone http://github.com/matplotlib/matplotlib.git
