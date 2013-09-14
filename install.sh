@@ -47,7 +47,7 @@ function install_matplotlib {
     git log -n 1
     echo "-------------------------------------------"
 
-    $PYTHON setup.py install
+    $SUDO $PYTHON setup.py install
     require_success "Failed to install matplotlib"
 
     cd ..
@@ -85,13 +85,15 @@ function install_macports_python {
         sudo port install $PY-pip
 
         export PYTHON=/opt/local/bin/python$M_dot_m
-        export PIP="sudo /opt/local/bin/pip-$M_dot_m"
+        export SUDO="sudo"
+        export PIP="$SUDO /opt/local/bin/pip-$M_dot_m"
     elif [ "$VENV" == 1 ]; then
         sudo port install $PY-virtualenv
         virtualenv-$M_dot_m $HOME/venv --system-site-packages
         source $HOME/venv/bin/activate
 
         export PYTHON=$HOME/venv/bin/python
+        export SUDO=""
         export PIP=$HOME/venv/bin/pip
     fi
 }
@@ -174,12 +176,14 @@ if [ "$TEST" == "brew_system" ] ; then
     if [ -z "$VENV" ]; then
         export PIP="sudo pip"
         export PYTHON=/usr/bin/python2.7
+        export SUDO="sudo"
     else
         sudo pip install virtualenv
         virtualenv $HOME/venv --system-site-packages
         source $HOME/venv/bin/activate
         export PIP=$HOME/venv/bin/pip
         export PYTHON=$HOME/venv/bin/python
+        export SUDO=""
     fi
 
     install_matplotlib
