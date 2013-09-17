@@ -36,14 +36,24 @@ env:
     - TEST='macports_py33'
     - TEST='macports_py33' VENV='1'
 
+before_script:
+  - gem install travis-artifacts
+
 install:
   - set -vx  # echo commands
+  - git clone http://github.com/matplotlib/matplotlib.git
+  - cd matplotlib
+  - git checkout master
+  - git log -n 1
+  - cd ..
   - source ./install.sh
 
 script:
   - echo $PWD
-  - source ./test.sh
+  - mkdir tmp_test_dir
+  - cd tmp_test_dir
+  - source ../test.sh
 
 after_failure:
   - echo $PWD
-  - ./travis_upload.sh
+  - ../travis_upload.sh
