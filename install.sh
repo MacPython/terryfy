@@ -159,6 +159,8 @@ function install_mac_numpy {
 }
 
 
+export PIP_USE_MIRRORS=1
+
 if [ "$TEST" == "brew_system" ] ; then
 
     brew update
