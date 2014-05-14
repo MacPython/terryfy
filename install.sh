@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
+MACPYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions
+
 function require_success {
     STATUS=$?
     MESSAGE=$1
@@ -99,10 +102,11 @@ function install_tkl_85 {
 
 function install_mac_python {
     PY_VERSION=$1
-    curl http://python.org/ftp/python/$PY_VERSION/python-$PY_VERSION-macosx10.6.dmg > python-$PY_VERSION.dmg
+    PY_DMG=python-$PY_VERSION-macosx10.6.dmg
+    curl http://python.org/ftp/python/$PY_VERSION/${PY_DMG} > $PY_DMG
     require_success "Failed to download mac python $PY_VERSION"
 
-    hdiutil attach python-$PY_VERSION.dmg -mountpoint /Volumes/Python
+    hdiutil attach $PY_DMG -mountpoint /Volumes/Python
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
     require_success "Failed to install Python.org Python $PY_VERSION"
     M_dot_m=${PY_VERSION:0:3}
@@ -161,6 +165,16 @@ function install_mac_numpy {
     hdiutil attach numpy.dmg
     sudo installer -pkg /Volumes/numpy/numpy-$NUMPY-py$PY.mpkg/ -target /
     require_success "Failed to install numpy"
+}
+
+function get_pip {
+    PYTHON=$1
+
+    curl -O GET_PIP_URL > get-pip.py
+    require_success "failed to download get-pip"
+
+    sudo $PYTHON get-pip.py
+    require_success "Failed to install pip"
 }
 
 
@@ -280,15 +294,9 @@ elif [ "$TEST" == "macpython27_10.8" ] ; then
     install_tkl_85
     install_libpng $PNG_VERSION
     install_freetype $FT_VERSION
-
-    curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
-    require_success "failed to download setuptools"
-
-    sudo $PYTHON ez_setup.py
-
-    PREFIX=/Library/Frameworks/Python.framework/Versions/2.7
-    sudo $PREFIX/bin/easy_install-2.7 pip
-    export PIP="sudo $PREFIX/bin/pip-2.7"
+    PY=${PY_VERSION:0:3}
+    get_pip $PYTHON
+    export PIP="sudo $MACPYTHON_PREFIX/$PY/bin/pip-$PY"
 
     # pip gets confused as to which PYTHONPATH it is supposed to look at
     # make sure to upgrade default-installed packges so that they actually
@@ -309,7 +317,7 @@ elif [ "$TEST" == "macpython27_10.8" ] ; then
 
 elif [ "$TEST" == "macpython33_10.8" ] ; then
 
-    PY_VERSION="3.3.2"
+    PY_VERSION="3.3.5"
     FT_VERSION="2.5.0.1"
     PNG_VERSION="1.6.3"
     XQUARTZ_VERSION="2.7.4"
@@ -318,14 +326,9 @@ elif [ "$TEST" == "macpython33_10.8" ] ; then
     install_libpng $PNG_VERSION
     install_freetype $FT_VERSION
 
-    curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py > ez_setup.py
-    require_success "failed to download setuptools"
-
-    sudo $PYTHON ez_setup.py
-
-    PREFIX=/Library/Frameworks/Python.framework/Versions/3.3
-    sudo $PREFIX/bin/easy_install pip
-    export PIP="sudo $PREFIX/bin/pip-3.3"
+    PY=${PY_VERSION:0:3}
+    get_pip $PYTHON
+    export PIP="sudo $MACPYTHON_PREFIX/$PY/bin/pip-$PY"
 
     if [ -z "$BIN_NUMPY" ] ; then
         $PIP install numpy
