@@ -9,11 +9,11 @@ env:
     - secure: uxYSxs3D3ZOTNjRg0vKk1YsOpG5vWshekMixV4lEuwcSnLJtNHUhZvzoj11GLwqHokTaYXlM1TvFMm7oQBwtW5B+dacnOFar3MJlvu96n+B1CG6ldiIy4uZd+DKR7la0vwK7aTOKyiMK+vWQe8C0kCYBTcN0UiVQn/2nUlFgioM=
 
   matrix:
-    - TEST='macpython27_10.8'
-    - TEST='macpython27_10.8' BIN_NUMPY='1'
-    - TEST='macpython33_10.8'
+    - TEST='macpython27_10.9'
+    - TEST='macpython27_10.9' BIN_NUMPY='1'
+    - TEST='macpython33_10.9'
     # no python 3 numpy installer
-    #- TEST='macpython33_10.8' BIN_NUMPY='1'
+    #- TEST='macpython33_10.9' BIN_NUMPY='1'
 
     - TEST='brew_system'
     - TEST='brew_system' VENV='1'

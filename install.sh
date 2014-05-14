@@ -276,7 +276,7 @@ then
 
     install_matplotlib
 
-elif [ "$TEST" == "macpython27_10.8" ] ; then
+elif [ "$TEST" == "macpython27_10.9" ] ; then
 
     PY_VERSION="2.7.6"
     FT_VERSION="2.5.0.1"
@@ -304,7 +304,7 @@ elif [ "$TEST" == "macpython27_10.8" ] ; then
 
     install_matplotlib
 
-elif [ "$TEST" == "macpython33_10.8" ] ; then
+elif [ "$TEST" == "macpython33_10.9" ] ; then
 
     PY_VERSION="3.3.5"
     FT_VERSION="2.5.0.1"
