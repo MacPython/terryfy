@@ -278,7 +278,7 @@ then
 
 elif [ "$TEST" == "macpython27_10.8" ] ; then
 
-    PY_VERSION="2.7.5"
+    PY_VERSION="2.7.6"
     FT_VERSION="2.5.0.1"
     PNG_VERSION="1.6.3"
     XQUARTZ_VERSION="2.7.4"
