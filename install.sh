@@ -251,10 +251,6 @@ elif [ "$TEST" == "brew_py3" ] ; then
 
     $PIP install numpy
 
-    # dateutil has issues with python 3.3, make sure you get version 2.0
-    $PIP install python-dateutil==2.0
-    require_success "Failed to install python-dateutil"
-
     install_matplotlib
 
 elif [ "$TEST" == "macports" ] ; then
@@ -277,10 +273,6 @@ then
 
     install_macports
     install_macports_python $PY noforce $VENV
-
-    # dateutil 2.1 has issues with python 3.3, make sure you get version 2.0
-    $PIP install python-dateutil==2.0
-    require_success "Failed to install python-dateutil"
 
     install_matplotlib
 
@@ -310,9 +302,6 @@ elif [ "$TEST" == "macpython27_10.8" ] ; then
         install_mac_numpy $NUMPY $PY $OS
     fi
 
-    $PIP install python-dateutil
-    require_success "Failed to install python-dateutil"
-
     install_matplotlib
 
 elif [ "$TEST" == "macpython33_10.8" ] ; then
@@ -335,9 +324,6 @@ elif [ "$TEST" == "macpython33_10.8" ] ; then
     else
         exit "numpy does not distribute python 3 binaries,  yet"
     fi
-
-    $PIP install python-dateutil==2.0
-    require_success "Failed to install python-dateutil"
 
     install_matplotlib
 
