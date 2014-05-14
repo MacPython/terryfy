@@ -10,8 +10,8 @@ PNG_VERSION="1.6.10"
 XQ_BASE_URL=http://xquartz.macosforge.org/downloads/SL
 XQUARTZ_VERSION="2.7.4"
 # Compiler defaults
-CC=clang
-CXX=clang++
+SYS_CC=clang
+SYS_CXX=clang++
 
 function require_success {
     STATUS=$?
@@ -20,6 +20,21 @@ function require_success {
         echo $MESSAGE
         exit $STATUS
     fi
+}
+
+
+function cc_cmd {
+    NEW_CC=$1
+    shift
+    NEW_CXX=$1
+    shift
+    OLD_CC=$CC
+    OLD_CXX=$CXX
+    export CC=$NEW_CC
+    export CXX=$NEW_CXX
+    $@
+    export CC=$OLD_CC
+    export CXX=$OLD_CXX
 }
 
 
@@ -32,7 +47,7 @@ function install_macports {
     tar -xzf $MACPORTS.tar.gz
 
     cd $MACPORTS
-    CC=${CC} CXX=${CXX} ./configure --prefix=$PREFIX
+    cc_cmd $SYS_CC $SYS_CXX ./configure --prefix=$PREFIX
     make
     sudo make install
     cd ..
@@ -51,7 +66,7 @@ function install_matplotlib {
 
     cd matplotlib
 
-    $SUDO CC=$MPL_CC CXX=$MPL_CXX $PYTHON setup.py install
+    cc_cmd $MPL_CC $MPL_CXX $SUDO $PYTHON setup.py install
     require_success "Failed to install matplotlib"
 
     cd ..
@@ -137,7 +152,7 @@ function install_freetype {
     cd freetype-$FT_VERSION
     require_success "Failed to cd to freetype directory"
 
-    CC=${CC} CXX=${CXX} ./configure --enable-shared=no --enable-static=true
+    cc_cmd ${SYS_CC} ${SYS_CXX} ./configure --enable-shared=no --enable-static=true
     make
     sudo make install
     require_success "Failed to install freetype $FT_VERSION"
@@ -153,7 +168,7 @@ function install_libpng {
     tar -xzf libpng.tar.gz
     cd libpng-$VERSION
     require_success "Failed to cd to libpng directory"
-    ./configure --enable-shared=no --enable-static=true
+    cc_cmd ${SYS_CC} ${SYS_CXX} ./configure --enable-shared=no --enable-static=true
     make
     sudo make install
     require_success "Failed to install libpng $VERSION"
@@ -336,7 +351,9 @@ elif [ "$TEST" == "macpython33_10.9" ] ; then
 
     install_matplotlib $CC $CXX
 
-else
+elif [ "$TEST" != "debug" ] ; then
+
     echo "Unknown test setting ($TEST)"
     exit -1
+
 fi
