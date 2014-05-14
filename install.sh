@@ -288,7 +288,7 @@ elif [ "$TEST" == "macpython27_10.9" ] ; then
     install_freetype $FT_VERSION
     PY=${PY_VERSION:0:3}
     get_pip $PYTHON
-    export PIP="sudo $MACPYTHON_PREFIX/$PY/bin/pip-$PY"
+    export PIP="sudo $MACPYTHON_PREFIX/$PY/bin/pip$PY"
 
     # pip gets confused as to which PYTHONPATH it is supposed to look at
     # make sure to upgrade default-installed packges so that they actually
