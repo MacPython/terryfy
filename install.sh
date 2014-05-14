@@ -2,6 +2,13 @@
 
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 MACPYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions
+# Package versions / URLs for fresh source builds (MacPython only)
+FT_BASE_URL=http://sourceforge.net/projects/freetype/files/freetype2
+FT_VERSION="2.5.3"
+PNG_BASE_URL=http://downloads.sourceforge.net/project/libpng/libpng16
+PNG_VERSION="1.6.10"
+XQ_BASE_URL=http://xquartz.macosforge.org/downloads/SL
+XQUARTZ_VERSION="2.7.4"
 
 function require_success {
     STATUS=$?
@@ -116,11 +123,12 @@ function install_mac_python {
 
 function install_freetype {
     FT_VERSION=$1
-    curl -L http://sourceforge.net/projects/freetype/files/freetype2/2.5.0/freetype-2.5.0.1.tar.bz2/download > freetype.tar.bz2
+    curl -L $FT_BASE_URL/$FT_VERSION/freetype-$FT_VERSION.tar.bz2/download > freetype.tar.bz2
     require_success "Failed to download freetype"
 
     tar -xjf freetype.tar.bz2
     cd freetype-$FT_VERSION
+    require_success "Failed to cd to freetype directory"
     ./configure --enable-shared=no --enable-static=true
     make
     sudo make install
@@ -131,11 +139,12 @@ function install_freetype {
 
 function install_libpng {
     VERSION=$1
-    curl -L http://downloads.sourceforge.net/project/libpng/libpng16/$VERSION/libpng-$VERSION.tar.gz > libpng.tar.gz
+    curl -L $PNG_BASE_URL/$VERSION/libpng-$VERSION.tar.gz > libpng.tar.gz
     require_success "Failed to download libpng"
 
     tar -xzf libpng.tar.gz
     cd libpng-$VERSION
+    require_success "Failed to cd to libpng directory"
     ./configure --enable-shared=no --enable-static=true
     make
     sudo make install
@@ -146,7 +155,7 @@ function install_libpng {
 
 function install_xquartz {
     VERSION=$1
-    curl http://xquartz.macosforge.org/downloads/SL/XQuartz-$VERSION.dmg > xquartz.dmg
+    curl $XQ_BASE_URL/XQuartz-$VERSION.dmg > xquartz.dmg
     require_success "failed to download XQuartz"
 
     hdiutil attach xquartz.dmg -mountpoint /Volumes/XQuartz
@@ -279,9 +288,6 @@ then
 elif [ "$TEST" == "macpython27_10.9" ] ; then
 
     PY_VERSION="2.7.6"
-    FT_VERSION="2.5.0.1"
-    PNG_VERSION="1.6.3"
-    XQUARTZ_VERSION="2.7.4"
     install_mac_python $PY_VERSION
     install_tkl_85
     install_libpng $PNG_VERSION
@@ -307,9 +313,6 @@ elif [ "$TEST" == "macpython27_10.9" ] ; then
 elif [ "$TEST" == "macpython33_10.9" ] ; then
 
     PY_VERSION="3.3.5"
-    FT_VERSION="2.5.0.1"
-    PNG_VERSION="1.6.3"
-    XQUARTZ_VERSION="2.7.4"
     install_mac_python $PY_VERSION
     install_tkl_85
     install_libpng $PNG_VERSION
