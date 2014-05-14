@@ -9,6 +9,9 @@ PNG_BASE_URL=http://downloads.sourceforge.net/project/libpng/libpng16
 PNG_VERSION="1.6.10"
 XQ_BASE_URL=http://xquartz.macosforge.org/downloads/SL
 XQUARTZ_VERSION="2.7.4"
+# Compiler defaults
+CC=clang
+CXX=clang++
 
 function require_success {
     STATUS=$?
@@ -29,7 +32,7 @@ function install_macports {
     tar -xzf $MACPORTS.tar.gz
 
     cd $MACPORTS
-    ./configure --prefix=$PREFIX
+    CC=${CC} CXX=${CXX} ./configure --prefix=$PREFIX
     make
     sudo make install
     cd ..
@@ -42,9 +45,13 @@ function install_macports {
 
 
 function install_matplotlib {
+    # Accept c and c++ compilers, default to cc, c++
+    MPL_CC=${1:-"cc"}
+    MPL_CXX=${2:-"c++"}
+
     cd matplotlib
 
-    $SUDO $PYTHON setup.py install
+    $SUDO CC=$MPL_CC CXX=$MPL_CXX $PYTHON setup.py install
     require_success "Failed to install matplotlib"
 
     cd ..
@@ -129,7 +136,8 @@ function install_freetype {
     tar -xjf freetype.tar.bz2
     cd freetype-$FT_VERSION
     require_success "Failed to cd to freetype directory"
-    ./configure --enable-shared=no --enable-static=true
+
+    CC=${CC} CXX=${CXX} ./configure --enable-shared=no --enable-static=true
     make
     sudo make install
     require_success "Failed to install freetype $FT_VERSION"
@@ -259,7 +267,6 @@ elif [ "$TEST" == "brew_py3" ] ; then
     fi
 
     $PIP install numpy
-
     install_matplotlib
 
 elif [ "$TEST" == "macports" ] ; then
@@ -282,7 +289,6 @@ then
 
     install_macports
     install_macports_python $PY noforce $VENV
-
     install_matplotlib
 
 elif [ "$TEST" == "macpython27_10.9" ] ; then
@@ -308,7 +314,7 @@ elif [ "$TEST" == "macpython27_10.9" ] ; then
         install_mac_numpy $NUMPY $PY $OS
     fi
 
-    install_matplotlib
+    install_matplotlib $CC $CXX
 
 elif [ "$TEST" == "macpython33_10.9" ] ; then
 
@@ -328,7 +334,7 @@ elif [ "$TEST" == "macpython33_10.9" ] ; then
         exit "numpy does not distribute python 3 binaries,  yet"
     fi
 
-    install_matplotlib
+    install_matplotlib $CC $CXX
 
 else
     echo "Unknown test setting ($TEST)"
