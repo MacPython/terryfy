@@ -291,7 +291,7 @@ elif [ "$TEST" == "macpython27_10.9" ] ; then
     export PIP="sudo $MACPYTHON_PREFIX/$PY/bin/pip$PY"
 
     # pip gets confused as to which PYTHONPATH it is supposed to look at
-    # make sure to upgrade default-installed packges so that they actually
+    # make sure to upgrade default-installed packages so that they actually
     # show up in $PYTHON's search path
     if [ -z "$BIN_NUMPY" ] ; then
         $PIP install numpy
