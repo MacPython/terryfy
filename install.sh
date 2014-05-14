@@ -170,7 +170,7 @@ function install_mac_numpy {
 function get_pip {
     PYTHON=$1
 
-    curl -O GET_PIP_URL > get-pip.py
+    curl -O $GET_PIP_URL > get-pip.py
     require_success "failed to download get-pip"
 
     sudo $PYTHON get-pip.py
