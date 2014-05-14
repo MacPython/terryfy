@@ -103,7 +103,7 @@ function install_tkl_85 {
 function install_mac_python {
     PY_VERSION=$1
     PY_DMG=python-$PY_VERSION-macosx10.6.dmg
-    curl http://python.org/ftp/python/$PY_VERSION/${PY_DMG} > $PY_DMG
+    curl https://www.python.org/ftp/python/$PY_VERSION/${PY_DMG} > $PY_DMG
     require_success "Failed to download mac python $PY_VERSION"
 
     hdiutil attach $PY_DMG -mountpoint /Volumes/Python
