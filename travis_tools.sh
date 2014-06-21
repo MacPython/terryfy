@@ -22,7 +22,7 @@ function require_success {
 }
 
 
-function python_check {
+function check_python {
     if [ -z $PYTHON_CMD ]; then
         echo "PYTHON_CMD variable not defined"
         exit 1
@@ -30,7 +30,7 @@ function python_check {
 }
 
 
-function pip_check {
+function check_pip {
     if [ -z $PIP_CMD ]; then
         echo "PIP_CMD variable not defined"
         exit 1
@@ -44,25 +44,25 @@ function abspath {
 
 
 function get_py_digit {
-    python_check
+    check_python
     $PYTHON_CMD -c "import sys; print(sys.version_info[0])"
 }
 
 
 function get_py_mm {
-    python_check
+    check_python
     $PYTHON_CMD -c "import sys; print('{0}.{1}'.format(*sys.version_info[0:2]))"
 }
 
 
 function get_py_mm_nodot {
-    python_check
+    check_python
     $PYTHON_CMD -c "import sys; print('{0}{1}'.format(*sys.version_info[0:2]))"
 }
 
 
 function get_py_prefix {
-    python_check
+    check_python
     $PYTHON_CMD -c "import sys; print(sys.prefix)"
 }
 
@@ -191,7 +191,7 @@ function make_workon_venv {
         venv_dir="venv"
     fi
     venv_dir=`abspath $venv_dir`
-    cHeck_python
+    check_python
     $VIRTUALENV_CMD --python=$PYTHON_CMD $venv_dir
     PYTHON_CMD=$venv_dir/bin/python
     PIP_CMD=$venv_dir/bin/pip
