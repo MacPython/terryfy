@@ -2,7 +2,7 @@
 # Use with ``source travis_tools.sh``
 
 GET_PIP_CMD_URL=https://bootstrap.pypa.io/get-pip.py
-PYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions
+MACPYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions
 PYTHON_URL=https://www.python.org/ftp/python
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
 MACPORTS_VERSION="MacPorts-2.2.1"
@@ -80,7 +80,7 @@ function install_macpython {
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
     require_success "Failed to install Python.org Python $py_version"
     py_mm=${py_version:0:3}
-    PYTHON_CMD=$PYTHON_PREFIX/$py_mm/bin/python$py_mn
+    PYTHON_CMD=$MACPYTHON_PREFIX/$py_mm/bin/python$py_mn
 }
 
 
@@ -125,11 +125,9 @@ function macports_install_pip {
 
 
 function macports_install_virtualenv {
-    local py_version=$1
-    local py_mm=${py_version:0:3}
-    local py_mm_nodot=`echo $py_mm | tr -d '.'`
-    local py_ver_spec="py$py_mm_nodot"
-    sudo port install $py_ver_spec-virtualenv
+    local py_mm=`get_py_mm`
+    local py_mm_nodot=`get_py_mm_nodot`
+    sudo port install py$py_mm_nodot-virtualenv
     VIRTUALENV_CMD="$MACPORTS_PREFIX/bin/virtualenv-$py_mm"
 }
 
@@ -168,7 +166,8 @@ function install_pip {
     sudo $PYTHON_CMD get-pip.py
     require_success "Failed to install pip"
     local py_prefix=`get_py_prefix`
-    PIP_CMD="sudo $py_prefix/bin/pip$PY"
+    local py_mm=`get_py_mm`
+    PIP_CMD="sudo $py_prefix/bin/pip$py_mm"
 }
 
 
