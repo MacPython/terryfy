@@ -71,7 +71,7 @@ function install_macpython {
     # Installs Python.org Python
     # puts bin directory on the PATH
     # sets $PYTHON_CMD variable to python executable
-    local py_version $1
+    local py_version=$1
     local py_dmg=python-$py_version-macosx10.6.dmg
     local dmg_path=$DOWNLOADS/$py_dmg
     curl $PYTHON_URL/$py_version/${py_dmg} > $dmg_path
