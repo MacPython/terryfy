@@ -1,7 +1,7 @@
 #!/bin/bash
 # Use with ``source travis_tools.sh``
 
-GET_PIP_CMD_URL=https://bootstrap.pypa.io/get-pip.py
+GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 MACPYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions
 PYTHON_URL=https://www.python.org/ftp/python
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
@@ -74,6 +74,7 @@ function install_macpython {
     local py_version=$1
     local py_dmg=python-$py_version-macosx10.6.dmg
     local dmg_path=$DOWNLOADS_SDIR/$py_dmg
+    mkdir -p $DOWNLOADS_SDIR
     curl $PYTHON_URL/$py_version/${py_dmg} > $dmg_path
     require_success "Failed to download mac python $py_version"
     hdiutil attach $dmg_path -mountpoint /Volumes/Python
@@ -87,8 +88,10 @@ function install_macpython {
 function install_macports {
     # Initialize macports, put macports on PATH
     local macports_path=$DOWNLOADS_SDIR/$MACPORTS.tar.gz
+    mkdir -p $DOWNLOADS_SDIR
     curl $MACPORTS_URL/$MACPORTS.tar.gz > $macports_path --insecure
     require_success "failed to download macports"
+    mkdir -p $WORKING_SDIR
     cd $WORKING_SDIR
     tar -xzf ../$macports_path
     cd $MACPORTS
@@ -161,9 +164,10 @@ function system_install_pip {
 
 function install_pip {
     check_python
-    curl -O $GET_PIP_CMD_URL > get-pip.py
+    mkdir -p $DOWNLOADS_SDIR
+    curl -O $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
     require_success "failed to download get-pip"
-    sudo $PYTHON_CMD get-pip.py
+    sudo $PYTHON_CMD $DOWNLOADS_SDIR/get-pip.py
     require_success "Failed to install pip"
     local py_prefix=`get_py_prefix`
     local py_mm=`get_py_mm`
