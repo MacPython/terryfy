@@ -73,7 +73,7 @@ function install_macpython {
     # sets $PYTHON_CMD variable to python executable
     local py_version=$1
     local py_dmg=python-$py_version-macosx10.6.dmg
-    local dmg_path=$DOWNLOADS/$py_dmg
+    local dmg_path=$DOWNLOADS_SDIR/$py_dmg
     curl $PYTHON_URL/$py_version/${py_dmg} > $dmg_path
     require_success "Failed to download mac python $py_version"
     hdiutil attach $dmg_path -mountpoint /Volumes/Python
@@ -86,10 +86,10 @@ function install_macpython {
 
 function install_macports {
     # Initialize macports, put macports on PATH
-    local macports_path=$DOWNLOADS/$MACPORTS.tar.gz
+    local macports_path=$DOWNLOADS_SDIR/$MACPORTS.tar.gz
     curl $MACPORTS_URL/$MACPORTS.tar.gz > $macports_path --insecure
     require_success "failed to download macports"
-    cd $WORKING
+    cd $WORKING_SDIR
     tar -xzf ../$macports_path
     cd $MACPORTS
     ./configure --prefix=$MACPORTS_PREFIX
