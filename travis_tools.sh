@@ -23,7 +23,7 @@ function require_success {
 
 
 function check_python {
-    if [ -z $PYTHON_CMD ]; then
+    if [ -z "$PYTHON_CMD" ]; then
         echo "PYTHON_CMD variable not defined"
         exit 1
     fi
@@ -31,7 +31,7 @@ function check_python {
 
 
 function check_pip {
-    if [ -z $PIP_CMD ]; then
+    if [ -z "$PIP_CMD" ]; then
         echo "PIP_CMD variable not defined"
         exit 1
     fi
@@ -165,7 +165,7 @@ function system_install_pip {
 function install_pip {
     check_python
     mkdir -p $DOWNLOADS_SDIR
-    curl -O $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
+    curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
     require_success "failed to download get-pip"
     sudo $PYTHON_CMD $DOWNLOADS_SDIR/get-pip.py
     require_success "Failed to install pip"
