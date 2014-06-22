@@ -80,8 +80,8 @@ function install_macpython {
     hdiutil attach $dmg_path -mountpoint /Volumes/Python
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
     require_success "Failed to install Python.org Python $py_version"
-    py_mm=${py_version:0:3}
-    PYTHON_CMD=$MACPYTHON_PREFIX/$py_mm/bin/python$py_mn
+    local py_mm=${py_version:0:3}
+    PYTHON_CMD=$MACPYTHON_PREFIX/$py_mm/bin/python$py_mm
 }
 
 
