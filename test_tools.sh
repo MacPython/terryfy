@@ -12,6 +12,30 @@ echo "pip cmd: $VIRTUALENV_CMD"
 # Return code
 RET=0
 
+python_version=`$PYTHON_CMD -c \
+    'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))'`
+python_mm=${python_version:0:3}
+python_m=${python_version:0:1}
+case $INSTALL_TYPE in
+"macpython")
+    if [ "$python_version" != "$VERSION" ]; then
+        echo "Wrong macpython python version"
+        RET=1
+    fi
+    ;;
+"macports")
+    if [ "$python_mm" != "$VERSION" ]; then
+        echo "Wrong macports python version"
+        RET=1
+    fi
+    ;;
+"homebrew")
+    if [ "$python_m" != "$VERSION" ]; then
+        echo "Wrong homebrew python version"
+        RET=1
+    fi
+    ;;
+esac
 if [ "$VENV" == "1" ]; then
     if [ "$PYTHON_CMD" != "$PWD/venv/bin/python" ]; then
         echo "Wrong virtualenv python"
@@ -22,11 +46,8 @@ if [ "$VENV" == "1" ]; then
         RET=1
     fi
 else # not virtualenv
-    python_version=`$PYTHON_CMD -c \
-        'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))'`
-    python_mm=${python_version:0:3}
-    python_m=${python_version:0:1}
-    if [ $INSTALL_TYPE == "system" ]; then
+    case $INSTALL_TYPE in
+    "system")
         if [ "$PYTHON_CMD" != "/usr/bin/python" ]; then
             echo "Wrong system python cmd"
             RET=1
@@ -35,24 +56,19 @@ else # not virtualenv
             echo "Wrong system pip"
             RET=1
         fi
-    elif [ $INSTALL_TYPE == "macpython" ]; then
-        if [ "$python_version" != "$VERSION" ]; then
-            echo "Wrong macpython python version"
-            RET=1
-        fi
-        if [ "$PYTHON_CMD" != "$MACPYTHON_PREFIX/bin/python$python_mm" ]; then
+        ;;
+    "macpython")
+        macpie_bin="$MACPYTHON_PREFIX/$python_mm/bin"
+        if [ "$PYTHON_CMD" != "$macpie_bin/python$python_mm" ]; then
             echo "Wrong macpython python cmd"
             RET=1
         fi
-        if [ "$PIP_CMD" != "sudo $MACPYTHON_PREFIX/bin/pip$python_mm" ]; then
+        if [ "$PIP_CMD" != "sudo $macpie_bin/pip$python_mm" ]; then
             echo "Wrong macpython pip"
             RET=1
         fi
-    elif [ $INSTALL_TYPE == "macports" ]; then
-        if [ "$python_mm" != "$VERSION" ]; then
-            echo "Wrong macports python version"
-            RET=1
-        fi
+        ;;
+    "macports")
         if [ "$PYTHON_CMD" != "/opt/local/bin/python$python_mm" ]; then
             echo "Wrong macports python cmd"
             RET=1
@@ -61,11 +77,8 @@ else # not virtualenv
             echo "Wrong macports pip"
             RET=1
         fi
-    elif [ $INSTALL_TYPE == "homebrew" ]; then
-        if [ "$python_m" != "$VERSION" ]; then
-            echo "Wrong homebrew python version"
-            RET=1
-        fi
+        ;;
+    "homebrew")
         if [ "$PYTHON_CMD" != "/usr/local/bin/python$python_m" ]; then
             echo "Wrong homebrew python cmd"
             RET=1
@@ -74,7 +87,7 @@ else # not virtualenv
             echo "Wrong homebrew pip"
             RET=1
         fi
-    fi
+    esac
 fi
 # Set the return code
 (exit $RET)

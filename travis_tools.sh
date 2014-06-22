@@ -87,14 +87,14 @@ function install_macpython {
 
 function install_macports {
     # Initialize macports, put macports on PATH
-    local macports_path=$DOWNLOADS_SDIR/$MACPORTS.tar.gz
+    local macports_path=$DOWNLOADS_SDIR/$MACPORTS_VERSION.tar.gz
     mkdir -p $DOWNLOADS_SDIR
-    curl $MACPORTS_URL/$MACPORTS.tar.gz > $macports_path --insecure
+    curl $MACPORTS_URL/$MACPORTS_VERSION.tar.gz > $macports_path --insecure
     require_success "failed to download macports"
     mkdir -p $WORKING_SDIR
     cd $WORKING_SDIR
     tar -xzf ../$macports_path
-    cd $MACPORTS
+    cd $MACPORTS_VERSION
     ./configure --prefix=$MACPORTS_PREFIX
     make
     sudo make install
@@ -140,9 +140,9 @@ function brew_install_python {
     local py_version=$1
     local py_digit=${py_version:0:1}
     if [[ "$py_digit" == "3" ]] ; then
-        brew install python
-    else
         brew install python3
+    else
+        brew install python2
     fi
     require_success "Failed to install python"
     PYTHON_CMD=/usr/local/bin/python$py_digit
