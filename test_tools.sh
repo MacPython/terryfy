@@ -73,7 +73,7 @@ else # not virtualenv
             echo "Wrong macports python cmd"
             RET=1
         fi
-        if [ "$PIP_CMD" != "/opt/local/bin/pip$python_mm" ]; then
+        if [ "$PIP_CMD" != "sudo /opt/local/bin/pip$python_mm" ]; then
             echo "Wrong macports pip"
             RET=1
         fi
