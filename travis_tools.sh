@@ -69,7 +69,8 @@ function get_py_prefix {
 
 function install_macpython {
     # Installs Python.org Python
-    # puts bin directory on the PATH
+    # Parameter $version
+    # Version given in major.minor.micro e.g  "3.4.1"
     # sets $PYTHON_CMD variable to python executable
     local py_version=$1
     local py_dmg=python-$py_version-macosx10.6.dmg
@@ -82,6 +83,49 @@ function install_macpython {
     require_success "Failed to install Python.org Python $py_version"
     local py_mm=${py_version:0:3}
     PYTHON_CMD=$MACPYTHON_PREFIX/$py_mm/bin/python$py_mm
+}
+
+
+function install_pip {
+    # Generic install pip
+    # Gets needed version from version implied by $PYTHON_CMD
+    # Installs pip into python given by $PYTHON_CMD
+    # Assumes pip will be installed into same directory as $PYTHON_CMD
+    check_python
+    mkdir -p $DOWNLOADS_SDIR
+    curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
+    require_success "failed to download get-pip"
+    sudo $PYTHON_CMD $DOWNLOADS_SDIR/get-pip.py
+    require_success "Failed to install pip"
+    local py_mm=`get_py_mm`
+    PIP_CMD="sudo `dirname $PYTHON_CMD`/pip$py_mm"
+}
+
+
+function install_virtualenv {
+    # Generic install of virtualenv
+    # Installs virtualenv into python given by $PYTHON_CMD
+    # Assumes virtualenv will be installed into same directory as $PYTHON_CMD
+    check_pip
+    $PIP_CMD install virtualenv
+    require_success "Failed to install virtualenv"
+    check_python
+    VIRTUALENV_CMD="`dirname $PYTHON_CMD`/virtualenv"
+}
+
+
+function make_workon_venv {
+    # Make a virtualenv in given directory ('venv' default)
+    # Set $PYTHON_CMD, $PIP_CMD to virtualenv versions
+    local venv_dir=$1
+    if [ -z "$venv_dir" ]; then
+        venv_dir="venv"
+    fi
+    venv_dir=`abspath $venv_dir`
+    check_python
+    $VIRTUALENV_CMD --python=$PYTHON_CMD $venv_dir
+    PYTHON_CMD=$venv_dir/bin/python
+    PIP_CMD=$venv_dir/bin/pip
 }
 
 
@@ -105,7 +149,10 @@ function install_macports {
 
 
 function macports_install_python {
-    # major.minor version
+    # Installs macports python
+    # Parameter $version
+    # Version given in format major.minor e.g. "3.4"
+    # sets $PYTHON_CMD variable to python executable
     local py_version=$1
     local force=$2
     if [ "$force" == "1" ]; then
@@ -120,14 +167,18 @@ function macports_install_python {
 
 
 function macports_install_pip {
+    # macports install of pip
+    # Gets needed version from version implied by $PYTHON_CMD
     local py_mm=`get_py_mm`
     local py_mm_nodot=`get_py_mm_nodot`
-    sudo port install py$py_ver_spec-pip
-    PIP_CMD="sudo $MACPORTS_PREFIX/pip-$py_mm"
+    sudo port install py$py_mm_nodot-pip
+    PIP_CMD="sudo $MACPORTS_PREFIX/bin/pip-$py_mm"
 }
 
 
 function macports_install_virtualenv {
+    # macports install of virtualenv
+    # Gets needed version from version implied by $PYTHON_CMD
     local py_mm=`get_py_mm`
     local py_mm_nodot=`get_py_mm_nodot`
     sudo port install py$py_mm_nodot-virtualenv
@@ -136,7 +187,10 @@ function macports_install_virtualenv {
 
 
 function brew_install_python {
-    # Only installs by version 2 or 3
+    # Installs macports python
+    # Parameter $version
+    # Version can only be "2" or "3"
+    # sets $PYTHON_CMD variable to python executable
     local py_version=$1
     local py_digit=${py_version:0:1}
     if [[ "$py_digit" == "3" ]] ; then
@@ -149,55 +203,54 @@ function brew_install_python {
 }
 
 
-function brew_install_pip {
-    # already installed apparently
+function brew_set_pip_cmd {
+    # homebrew set of $PIP_CMD variable
+    # pip already installed by Python formula
+    # Gets version from version implied by $PYTHON_CMD
+    # https://github.com/Homebrew/homebrew/wiki/Homebrew-and-Python
     local py_digit=`get_py_digit`
     PIP_CMD=/usr/local/bin/pip${py_digit}
 }
 
 
 function system_install_pip {
+    # Install pip into system python
+    # Gets needed version from $PYTHON_CMD
+    # (so far on OSX, this must be "2")
     local py_digit=`get_py_digit`
-    PIP_CMD=/usr/local/bin/pip${py_digit}
+    sudo easy_install pip
+    PIP_CMD="sudo /usr/local/bin/pip${py_digit}"
 }
 
 
-function install_pip {
-    check_python
-    mkdir -p $DOWNLOADS_SDIR
-    curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
-    require_success "failed to download get-pip"
-    sudo $PYTHON_CMD $DOWNLOADS_SDIR/get-pip.py
-    require_success "Failed to install pip"
-    local py_mm=`get_py_mm`
-    PIP_CMD="sudo `dirname $PYTHON_CMD`/pip$py_mm"
-}
-
-
-function install_virtualenv {
-    # Install virtualenv
+function system_install_virtualenv {
+    # Install virtualenv into system python
+    # Needs $PIP_CMD
     check_pip
     $PIP_CMD install virtualenv
     require_success "Failed to install virtualenv"
-    check_python
-    VIRTUALENV_CMD="`dirname $PYTHON_CMD`/virtualenv"
-}
-
-
-function make_workon_venv {
-    local venv_dir=$1
-    if [ -z "$venv_dir" ]; then
-        venv_dir="venv"
-    fi
-    venv_dir=`abspath $venv_dir`
-    check_python
-    $VIRTUALENV_CMD --python=$PYTHON_CMD $venv_dir
-    PYTHON_CMD=$venv_dir/bin/python
-    PIP_CMD=$venv_dir/bin/pip
+    VIRTUALENV_CMD="/usr/local/bin/virtualenv"
 }
 
 
 function get_python_environment {
+    # Set up python environment
+    # Parameters:
+    #     $install_type : {macpython|macports|homebrew|system}
+    #         Type of Python to install
+    #     $version :
+    #         macpython : major.minor.micro e.g. "3.4.1"
+    #         macpports : major.minor e.g. "3.4"
+    #         homebrew : major e.g "3"
+    #         system : ignored (but required to be not empty)
+    #     $venv_flag : {1|not defined}
+    #         If "1" - make virtualenv, set python / pip commands accordingly
+    #
+    # Installs Python
+    # Sets $PYTHON_CMD to Python executable
+    # Sets $PIP_CMD to pip executable (including sudo if necessary)
+    # If $venv_flag==1, Sets $VIRTUALENV_CMD to virtualenv executable
+    # Puts directory of $PYTHON_CMD on $PATH
     local install_type=$1
     local version=$2
     local venv_flag=$3
@@ -220,10 +273,10 @@ function get_python_environment {
         fi
         ;;
     homebrew)
-        # Already installed on travis worker
+        # Homebrew already installed on travis worker
         brew update
         brew_install_python $version
-        install_pip
+        brew_set_pip_cmd
         if [ -n "$venv_flag" ]; then
             install_virtualenv
             make_workon_venv
@@ -231,10 +284,8 @@ function get_python_environment {
         ;;
     system)
         PYTHON_CMD="/usr/bin/python"
-        sudo easy_install pip
-        PIP_CMD="sudo /usr/local/bin/pip"
         if [ -n "$venv_flag" ]; then
-            install_virtualenv
+            system_install_virtualenv
             make_workon_venv
         fi
         ;;

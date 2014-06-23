@@ -7,7 +7,7 @@ echo "pip cmd: $PIP_CMD"
 $PIP_CMD --version
 
 echo "virtualenv on path: `which virtualenv`"
-echo "pip cmd: $VIRTUALENV_CMD"
+echo "virtualenv cmd: $VIRTUALENV_CMD"
 
 # Return code
 RET=0
@@ -52,7 +52,7 @@ else # not virtualenv
             echo "Wrong system python cmd"
             RET=1
         fi
-        if [ "$PIP_CMD" != "sudo /usr/bin/pip" ]; then
+        if [ "$PIP_CMD" != "sudo /usr/local/bin/pip" ]; then
             echo "Wrong system pip"
             RET=1
         fi
