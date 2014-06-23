@@ -142,7 +142,7 @@ function brew_install_python {
     if [[ "$py_digit" == "3" ]] ; then
         brew install python3
     else
-        brew install python2
+        brew install python
     fi
     require_success "Failed to install python"
     PYTHON_CMD=/usr/local/bin/python$py_digit
@@ -169,9 +169,8 @@ function install_pip {
     require_success "failed to download get-pip"
     sudo $PYTHON_CMD $DOWNLOADS_SDIR/get-pip.py
     require_success "Failed to install pip"
-    local py_prefix=`get_py_prefix`
     local py_mm=`get_py_mm`
-    PIP_CMD="sudo $py_prefix/bin/pip$py_mm"
+    PIP_CMD="sudo `dirname $PYTHON_CMD`/pip$py_mm"
 }
 
 
@@ -214,6 +213,7 @@ function get_python_environment {
     "macports")
         install_macports
         macports_install_python $version
+        macports_install_pip
         if [ -n "$venv_flag" ]; then
             macports_install_virtualenv
             make_workon_venv
@@ -232,7 +232,7 @@ function get_python_environment {
     "system")
         PYTHON_CMD="/usr/bin/python"
         sudo easy_install pip
-        PIP_CMD="sudo /usr/bin/pip"
+        PIP_CMD="sudo /usr/local/bin/pip"
         if [ -n "$venv_flag" ]; then
             install_virtualenv
             make_workon_venv
