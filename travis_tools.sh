@@ -284,6 +284,7 @@ function get_python_environment {
         ;;
     system)
         PYTHON_CMD="/usr/bin/python"
+        system_install_pip
         if [ -n "$venv_flag" ]; then
             system_install_virtualenv
             make_workon_venv
