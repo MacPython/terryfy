@@ -202,7 +202,7 @@ function get_python_environment {
     local version=$2
     local venv_flag=$3
     case $install_type in
-    "macpython")
+    macpython)
         install_macpython $version
         install_pip
         if [ -n "$venv_flag" ]; then
@@ -210,7 +210,7 @@ function get_python_environment {
             make_workon_venv
         fi
         ;;
-    "macports")
+    macports)
         install_macports
         macports_install_python $version
         macports_install_pip
@@ -219,7 +219,7 @@ function get_python_environment {
             make_workon_venv
         fi
         ;;
-    "homebrew")
+    homebrew)
         # Already installed on travis worker
         brew update
         brew_install_python $version
@@ -229,7 +229,7 @@ function get_python_environment {
             make_workon_venv
         fi
         ;;
-    "system")
+    system)
         PYTHON_CMD="/usr/bin/python"
         sudo easy_install pip
         PIP_CMD="sudo /usr/local/bin/pip"
