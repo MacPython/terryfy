@@ -215,11 +215,8 @@ function brew_set_pip_cmd {
 
 function system_install_pip {
     # Install pip into system python
-    # Gets needed version from $PYTHON_CMD
-    # (so far on OSX, this must be "2")
-    local py_digit=`get_py_digit`
     sudo easy_install pip
-    PIP_CMD="sudo /usr/local/bin/pip${py_digit}"
+    PIP_CMD="sudo /usr/local/bin/pip"
 }
 
 
