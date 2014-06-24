@@ -43,6 +43,11 @@ function abspath {
 }
 
 
+function realpath {
+    python -c "import os; print(os.path.realpath('$1'))"
+}
+
+
 function get_py_digit {
     check_python
     $PYTHON_CMD -c "import sys; print(sys.version_info[0])"
@@ -164,7 +169,7 @@ function macports_install_python {
     local py_mm_nodot=`echo $py_mm | tr -d '.'`
     sudo port install $force python$py_mm_nodot
     require_success "Failed to install macports python"
-    PYTHON_CMD=$MACPORTS_PREFIX/bin/python$py_mm
+    PYTHON_CMD=`realpath $MACPORTS_PREFIX/bin/python$py_mm`
 }
 
 
