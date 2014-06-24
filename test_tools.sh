@@ -14,6 +14,10 @@ if [ $? -ne 0 ] ; then RET=1; fi
 echo "virtualenv on path: `which virtualenv`"
 echo "virtualenv cmd: $VIRTUALENV_CMD"
 
+# Check that a pip install puts scripts on path
+$PIP_CMD install delocate
+delocate-listdeps --version
+if [ $? -ne 0 ] ; then RET=1; fi
 
 python_version=`$PYTHON_CMD -c \
     'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))'`
