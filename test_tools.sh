@@ -39,7 +39,7 @@ homebrew)
     fi
     ;;
 esac
-if [ "$VENV" == "1" ]; then
+if [ -n "$VENV" ]; then
     if [ "$PYTHON_CMD" != "$PWD/venv/bin/python" ]; then
         echo "Wrong virtualenv python"
         RET = 1

@@ -117,6 +117,8 @@ function install_virtualenv {
 function make_workon_venv {
     # Make a virtualenv in given directory ('venv' default)
     # Set $PYTHON_CMD, $PIP_CMD to virtualenv versions
+    # Parameter $venv_dir
+    #    directory for virtualenv
     local venv_dir=$1
     if [ -z "$venv_dir" ]; then
         venv_dir="venv"
@@ -240,33 +242,34 @@ function get_python_environment {
     #         macpports : major.minor e.g. "3.4"
     #         homebrew : major e.g "3"
     #         system : ignored (but required to be not empty)
-    #     $venv_flag : {1|not defined}
-    #         If "1" - make virtualenv, set python / pip commands accordingly
+    #     $venv_dir : {directory_name|not defined}
+    #         If defined - make virtualenv in this directory, set python / pip
+    #         commands accordingly
     #
     # Installs Python
     # Sets $PYTHON_CMD to Python executable
     # Sets $PIP_CMD to pip executable (including sudo if necessary)
-    # If $venv_flag==1, Sets $VIRTUALENV_CMD to virtualenv executable
+    # If $venv_dir defined, Sets $VIRTUALENV_CMD to virtualenv executable
     # Puts directory of $PYTHON_CMD on $PATH
     local install_type=$1
     local version=$2
-    local venv_flag=$3
+    local venv_dir=$3
     case $install_type in
     macpython)
         install_macpython $version
         install_pip
-        if [ -n "$venv_flag" ]; then
+        if [ -n "$venv_dir" ]; then
             install_virtualenv
-            make_workon_venv
+            make_workon_venv $venv_dir
         fi
         ;;
     macports)
         install_macports
         macports_install_python $version
         macports_install_pip
-        if [ -n "$venv_flag" ]; then
+        if [ -n "$venv_dir" ]; then
             macports_install_virtualenv
-            make_workon_venv
+            make_workon_venv $venv_dir
         fi
         ;;
     homebrew)
@@ -274,17 +277,17 @@ function get_python_environment {
         brew update
         brew_install_python $version
         brew_set_pip_cmd
-        if [ -n "$venv_flag" ]; then
+        if [ -n "$venv_dir" ]; then
             install_virtualenv
-            make_workon_venv
+            make_workon_venv $venv_dir
         fi
         ;;
     system)
         PYTHON_CMD="/usr/bin/python"
         system_install_pip
-        if [ -n "$venv_flag" ]; then
+        if [ -n "$venv_dir" ]; then
             system_install_virtualenv
-            make_workon_venv
+            make_workon_venv $venv_dir
         fi
         ;;
     *)
