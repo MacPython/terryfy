@@ -1,16 +1,19 @@
+# Return code
+RET=0
+
 echo "Python on path: `which python`"
 echo "Python cmd: $PYTHON_CMD"
 $PYTHON_CMD --version
+if [ $? -ne 0 ] ; then RET=1; fi
 
 echo "pip on path: `which pip`"
 echo "pip cmd: $PIP_CMD"
 $PIP_CMD --version
+if [ $? -ne 0 ] ; then RET=1; fi
 
 echo "virtualenv on path: `which virtualenv`"
 echo "virtualenv cmd: $VIRTUALENV_CMD"
 
-# Return code
-RET=0
 
 python_version=`$PYTHON_CMD -c \
     'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))'`
@@ -90,5 +93,5 @@ else # not virtualenv
         ;;
     esac
 fi
-# Set the return code
+# Set the final return code
 (exit $RET)
