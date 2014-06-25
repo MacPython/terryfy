@@ -2,8 +2,8 @@
 RET=0
 
 echo "Python on path: `which python`"
-echo "Python cmd: $PYTHON_CMD"
-$PYTHON_CMD --version
+echo "Python cmd: $PYTHON_EXE"
+$PYTHON_EXE --version
 if [ $? -ne 0 ] ; then RET=1; fi
 
 echo "pip on path: `which pip`"
@@ -20,7 +20,7 @@ delocate-listdeps --version
 if [ $? -ne 0 ] ; then RET=1; fi
 
 # Python version information
-python_version=`$PYTHON_CMD -c \
+python_version=`$PYTHON_EXE -c \
     'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))'`
 python_mm=${python_version:0:3}
 python_m=${python_version:0:1}
@@ -45,7 +45,7 @@ homebrew)
     ;;
 esac
 if [ -n "$VENV" ]; then
-    if [ "$PYTHON_CMD" != "$PWD/venv/bin/python" ]; then
+    if [ "$PYTHON_EXE" != "$PWD/venv/bin/python" ]; then
         echo "Wrong virtualenv python"
         RET = 1
     fi
@@ -56,7 +56,7 @@ if [ -n "$VENV" ]; then
 else # not virtualenv
     case $INSTALL_TYPE in
     system)
-        if [ "$PYTHON_CMD" != "/usr/bin/python" ]; then
+        if [ "$PYTHON_EXE" != "/usr/bin/python" ]; then
             echo "Wrong system python cmd"
             RET=1
         fi
@@ -67,7 +67,7 @@ else # not virtualenv
         ;;
     macpython)
         macpie_bin="$MACPYTHON_PY_PREFIX/$python_mm/bin"
-        if [ "$PYTHON_CMD" != "$macpie_bin/python$python_mm" ]; then
+        if [ "$PYTHON_EXE" != "$macpie_bin/python$python_mm" ]; then
             echo "Wrong macpython python cmd"
             RET=1
         fi
@@ -78,7 +78,7 @@ else # not virtualenv
         ;;
     macports)
         macports_pie_bin=$MACPORTS_PY_PREFIX/$python_mm/bin
-        if [ "$PYTHON_CMD" != "$macports_pie_bin/python$python_mm"
+        if [ "$PYTHON_EXE" != "$macports_pie_bin/python$python_mm"
             echo "Wrong macports python cmd"
             RET=1
         fi
@@ -88,7 +88,7 @@ else # not virtualenv
         fi
         ;;
     homebrew)
-        if [ "$PYTHON_CMD" != "/usr/local/bin/python$python_m" ]; then
+        if [ "$PYTHON_EXE" != "/usr/local/bin/python$python_m" ]; then
             echo "Wrong homebrew python cmd"
             RET=1
         fi
