@@ -329,6 +329,7 @@ function get_python_environment {
         exit 1
         ;;
     esac
-    # Put python binary on path
-    PATH="`dirname $PYTHON_EXE`:$PATH"
+    # Put python binary on path and export
+    export PATH="`dirname $PYTHON_EXE`:$PATH"
+    export PYTHON_EXE PIP_CMD
 }
