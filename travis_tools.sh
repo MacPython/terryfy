@@ -1,13 +1,13 @@
 #!/bin/bash
 # Use with ``source travis_tools.sh``
 
-GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
+MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
-PYTHON_URL=https://www.python.org/ftp/python
+GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
 MACPORTS_VERSION="MacPorts-2.2.1"
 MACPORTS_PREFIX=/opt/local
-MACPORTS_PY_PREFIX=$MACPORTS_PREFIX/MACPYTHON_PY_PREFIX
+MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
@@ -110,7 +110,7 @@ function install_macpython {
     local py_dmg=python-$py_version-macosx10.6.dmg
     local dmg_path=$DOWNLOADS_SDIR/$py_dmg
     mkdir -p $DOWNLOADS_SDIR
-    curl $PYTHON_URL/$py_version/${py_dmg} > $dmg_path
+    curl $MACPYTHON_URL/$py_version/${py_dmg} > $dmg_path
     require_success "Failed to download mac python $py_version"
     hdiutil attach $dmg_path -mountpoint /Volumes/Python
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
