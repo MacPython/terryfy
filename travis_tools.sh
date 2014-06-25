@@ -76,12 +76,19 @@ function get_py_prefix {
 function get_py_site_packages {
     # Return site-packages directory using PYTHON_EXE
     check_python
-    $PYTHON_EXE -c "import distutils; print(distutils.sysconfig.get_python_lib())"
+    $PYTHON_EXE -c "from distutils import sysconfig; print(sysconfig.get_python_lib())"
+}
 
 
-function enable_py_sys_site_packages {
-    # When in virtualenv (not checked) enable use of system site packages
-    touch "`get_site_packages`/../no-global-site-packages.txt"
+function toggle_py_sys_site_packages {
+    # When in virtualenv (not checked) toggle use of system site packages
+    local no_sp_fname="`get_py_site_packages`/../no-global-site-packages.txt"
+    if [ -f "$no_sp_fname" ]; then
+        rm $no_sp_fname
+    else
+        touch $no_sp_fname
+    fi
+}
 
 
 function get_pip_sudo {
@@ -91,6 +98,7 @@ function get_pip_sudo {
     if [ "${PIP_CMD:0:4}" == "sudo" ]; then
         echo "sudo"
     fi
+}
 
 
 function install_macpython {
