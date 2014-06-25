@@ -19,6 +19,7 @@ $PIP_CMD install delocate
 delocate-listdeps --version
 if [ $? -ne 0 ] ; then RET=1; fi
 
+# Python version information
 python_version=`$PYTHON_CMD -c \
     'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))'`
 python_mm=${python_version:0:3}
@@ -65,7 +66,7 @@ else # not virtualenv
         fi
         ;;
     macpython)
-        macpie_bin="$MACPYTHON_PREFIX/$python_mm/bin"
+        macpie_bin="$MACPYTHON_PY_PREFIX/$python_mm/bin"
         if [ "$PYTHON_CMD" != "$macpie_bin/python$python_mm" ]; then
             echo "Wrong macpython python cmd"
             RET=1
@@ -76,7 +77,8 @@ else # not virtualenv
         fi
         ;;
     macports)
-        if [ "$PYTHON_CMD" != "/opt/local/bin/python$python_mm" ]; then
+        macports_pie_bin=$MACPORTS_PY_PREFIX/$python_mm/bin
+        if [ "$PYTHON_CMD" != "$macports_pie_bin/python$python_mm"
             echo "Wrong macports python cmd"
             RET=1
         fi

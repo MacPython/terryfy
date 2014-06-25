@@ -2,11 +2,12 @@
 # Use with ``source travis_tools.sh``
 
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
-MACPYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions
+MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 PYTHON_URL=https://www.python.org/ftp/python
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
 MACPORTS_VERSION="MacPorts-2.2.1"
 MACPORTS_PREFIX=/opt/local
+MACPORTS_PY_PREFIX=$MACPORTS_PREFIX/MACPYTHON_PY_PREFIX
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
@@ -87,7 +88,7 @@ function install_macpython {
     sudo installer -pkg /Volumes/Python/Python.mpkg -target /
     require_success "Failed to install Python.org Python $py_version"
     local py_mm=${py_version:0:3}
-    PYTHON_CMD=$MACPYTHON_PREFIX/$py_mm/bin/python$py_mm
+    PYTHON_CMD=$MACPYTHON_PY_PREFIX/$py_mm/bin/python$py_mm
 }
 
 
