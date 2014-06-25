@@ -73,6 +73,26 @@ function get_py_prefix {
 }
 
 
+function get_py_site_packages {
+    # Return site-packages directory using PYTHON_CMD
+    check_python
+    $PYTHON_CMD -c "import distutils; print(distutils.sysconfig.get_python_lib())"
+
+
+function enable_py_sys_site_packages {
+    # When in virtualenv (not checked) enable use of system site packages
+    touch "`get_site_packages`/../no-global-site-packages.txt"
+
+
+function get_pip_sudo {
+    # Echo "sudo" if PIP_CMD starts with sudo
+    # Useful for checking if Python installations need sudo
+    check_pip
+    if [ "${PIP_CMD:0:4}" == "sudo" ]; then
+        echo "sudo"
+    fi
+
+
 function install_macpython {
     # Installs Python.org Python
     # Parameter $version
