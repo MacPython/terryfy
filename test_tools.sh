@@ -19,11 +19,16 @@ $PIP_CMD install delocate
 delocate-listdeps --version
 if [ $? -ne 0 ] ; then RET=1; fi
 
+# Run the site-packages command
+echo "Site packages: `get_py_site_packages`"
+if [ $? -ne 0 ] ; then RET=1; fi
+
 # Python version information
 python_version=`$PYTHON_EXE -c \
     'import sys; print("{}.{}.{}".format(*sys.version_info[:3]))'`
 python_mm=${python_version:0:3}
 python_m=${python_version:0:1}
+
 case $INSTALL_TYPE in
 macpython)
     if [ "$python_version" != "$VERSION" ]; then
@@ -53,6 +58,10 @@ if [ -n "$VENV" ]; then
         echo "Wrong virtualenv pip"
         RET=1
     fi
+    # Check site-packages toggling doesn't error (at least)
+    toggle_py_sys_site_packages
+    toggle_py_sys_site_packages
+    if [ $? -ne 0 ] ; then RET=1; fi
 else # not virtualenv
     case $INSTALL_TYPE in
     system)
@@ -77,8 +86,8 @@ else # not virtualenv
         fi
         ;;
     macports)
-        macports_pie_bin=$MACPORTS_PY_PREFIX/$python_mm/bin
-        if [ "$PYTHON_EXE" != "$macports_pie_bin/python$python_mm"
+        macports_pie_bin="$MACPORTS_PY_PREFIX/$python_mm/bin"
+        if [ "$PYTHON_EXE" != "$macports_pie_bin/python$python_mm" ]; then
             echo "Wrong macports python cmd"
             RET=1
         fi
@@ -98,6 +107,20 @@ else # not virtualenv
         fi
         ;;
     esac
+fi
+
+# Check sudo
+if [ -n "$VENV" ] || [ "$INSTALL_TYPE" == "homebrew" ]; then
+    # Sudo should be empty
+    if [ -n "`get_pip_sudo`" ]; then
+        echo "pip sudo should be empty"
+        RET=1
+    fi
+else # sudo should be set
+    if [ "`get_pip_sudo`" != "sudo" ]; then
+        echo "pip sudo not set"
+        RET=1
+    fi
 fi
 # Set the final return code
 (exit $RET)
