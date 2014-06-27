@@ -39,6 +39,14 @@ function check_pip {
 }
 
 
+function check_var {
+    if [ -z "$1" ]; then
+        echo "required variable not defined"
+        exit 1
+    fi
+}
+
+
 function abspath {
     python -c "import os; print(os.path.abspath('$1'))"
 }
@@ -278,6 +286,18 @@ function system_install_virtualenv {
     $PIP_CMD install virtualenv
     require_success "Failed to install virtualenv"
     VIRTUALENV_CMD="/usr/local/bin/virtualenv"
+}
+
+
+function rename_wheels {
+    local wheelhouse=$1
+    check_var $wheelhouse
+    # From https://github.com/minrk/wheelhouse/blob/master/wheelhouse.sh
+    # tell pip that all of the 10.6 intel wheels will also work on 10.9
+    # (System Python) and for x86_64
+    for file in $(find "$wheelhouse" -name '*-macosx_10_6_intel.whl'); do
+        mv $file $(echo $file | sed s/macosx_10_6_intel.whl/macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.whl/)
+    done
 }
 
 
