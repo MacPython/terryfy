@@ -249,6 +249,21 @@ function brew_set_pip_cmd {
 }
 
 
+function patch_sys_python {
+    # Fixes error discussed here:
+    # http://stackoverflow.com/questions/22313407/clang-error-unknown-argument-mno-fused-madd-python-package-installation-fa
+    # Present for OSX 10.9.2 fixed in 10.9.3
+    # This should be benign for 10.9.3 though
+    local py_sys_dir="/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7"
+    pushd $py_sys_dir
+    if [ -n "`grep fused-madd _sysconfigdata.py`" ]; then
+        sudo sed -i '.old' 's/ -m\(no-\)\{0,1\}fused-madd//g' _sysconfigdata.py
+        sudo rm _sysconfigdata.pyo _sysconfigdata.pyc
+    fi
+    popd
+}
+
+
 function system_install_pip {
     # Install pip into system python
     sudo easy_install pip
