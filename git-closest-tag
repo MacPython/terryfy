@@ -12,7 +12,7 @@ def main():
     try:
         target_branch = sys.argv[1]
     except IndexError:
-        target_branch = 'origin/master'
+        target_branch = 'HEAD'
     target_commit = check_output(['git', 'rev-parse', target_branch]).strip()
     tag_lines = check_output(['git', 'tag']).strip()
     min_distance = None
