@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+# vim: ft=python
+""" Get tag with fewest commits from given branch
+"""
+from __future__ import print_function
+
+import sys
+from subprocess import check_output
+
+
+def main():
+    try:
+        target_branch = sys.argv[1]
+    except IndexError:
+        target_branch = 'origin/master'
+    target_commit = check_output(['git', 'rev-parse', target_branch]).strip()
+    tag_lines = check_output(['git', 'tag']).strip()
+    min_distance = None
+    for line in tag_lines.split('\n'):
+        tag = line.strip()
+        # Check for case where tag and target are the same
+        tag_commit = check_output(['git', 'rev-parse', tag]).strip()
+        if tag_commit == target_commit:
+            print(tag)
+            break
+        # The commits along target branch since the root of the branch that the
+        # tag is on
+        commit_range = '{}..{}'.format(tag, target_commit)
+        commits = check_output(['git', 'log', '--oneline', commit_range])
+        commits = commits.strip()
+        if commits == '': # target commit earlier in history than tag
+            continue
+        distance = len(commits.split('\n'))
+        if min_distance is None or distance < min_distance:
+            closest_tag = tag
+            min_distance = distance
+    else:
+        if min_distance is None:
+            raise RuntimeError('Cannot find tag distances')
+        print(closest_tag)
+
+
+if __name__ == '__main__':
+    main()
