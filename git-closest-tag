@@ -8,25 +8,30 @@ import sys
 from subprocess import check_output
 
 
+def backtick(cmd):
+    output = check_output(cmd)
+    return output.decode('latin1').strip()
+
+
 def main():
     try:
         target_branch = sys.argv[1]
     except IndexError:
         target_branch = 'HEAD'
-    target_commit = check_output(['git', 'rev-parse', target_branch]).strip()
-    tag_lines = check_output(['git', 'tag']).strip()
+    target_commit = backtick(['git', 'rev-parse', target_branch]).strip()
+    tag_lines = backtick(['git', 'tag']).strip()
     min_distance = None
     for line in tag_lines.split('\n'):
         tag = line.strip()
         # Check for case where tag and target are the same
-        tag_commit = check_output(['git', 'rev-parse', tag]).strip()
+        tag_commit = backtick(['git', 'rev-parse', tag]).strip()
         if tag_commit == target_commit:
             print(tag)
             break
         # The commits along target branch since the root of the branch that the
         # tag is on
         commit_range = '{}..{}'.format(tag, target_commit)
-        commits = check_output(['git', 'log', '--oneline', commit_range])
+        commits = backtick(['git', 'log', '--oneline', commit_range])
         commits = commits.strip()
         if commits == '': # target commit earlier in history than tag
             continue
