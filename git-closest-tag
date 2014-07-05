@@ -1,7 +1,20 @@
 #!/usr/bin/env python
 # vim: ft=python
 """ Get tag with fewest commits from given branch
+
+Usage:
+
+    git-closest-tag [commit-ish]
+
+To get closest tag to current HEAD
+
+    git-closest-tag
+
+To get closest tag to origin/master
+
+    git-closest-tag origin/master
 """
+# Requires at least Python 2.7
 from __future__ import print_function
 
 import sys
@@ -9,22 +22,26 @@ from subprocess import check_output
 
 
 def backtick(cmd):
+    """ Get command output as stripped string """
     output = check_output(cmd)
     return output.decode('latin1').strip()
 
 
 def main():
+    # Get commit-ish from passed command arguments, HEAD is default
     try:
-        target_branch = sys.argv[1]
+        target_ref = sys.argv[1]
     except IndexError:
-        target_branch = 'HEAD'
-    target_commit = backtick(['git', 'rev-parse', target_branch]).strip()
-    tag_lines = backtick(['git', 'tag']).strip()
+        target_ref = 'HEAD'
+    # SHA1 for target reference
+    target_commit = backtick(['git', 'rev-parse', target_ref])
+    # List of tags as string
+    tags_str = backtick(['git', 'tag'])
     min_distance = None
-    for line in tag_lines.split('\n'):
+    for line in tags_str.split('\n'):
         tag = line.strip()
         # Check for case where tag and target are the same
-        tag_commit = backtick(['git', 'rev-parse', tag]).strip()
+        tag_commit = backtick(['git', 'rev-parse', tag])
         if tag_commit == target_commit:
             print(tag)
             break
@@ -32,7 +49,6 @@ def main():
         # tag is on
         commit_range = '{}..{}'.format(tag, target_commit)
         commits = backtick(['git', 'log', '--oneline', commit_range])
-        commits = commits.strip()
         if commits == '': # target commit earlier in history than tag
             continue
         distance = len(commits.split('\n'))
