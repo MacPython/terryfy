@@ -35,16 +35,17 @@ def main():
         target_ref = 'HEAD'
     # SHA1 for target reference
     target_commit = backtick(['git', 'rev-parse', target_ref])
-    # List of tags as string
-    tags_str = backtick(['git', 'tag'])
-    min_distance = None
-    for line in tags_str.split('\n'):
+    min_distance = float('inf')
+    tag_lines = backtick(['git', 'tag']).split('\n')
+    if len(tag_lines) == 0:
+        raise RuntimeError("No tags to compare")
+    for line in tag_lines:
         tag = line.strip()
         # Check for case where tag and target are the same
         tag_commit = backtick(['git', 'rev-parse', tag])
         if tag_commit == target_commit:
             print(tag)
-            break
+            return
         # The commits along target branch since the root of the branch that the
         # tag is on
         commit_range = '{}..{}'.format(tag, target_commit)
@@ -52,13 +53,18 @@ def main():
         if commits == '': # target commit earlier in history than tag
             continue
         distance = len(commits.split('\n'))
-        if min_distance is None or distance < min_distance:
+        if distance < min_distance:
             closest_tag = tag
             min_distance = distance
-    else:
-        if min_distance is None:
-            raise RuntimeError('Cannot find tag distances')
-        print(closest_tag)
+        elif distance == min_distance: # tie break
+            # maybe this tag is further down the same path as the previous; if
+            # so choose this one
+            commit_range = '{}..{}'.format(closest_tag, tag)
+            commits = backtick(['git', 'log', '--oneline', commit_range])
+            if not commits == '': # some history starting from previous
+                closest_tag = tag
+                min_distance = distance
+    print(closest_tag)
 
 
 if __name__ == '__main__':
