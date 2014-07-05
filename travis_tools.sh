@@ -368,3 +368,19 @@ function get_python_environment {
     export PATH="`dirname $PYTHON_EXE`:$PATH"
     export PYTHON_EXE PIP_CMD
 }
+
+
+TRAVIS_TOOLS_DIR=`realpath $( dirname "$BASH_SOURCE[0]}" )`
+
+function checkout_closest_tag {
+    # Check out tag closest to origin/master
+    # Parameters
+    #   submodule  (name of submodule)
+    local submodule=$1
+    check_var $submodule
+    cd $submodule
+    git fetch
+    git fetch --tags
+    git checkout `$TRAVIS_TOOLS_DIR/git-closest-tag origin/master`
+    cd ..
+}
