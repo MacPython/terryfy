@@ -137,7 +137,8 @@ function install_pip {
     mkdir -p $DOWNLOADS_SDIR
     curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
     require_success "failed to download get-pip"
-    sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py
+    # System python installs pip by default - force install
+    sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py --ignore-installed
     require_success "Failed to install pip"
     local py_mm=`get_py_mm`
     PIP_CMD="sudo `dirname $PYTHON_EXE`/pip$py_mm"
