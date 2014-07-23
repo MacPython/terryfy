@@ -235,7 +235,7 @@ function macports_install_virtualenv {
 
 
 function brew_install_python {
-    # Installs macports python
+    # Installs homebrew python
     # Parameter $version
     # Version can only be "2" or "3"
     # sets $PYTHON_EXE variable to python executable
