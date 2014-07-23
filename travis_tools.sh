@@ -245,6 +245,8 @@ function brew_install_python {
         brew install python3
     else
         brew install python
+        # Now easy_install and pip are in /usr/local we need to force link
+        brew link --overwrite python
     fi
     require_success "Failed to install python"
     PYTHON_EXE=/usr/local/bin/python$py_digit
