@@ -137,8 +137,8 @@ function install_pip {
     mkdir -p $DOWNLOADS_SDIR
     curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
     require_success "failed to download get-pip"
-    # System python as of 10.9.4 installs pip by default - force install even
-    # if installed already
+    # Travis VMS now install pip for system python by default - force install
+    # even if installed already
     sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py --ignore-installed
     require_success "Failed to install pip"
     local py_mm=`get_py_mm`
@@ -151,7 +151,7 @@ function install_virtualenv {
     # Installs virtualenv into python given by $PYTHON_EXE
     # Assumes virtualenv will be installed into same directory as $PYTHON_EXE
     check_pip
-    # System python as of 10.9.4 installs virtualenv by default - force
+    # Travis VMS install virtualenv for system python by default - force
     # install even if installed already
     $PIP_CMD install virtualenv --ignore-installed
     require_success "Failed to install virtualenv"
