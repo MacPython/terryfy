@@ -5,14 +5,17 @@ Dump example vars, install, testing shell scripts to files for local testing
 """
 from __future__ import print_function
 
+import sys
 import os
-from os.path import join as pjoin
+from os.path import join as pjoin, dirname
 import warnings
 
 import argparse # Python 2.6, really?
 
 # pip install pyyaml
 import yaml
+
+sys.path.append(dirname(__file__))
 
 from travisparse import get_envs, TravisError, get_yaml_entry
 

@@ -1,7 +1,10 @@
 """ Nosetests for travis2bashes script
 """
-
 from __future__ import absolute_import, print_function
+
+import os
+import sys
+sys.path.append(os.path.dirname(__file__))
 
 from travisparse import get_envs, TravisError
 from nose.tools import assert_equal, assert_true, assert_false, assert_raises
