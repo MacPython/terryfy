@@ -27,5 +27,5 @@ install:
 
 script:
   - source test_tools.sh
-  - pip install nose
+  - $PIP_CMD install nose
   - nosetests test_travisparse.py
