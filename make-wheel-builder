@@ -60,6 +60,7 @@ deploy:
     secure: ALZrkCwjz3nY/9GfTNPgVQHUmUpCc5SnZTaqIUlJrhVyOBu6aktXaRmQi+sTXzFn7a/PQsYDnoZ8nibCZ472oUVDGUOSbtjIEkPodU+aisLN2dSLNueQsUU7Dmt0SaeyJVGovzfyUiavIYLuAfOtCfUKrwAsi7XTVNQpdyWCQDs=
   region: ORD
   container: wheels
+  skip_cleanup: true
 """
 
 GITIGNORE_TEMPLATE = \
