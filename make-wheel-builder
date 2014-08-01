@@ -181,6 +181,11 @@ You might also want to fill in the test command for the project in the
 
 Finally, push to github to initiate the first travis build.
 
+If your package has external library dependencies, there are some utilities to
+help you build them; see
+https://github.com/matthew-brett/h5py-wheels/blob/master/.travis.yml for an
+example of their use.
+
 [1] https://github.com/github/hub
 [2] https://github.com/travis-ci/travis.rb
 """.format(wheels_project=wheels_project))
