@@ -22,10 +22,10 @@ env:
     - INSTALL_TYPE='system' VERSION=2.7 VENV=venv
 
 install:
-  - set -vx  # echo commands
   - source ./travis_tools.sh
   - get_python_environment $INSTALL_TYPE $VERSION $VENV
 
 script:
-  - echo $PWD
   - source test_tools.sh
+  - pip install nose
+  - nosetests test_travisparse.py
