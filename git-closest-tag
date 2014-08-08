@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # vim: ft=python
-""" Get tag with fewest commits from given branch
+""" Get tag with fewest commits from path of given branch
 
 Usage:
 
@@ -13,6 +13,30 @@ To get closest tag to current HEAD
 To get closest tag to origin/master
 
     git-closest-tag origin/master
+
+What does "closest" mean, in "closest tag"?
+
+Imagine the following git history::
+
+    A->B->C->D->E->F (HEAD)
+           \     \
+            \     X->Y->Z (v0.2)
+             P->Q (v0.1)
+
+Imagine the developer tag'ed Z as v0.2 on Monday, and then tag'ed Q as v0.1 on
+Tuesday. v0.1 is the more recent, but v0.2 is closer in development history to
+HEAD, in the sense that the path it is on starts at a point closer to HEAD.
+
+We may want get the tag that is closer in development history. We can find that
+by using ``git log v0.2..HEAD`` etc for each tag. This gives you the number of
+commits on HEAD since the path ending at v0.2 diverged from the path followed by
+HEAD.
+
+``git describe`` does something slightly different, in that it tracks back from
+(e.g.) HEAD to find the first tag that is on a path back in the history from
+HEAD. In git terms, ``git describe`` looks for tags that are "reachable" from
+HEAD.  It will therefore not find tags like v0.2 that are not on the path back
+from HEAD, but a path that diverged from there.
 """
 # Requires at least Python 2.7
 from __future__ import print_function
@@ -27,6 +51,10 @@ def backtick(cmd):
     return output.decode('latin1').strip()
 
 
+def tagged_commit(tag):
+    return backtick(['git', 'rev-parse', '--verify', tag + '^{commit}'])
+
+
 def main():
     # Get commit-ish from passed command arguments, HEAD is default
     try:
@@ -34,15 +62,15 @@ def main():
     except IndexError:
         target_ref = 'HEAD'
     # SHA1 for target reference
-    target_commit = backtick(['git', 'rev-parse', target_ref])
+    target_commit = tagged_commit(target_ref)
     min_distance = float('inf')
-    tag_lines = backtick(['git', 'tag']).split('\n')
-    if len(tag_lines) == 0:
+    tag_lines = backtick(['git', 'tag'])
+    if tag_lines == '':
         raise RuntimeError("No tags to compare")
-    for line in tag_lines:
+    for line in tag_lines.split('\n'):
         tag = line.strip()
         # Check for case where tag and target are the same
-        tag_commit = backtick(['git', 'rev-parse', tag])
+        tag_commit = tagged_commit(tag)
         if tag_commit == target_commit:
             print(tag)
             return
@@ -63,7 +91,6 @@ def main():
             commits = backtick(['git', 'log', '--oneline', commit_range])
             if not commits == '': # some history starting from previous
                 closest_tag = tag
-                min_distance = distance
     print(closest_tag)
 
 
