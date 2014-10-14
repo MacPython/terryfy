@@ -17,11 +17,11 @@ WORKING_SDIR=working
 
 
 function require_success {
-    STATUS=$?
-    MESSAGE=$1
-    if [ "$STATUS" != "0" ]; then
-        echo $MESSAGE
-        exit $STATUS
+    local status=$?
+    local message=$1
+    if [ "$status" != "0" ]; then
+        echo $message
+        exit $status
     fi
 }
 
