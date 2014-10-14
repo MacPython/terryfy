@@ -10,7 +10,7 @@ MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # -q to avoid this:
 # https://lists.macosforge.org/pipermail/macports-users/2014-June/035672.html
-PORT_INSTALL="sudo port install -q"
+PORT_INSTALL="sudo port -q install"
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
