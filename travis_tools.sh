@@ -5,9 +5,12 @@ MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
-MACPORTS_VERSION="MacPorts-2.2.1"
+MACPORTS_VERSION="MacPorts-2.3.1"
 MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
+# -q to avoid this:
+# https://lists.macosforge.org/pipermail/macports-users/2014-June/035672.html
+PORT_INSTALL=sudo port install -q
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
@@ -208,7 +211,7 @@ function macports_install_python {
     fi
     local py_mm=${py_version:0:3}
     local py_mm_nodot=`echo $py_mm | tr -d '.'`
-    sudo port install $force python$py_mm_nodot
+    $PORT_INSTALL $force python$py_mm_nodot
     require_success "Failed to install macports python"
     PYTHON_EXE=`realpath $MACPORTS_PREFIX/bin/python$py_mm`
 }
@@ -219,7 +222,7 @@ function macports_install_pip {
     # Gets needed version from version implied by $PYTHON_EXE
     local py_mm=`get_py_mm`
     local py_mm_nodot=`get_py_mm_nodot`
-    sudo port install py$py_mm_nodot-pip
+    $PORT_INSTALL py$py_mm_nodot-pip
     PIP_CMD="sudo $MACPORTS_PREFIX/bin/pip-$py_mm"
 }
 
@@ -229,7 +232,7 @@ function macports_install_virtualenv {
     # Gets needed version from version implied by $PYTHON_EXE
     local py_mm=`get_py_mm`
     local py_mm_nodot=`get_py_mm_nodot`
-    sudo port install py$py_mm_nodot-virtualenv
+    $PORT_INSTALL py$py_mm_nodot-virtualenv
     VIRTUALENV_CMD="$MACPORTS_PREFIX/bin/virtualenv-$py_mm"
 }
 
