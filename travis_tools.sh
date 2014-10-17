@@ -385,11 +385,14 @@ function checkout_closest_tag {
     # Check out tag closest to origin/master
     # Parameters
     #   submodule  (name of submodule)
+    #   branch (name of branch to start from; optional, default "master")
     local submodule=$1
     check_var $submodule
+    local branch=$2
+    if [ -z "$branch" ]; then branch=master; fi
     cd $submodule
     git fetch
     git fetch --tags
-    git checkout `$TRAVIS_TOOLS_DIR/git-closest-tag origin/master`
+    git checkout `$TRAVIS_TOOLS_DIR/git-closest-tag origin/$branch`
     cd ..
 }
