@@ -102,6 +102,50 @@ function toggle_py_sys_site_packages {
 }
 
 
+function pyver_ge {
+    # Echo 1 if second python version is greater or equal to first
+    # Parameters
+    #   $first (python version in major.minor.extra format)
+    #   $second (python version in major.minor.extra format)
+    local first=$1
+    check_var $first
+    local second=$2
+    check_var $second
+    local arr_1
+    local arr_2
+    IFS='.' read -ra arr_1 <<< "$first"
+    IFS='.' read -ra arr_2 <<< "$second"
+    if [ ${arr_2[0]} -ge ${arr_1[0]} -a \
+         ${arr_2[1]} -ge ${arr_1[1]} -a \
+         ${arr_2[2]} -ge ${arr_1[2]} ]; then
+        echo 1
+    fi
+}
+
+
+function pyinst_ext_for_version {
+    # echo "pkg" or "dmg" depending on the passed Python version
+    # Parameters
+    #   $py_version (python version in major.minor.extra format)
+    local py_version=$1
+    check_var $py_version
+    local py_0=${py_version:0:1}
+    if [ $py_0 -eq 2 ]; then
+        if [ -n "$(pyver_ge 2.7.9 $py_version)" ]; then
+            echo "pkg"
+        else
+            echo "dmg"
+        fi
+    elif [ $py_0 -ge 3 ]; then
+        if [ -n "$(pyver_ge 3.4.2 $py_version)" ]; then
+            echo "pkg"
+        else
+            echo "dmg"
+        fi
+    fi
+}
+
+
 function get_pip_sudo {
     # Echo "sudo" if PIP_CMD starts with sudo
     # Useful for checking if Python installations need sudo
@@ -118,13 +162,18 @@ function install_macpython {
     # Version given in major.minor.micro e.g  "3.4.1"
     # sets $PYTHON_EXE variable to python executable
     local py_version=$1
-    local py_dmg=python-$py_version-macosx10.6.dmg
-    local dmg_path=$DOWNLOADS_SDIR/$py_dmg
+    check_var $py_version
+    local inst_ext=$(pyinst_ext_for_version $py_version)
+    local py_inst=python-$py_version-macosx10.6.$inst_ext
+    local inst_path=$DOWNLOADS_SDIR/$py_inst
     mkdir -p $DOWNLOADS_SDIR
-    curl $MACPYTHON_URL/$py_version/${py_dmg} > $dmg_path
+    curl $MACPYTHON_URL/$py_version/${py_inst} > $inst_path
     require_success "Failed to download mac python $py_version"
-    hdiutil attach $dmg_path -mountpoint /Volumes/Python
-    sudo installer -pkg /Volumes/Python/Python.mpkg -target /
+    if [ "$inst_ext" == "dmg" ]; then
+        hdiutil attach $inst_path -mountpoint /Volumes/Python
+        inst_path=/Volumes/Python/Python.mpkg
+    fi
+    sudo installer -pkg $inst_path -target /
     require_success "Failed to install Python.org Python $py_version"
     local py_mm=${py_version:0:3}
     PYTHON_EXE=$MACPYTHON_PY_PREFIX/$py_mm/bin/python$py_mm
