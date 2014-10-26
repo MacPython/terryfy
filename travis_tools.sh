@@ -351,10 +351,10 @@ function rename_wheels {
     local wheelhouse=$1
     check_var $wheelhouse
     # From https://github.com/minrk/wheelhouse/blob/master/wheelhouse.sh
-    # tell pip that all of the 10.6 intel wheels will also work on 10.9
+    # tell pip that all of the 10.6 intel wheels will also work on 10.10
     # (System Python) and for x86_64
     for file in $(find "$wheelhouse" -name '*-macosx_10_6_intel.whl'); do
-        mv $file $(echo $file | sed s/macosx_10_6_intel.whl/macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.whl/)
+        mv $file $(echo $file | sed s/macosx_10_6_intel.whl/macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl/)
     done
 }
 
