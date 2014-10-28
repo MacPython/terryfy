@@ -5,7 +5,7 @@ MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
-MACPORTS_VERSION="MacPorts-2.3.1"
+MACPORTS_PKG=MacPorts-2.3.2-10.9-Mavericks.pkg
 MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # -q to avoid this:
@@ -231,18 +231,12 @@ function make_workon_venv {
 
 function install_macports {
     # Initialize macports, put macports on PATH
-    local macports_path=$DOWNLOADS_SDIR/$MACPORTS_VERSION.tar.gz
+    local macports_path=$DOWNLOADS_SDIR/$MACPORTS_PKG
     mkdir -p $DOWNLOADS_SDIR
-    curl $MACPORTS_URL/$MACPORTS_VERSION.tar.gz > $macports_path --insecure
+    curl $MACPORTS_URL/$MACPORTS_PKG > $macports_path
     require_success "failed to download macports"
-    mkdir -p $WORKING_SDIR
-    cd $WORKING_SDIR
-    tar -xzf ../$macports_path
-    cd $MACPORTS_VERSION
-    ./configure --prefix=$MACPORTS_PREFIX
-    make
-    sudo make install
-    cd ../..
+    sudo installer -pkg $macports_path -target /
+    require_success "failed to install macports"
     PATH=$MACPORTS_PREFIX/bin:$PATH
     sudo port -v selfupdate
 }
