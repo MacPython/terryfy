@@ -4,7 +4,7 @@
 from __future__ import print_function, absolute_import
 
 import os
-from os.path import join as pjoin, splitext, exists
+from os.path import join as pjoin, splitext, exists, expanduser
 import sys
 import re
 from optparse import OptionParser, Option
@@ -73,6 +73,7 @@ def main():
                action="store_true",
                help="Give more feedback"))
     (opts, wheel_roots) = parser.parse_args()
+    wheel_dir = expanduser(opts.wheel_dir)
     if len(wheel_roots) < 1:
         parser.print_help()
         sys.exit(1)
@@ -92,7 +93,7 @@ def main():
             if not opts.wheel_type in plat:
                 continue
             wheel_url = '{0}/{1}'.format(opts.wheel_url, wheel_name)
-            wheel_path = pjoin(opts.wheel_dir, wheel_name)
+            wheel_path = pjoin(wheel_dir, wheel_name)
             found_wheels.append(wheel_path)
             if exists(wheel_path) and not opts.clobber:
                 if opts.verbose:
