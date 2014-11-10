@@ -115,11 +115,13 @@ function pyver_ge {
     local arr_2
     IFS='.' read -ra arr_1 <<< "$first"
     IFS='.' read -ra arr_2 <<< "$second"
-    if [ ${arr_2[0]} -ge ${arr_1[0]} -a \
-         ${arr_2[1]} -ge ${arr_1[1]} -a \
-         ${arr_2[2]} -ge ${arr_1[2]} ]; then
-        echo 1
-    fi
+    if [ ${arr_2[0]} -lt ${arr_1[0]} ]; then return; fi
+    if [ ${arr_2[0]} -gt ${arr_1[0]} ]; then echo 1; return; fi
+    # First digit equal
+    if [ ${arr_2[1]} -lt ${arr_1[1]} ]; then return; fi
+    if [ ${arr_2[1]} -gt ${arr_1[1]} ]; then echo 1; return; fi
+    # Second digit equal
+    if [ ${arr_2[2]} -ge ${arr_1[2]} ]; then echo 1; fi
 }
 
 
