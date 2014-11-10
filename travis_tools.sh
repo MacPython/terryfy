@@ -103,7 +103,7 @@ function toggle_py_sys_site_packages {
 
 
 function pyver_ge {
-    # Echo 1 if second python version is greater or equal to first
+    # Echo 1 if first python version is greater or equal to second
     # Parameters
     #   $first (python version in major.minor.extra format)
     #   $second (python version in major.minor.extra format)
@@ -115,13 +115,13 @@ function pyver_ge {
     local arr_2
     IFS='.' read -ra arr_1 <<< "$first"
     IFS='.' read -ra arr_2 <<< "$second"
-    if [ ${arr_2[0]} -lt ${arr_1[0]} ]; then return; fi
-    if [ ${arr_2[0]} -gt ${arr_1[0]} ]; then echo 1; return; fi
+    if [ ${arr_1[0]} -lt ${arr_2[0]} ]; then return; fi
+    if [ ${arr_1[0]} -gt ${arr_2[0]} ]; then echo 1; return; fi
     # First digit equal
-    if [ ${arr_2[1]} -lt ${arr_1[1]} ]; then return; fi
-    if [ ${arr_2[1]} -gt ${arr_1[1]} ]; then echo 1; return; fi
+    if [ ${arr_1[1]} -lt ${arr_2[1]} ]; then return; fi
+    if [ ${arr_1[1]} -gt ${arr_2[1]} ]; then echo 1; return; fi
     # Second digit equal
-    if [ ${arr_2[2]} -ge ${arr_1[2]} ]; then echo 1; fi
+    if [ ${arr_1[2]} -ge ${arr_2[2]} ]; then echo 1; fi
 }
 
 
@@ -133,13 +133,13 @@ function pyinst_ext_for_version {
     check_var $py_version
     local py_0=${py_version:0:1}
     if [ $py_0 -eq 2 ]; then
-        if [ -n "$(pyver_ge 2.7.9 $py_version)" ]; then
+        if [ -n "$(pyver_ge $py_version 2.7.9)" ]; then
             echo "pkg"
         else
             echo "dmg"
         fi
     elif [ $py_0 -ge 3 ]; then
-        if [ -n "$(pyver_ge 3.4.2 $py_version)" ]; then
+        if [ -n "$(pyver_ge $py_version 3.4.2)" ]; then
             echo "pkg"
         else
             echo "dmg"
