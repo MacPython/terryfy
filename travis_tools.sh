@@ -5,7 +5,7 @@ MACPYTHON_URL=https://www.python.org/ftp/python
 MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
 GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
-MACPORTS_PKG=MacPorts-2.3.2-10.9-Mavericks.pkg
+MACPORTS_PKG=MacPorts-2.3.3-10.9-Mavericks.pkg
 MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # -q to avoid this:
