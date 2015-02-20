@@ -131,5 +131,44 @@ if [ -n "$(pyver_ge 3.4.0 3.4.1)" ]; then RET=1; fi
 if [ -n "$(pyver_ge 2.1.1 3.0.0)" ]; then RET=1; fi
 if [ -n "$(pyver_ge 3.0.0 3.0.1)" ]; then RET=1; fi
 if [ -n "$(pyver_ge 3.0.1 3.1.0)" ]; then RET=1; fi
+
+# Check commit finding
+rm -rf repo-testing
+mkdir repo-testing
+cd repo-testing
+mkdir a_repo
+cd a_repo
+git init
+git commit --allow-empty -m 'initial'
+git tag first -m 'first'
+FIRST=$(git rev-parse HEAD)
+git commit --allow-empty -m 'second'
+SECOND=$(git rev-parse HEAD)
+git init --bare ../b_repo.git
+git remote add origin ../b_repo.git
+git push origin master --set-upstream
+cd ..
+
+function check_hash {
+    cd a_repo
+    if [[ $(git rev-parse HEAD) != $1 ]]; then
+        RET=1
+    fi
+    cd ..
+}
+
+checkout_commit a_repo $FIRST
+check_hash $FIRST
+checkout_commit a_repo
+check_hash $SECOND
+checkout_commit a_repo first
+check_hash $FIRST
+checkout_commit a_repo $SECOND
+check_hash $SECOND
+checkout_commit a_repo latest-tag
+check_hash $FIRST
+cd ..
+rm -rf repo-testing
+
 # Set the final return code
 (exit $RET)

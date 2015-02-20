@@ -441,3 +441,28 @@ function checkout_closest_tag {
     git checkout `$TRAVIS_TOOLS_DIR/git-closest-tag origin/$branch`
     cd ..
 }
+
+
+function checkout_commit {
+    # Check out named commit or latest
+    # Parameters
+    #   submodule  (name of submodule)
+    #   commitish ('latest-tag' or a git ref; optional, default
+    #       'master')
+    #   branch (name of branch to start 'latest-tag' from; optional,
+    #       default "master")
+    local submodule=$1
+    check_var $submodule
+    local commitish=$2
+    if [ -z "$commitish" ]; then commitish=master; fi
+    local branch=$3
+    if [ -z "$branch" ]; then branch=master; fi
+    cd $submodule
+    git fetch
+    git fetch --tags
+    if [ "$commitish" == 'latest-tag' ]; then
+        commitish=`$TRAVIS_TOOLS_DIR/git-closest-tag origin/$branch`
+    fi
+    git checkout $commitish
+    cd ..
+}
