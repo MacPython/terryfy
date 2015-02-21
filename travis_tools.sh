@@ -377,6 +377,10 @@ function get_python_environment {
     local install_type=$1
     local version=$2
     local venv_dir=$3
+    # Remove travis installs of virtualenv and pip
+    sudo pip uninstall -y virtualenv
+    sudo pip uninstall -y pip
+    # Install python, pip, maybe virtualenv for different systems
     case $install_type in
     macpython)
         install_macpython $version
