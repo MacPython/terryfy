@@ -78,9 +78,15 @@ def main():
         # tag is on
         commit_range = '{}..{}'.format(tag, target_commit)
         commits = backtick(['git', 'log', '--oneline', commit_range])
-        if commits == '': # target commit earlier in history than tag
-            continue
-        distance = len(commits.split('\n'))
+        if commits == '':
+            # target is merge-base or commit is earlier in history than tag
+            merge_base = backtick(['git', 'merge-base', tag, target_commit])
+            if merge_base != target_commit:
+                continue
+            # This tag branches directly off the target commit
+            distance = 0
+        else:
+            distance = len(commits.split('\n'))
         if distance < min_distance:
             closest_tag = tag
             min_distance = distance
