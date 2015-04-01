@@ -465,7 +465,7 @@ function checkout_commit {
     git fetch
     git fetch --tags
     if [ "$commitish" == 'latest-tag' ]; then
-        commitish=`$TRAVIS_TOOLS_DIR/git-closest-tag origin/$branch`
+        commitish=`$TRAVIS_TOOLS_DIR/git-closest-tag $branch`
     fi
     git checkout $commitish
     cd ..

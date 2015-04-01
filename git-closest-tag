@@ -55,6 +55,12 @@ def tagged_commit(tag):
     return backtick(['git', 'rev-parse', '--verify', tag + '^{commit}'])
 
 
+def n_commits_exclude_include(exclude, include):
+    commit_range = '{}..{}'.format(exclude, include)
+    commits = backtick(['git', 'log', '--oneline', commit_range])
+    return 0 if commits == '' else len(commits.split('\n'))
+
+
 def main():
     # Get commit-ish from passed command arguments, HEAD is default
     try:
@@ -63,40 +69,36 @@ def main():
         target_ref = 'HEAD'
     # SHA1 for target reference
     target_commit = tagged_commit(target_ref)
-    min_distance = float('inf')
     tag_lines = backtick(['git', 'tag'])
     if tag_lines == '':
         raise RuntimeError("No tags to compare")
-    for line in tag_lines.split('\n'):
-        tag = line.strip()
-        # Check for case where tag and target are the same
+    tags = [tag.strip() for tag in tag_lines.split('\n')]
+    tags_info = {}
+    min_after = float('inf')
+    for tag in tags:
         tag_commit = tagged_commit(tag)
-        if tag_commit == target_commit:
-            print(tag)
-            return
         # The commits along target branch since the root of the branch that the
         # tag is on
-        commit_range = '{}..{}'.format(tag, target_commit)
-        commits = backtick(['git', 'log', '--oneline', commit_range])
-        if commits == '':
-            # target is merge-base or commit is earlier in history than tag
-            merge_base = backtick(['git', 'merge-base', tag, target_commit])
-            if merge_base != target_commit:
-                continue
-            # This tag branches directly off the target commit
-            distance = 0
-        else:
-            distance = len(commits.split('\n'))
-        if distance < min_distance:
+        merge_base = backtick(['git', 'merge-base', tag, target_commit])
+        tags_info[tag] = (tag_commit, merge_base)
+        n_after = n_commits_exclude_include(merge_base, target_commit)
+        if n_after < min_after:
+            min_after = n_after
+            candidates = [tag]
+        elif n_after == min_after:
+            candidates.append(tag)
+    if len(candidates) == 0:
+        raise RuntimeError('Could not find any useful tags')
+    if len(candidates) == 1:
+        print(candidates[0])
+        return
+    # More than one candidate with same post-tag-on-target length
+    max_post_common = -1
+    for tag in candidates:
+        tag_commit, merge_base = tags_info[tag]
+        n_after = n_commits_exclude_include(merge_base, tag_commit)
+        if n_after > max_post_common:
             closest_tag = tag
-            min_distance = distance
-        elif distance == min_distance: # tie break
-            # maybe this tag is further down the same path as the previous; if
-            # so choose this one
-            commit_range = '{}..{}'.format(closest_tag, tag)
-            commits = backtick(['git', 'log', '--oneline', commit_range])
-            if not commits == '': # some history starting from previous
-                closest_tag = tag
     print(closest_tag)
 
 
