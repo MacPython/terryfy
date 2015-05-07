@@ -1,10 +1,12 @@
+#!/bin/bash
 # Helper routines for building source libraries
 # source this script to set up library building functions and vars
 #
 # You'll later need any relevant libraries stored at $ARCHIVE_PATH (see below)
 
 # Get needed utilities
-source terryfy/travis_tools.sh
+TERRYFY_DIR=`dirname "$BASH_SOURCE[0]}"`
+source $TERRYFY_DIR/travis_tools.sh
 
 # Compiler defaults
 SYS_CC=clang
@@ -69,22 +71,23 @@ function standard_install {
     if [ -z "$archive_prefix" ]; then
         archive_prefix="${pkg_name}-"
     fi
-    local extra_configures=$5
+    # Put the rest of the positional parameters into new positional params
+    set -- "${@:5:$#-4}"
+    echo "$@"
     check_var $SRC_PREFIX
     check_var $BUILD_PREFIX
     local archive_path="$SRC_ARCHIVES/${archive_prefix}${pkg_version}${archive_suffix}"
     tar xvf $archive_path -C $SRC_PREFIX
     cd $SRC_PREFIX/$pkg_name-$pkg_version
     require_success "Failed to cd to $pkg_name directory"
-    if [ "$extra_configures" == "cmake" ]; then # cmake configure
+    if [ "$1" == "cmake" ]; then # cmake configure
         CC=${SYS_CC} CXX=${SYS_CXX} CFLAGS=$ARCH_FLAGS \
             CMAKE_INCLUDE_PATH=$CPATH \
             CMAKE_LIBRARY_PATH=$LIBRARY_PATH \
             cmake -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX .
     else # standard configure
         CC=${SYS_CC} CXX=${SYS_CXX} CFLAGS=$ARCH_FLAGS ./configure \
-            --prefix=$BUILD_PREFIX \
-            $extra_configures
+            --prefix=$BUILD_PREFIX "$@"
     fi
     make
     make install
