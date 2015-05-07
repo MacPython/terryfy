@@ -25,6 +25,7 @@ SRC_PREFIX=$PWD/working
 export PATH=$BUILD_PREFIX/bin:$PATH
 export CPATH=$BUILD_PREFIX/include
 export LIBRARY_PATH=$BUILD_PREFIX/lib
+export DYLD_LIBRARY_PATH=$LIBRARY_PATH
 export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig
 
 
