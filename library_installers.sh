@@ -72,8 +72,7 @@ function standard_install {
         archive_prefix="${pkg_name}-"
     fi
     # Put the rest of the positional parameters into new positional params
-    set -- "${@:5:$#-4}"
-    echo "$@"
+    set -- "${@:5}"
     check_var $SRC_PREFIX
     check_var $BUILD_PREFIX
     local archive_path="$SRC_ARCHIVES/${archive_prefix}${pkg_version}${archive_suffix}"
