@@ -85,8 +85,7 @@ function standard_install {
             CMAKE_LIBRARY_PATH=$LIBRARY_PATH \
             cmake -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX .
     else # standard configure
-        CC=${SYS_CC} CXX=${SYS_CXX} CFLAGS=$ARCH_FLAGS ./configure \
-            --prefix=$BUILD_PREFIX "$@"
+        CC=${SYS_CC} CXX=${SYS_CXX} CFLAGS=$ARCH_FLAGS ./configure --prefix=$BUILD_PREFIX "$@"
     fi
     make
     make install
