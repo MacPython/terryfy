@@ -5,8 +5,11 @@
 # You'll later need any relevant libraries stored at $ARCHIVE_PATH (see below)
 
 # Get needed utilities
-TERRYFY_DIR=`dirname "$BASH_SOURCE[0]}"`
+TERRYFY_DIR=$(dirname "$BASH_SOURCE[0]}")
 source $TERRYFY_DIR/travis_tools.sh
+
+# Get absolute path to script directory
+TERRYFY_DIR=$(abspath "$TERRYFY_DIR")
 
 # Compiler defaults
 SYS_CC=clang
