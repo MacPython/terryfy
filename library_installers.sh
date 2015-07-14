@@ -94,3 +94,28 @@ function standard_install {
     require_success "Failed to install $pkg_name $pkg_version"
     cd ../..
 }
+
+
+function dual_arch_install {
+    # Build archive twice, with i386 and x86_64, then fuse
+    # Calls "standard_install" with all input parameters
+    #
+    # Required arguments
+    #  pkg_name (e.g. libpng)
+    #  pkg_version (e.g. 1.6.12)
+    #
+    # Optional arguments
+    #  archive_suffix (default .tar.gz)
+    #  archive_prefix (default "$pkg_name-")
+    #  extra_configures (default empty)
+    #    This last can either be extra flags to pass to configure step, or the
+    #    string "cmake" in which case use cmake for configure step
+    local old_arch_flags=$ARCH_FLAGS
+    export ARCH_FLAGS="-arch i386"
+    standard_install $@
+    python $TERRYFY_DIR/cp_suff_real_libs.py $BUILD_PREFIX/lib .i386
+    export ARCH_FLAGS="-arch x86_64"
+    standard_install $@
+    python $TERRYFY_DIR/fuse_real_libs.py $BUILD_PREFIX/lib .i386
+    export ARCH_FLAGS=$old_arch_flags
+}
