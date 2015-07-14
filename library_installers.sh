@@ -119,6 +119,6 @@ function dual_arch_install {
     python $TERRYFY_DIR/cp_suff_real_libs.py $BUILD_PREFIX/lib .i386
     export ARCH_FLAGS="-arch x86_64"
     standard_install $@
-    python $TERRYFY_DIR/fuse_real_libs.py $BUILD_PREFIX/lib .i386
+    python $TERRYFY_DIR/fuse_suff_real_libs.py $BUILD_PREFIX/lib .i386
     export ARCH_FLAGS=$old_arch_flags
 }
