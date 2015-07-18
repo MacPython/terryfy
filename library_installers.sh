@@ -14,22 +14,59 @@ TERRYFY_DIR=$(abspath "$TERRYFY_DIR")
 # Compiler defaults
 SYS_CC=clang
 SYS_CXX=clang++
-ARCH_FLAGS="-arch i386 -arch x86_64"
 MACOSX_DEPLOYMENT_TARGET='10.6'
 
 # Default location for source archives
 SRC_ARCHIVES=archives
 
-# Set BUILD_PREFIX elsewhere to change default
-if [ -z "$BUILD_PREFIX" ]; then
-    BUILD_PREFIX=$PWD/build
-fi
-SRC_PREFIX=$PWD/working
-export PATH=$BUILD_PREFIX/bin:$PATH
-export CPATH=$BUILD_PREFIX/include
-export LIBRARY_PATH=$BUILD_PREFIX/lib
-export DYLD_LIBRARY_PATH=$LIBRARY_PATH
-export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig
+# Default location for unpacking sources
+export SRC_PREFIX=$PWD/working
+
+# PATH when we start
+START_PATH=$PATH
+
+# BUILD_PREFIXES
+BUILD_PREFIX_32=$PWD/build32
+BUILD_PREFIX_64=$PWD/build64
+BUILD_PREFIX_DUAL=$PWD/build
+
+
+function set_dual_prefix {
+    export ARCH_FLAGS="-arch i386 -arch x86_64"
+    export BUILD_PREFIX=$BUILD_PREFIX_DUAL
+    set_from_prefix
+}
+
+
+function set_32_prefix {
+    export ARCH_FLAGS="-arch i386"
+    export BUILD_PREFIX=$BUILD_PREFIX_32
+    set_from_prefix
+}
+
+
+function set_64_prefix {
+    export ARCH_FLAGS="-arch x86_64"
+    export BUILD_PREFIX=$BUILD_PREFIX_64
+    set_from_prefix
+}
+
+
+function set_from_prefix {
+    check_var $BUILD_PREFIX
+    mkdir -p $BUILD_PREFIX/bin
+    export PATH=$BUILD_PREFIX/bin:$START_PATH
+    mkdir -p $BUILD_PREFIX/include
+    export CPATH=$BUILD_PREFIX/include
+    mkdir -p $BUILD_PREFIX/lib
+    export LIBRARY_PATH=$BUILD_PREFIX/lib
+    export DYLD_LIBRARY_PATH=$LIBRARY_PATH
+    export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig
+}
+
+
+# Set dual-arch prefix by default
+set_dual_prefix
 
 
 function clean_builds {
@@ -37,8 +74,9 @@ function clean_builds {
     check_var $BUILD_PREFIX
     rm -rf $SRC_PREFIX
     mkdir $SRC_PREFIX
-    rm -rf $BUILD_PREFIX
-    mkdir $BUILD_PREFIX
+    rm -rf $BUILD_PREFIX_32
+    rm -rf $BUILD_PREFIX_64
+    rm -rf $BUILD_PREFIX_DUAL
 }
 
 
@@ -96,29 +134,4 @@ function standard_install {
     make install
     require_success "Failed to install $pkg_name $pkg_version"
     cd ../..
-}
-
-
-function dual_arch_install {
-    # Build archive twice, with i386 and x86_64, then fuse
-    # Calls "standard_install" with all input parameters
-    #
-    # Required arguments
-    #  pkg_name (e.g. libpng)
-    #  pkg_version (e.g. 1.6.12)
-    #
-    # Optional arguments
-    #  archive_suffix (default .tar.gz)
-    #  archive_prefix (default "$pkg_name-")
-    #  extra_configures (default empty)
-    #    This last can either be extra flags to pass to configure step, or the
-    #    string "cmake" in which case use cmake for configure step
-    local old_arch_flags=$ARCH_FLAGS
-    export ARCH_FLAGS="-arch i386"
-    standard_install $@
-    python $TERRYFY_DIR/cp_suff_real_libs.py $BUILD_PREFIX/lib .i386
-    export ARCH_FLAGS="-arch x86_64"
-    standard_install $@
-    python $TERRYFY_DIR/fuse_suff_real_libs.py $BUILD_PREFIX/lib .i386
-    export ARCH_FLAGS=$old_arch_flags
 }
