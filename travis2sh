@@ -22,10 +22,19 @@ def main():
     parser.add_argument('in_yml', default='.travis.yml', nargs='?',
                         help = 'input travis YAML file '
                         '(default is ".travis.yml")')
+    parser.add_argument('--no-py-env', action='store_true',
+                        help = 'omit Python virtualenv building'
+                        ' and substitute env vars that usually result')
     parser.add_argument('--out-sh',
                         help = 'output sh file name '
-                        '(default is input name with .sh extension)')
+                        '(default is input name with .sh extension) '
+                        '("-" means stdout)')
+    parser.add_argument('-L', '--local', action='store_true',
+                        help = 'shortcut for "--no-py-env --out-sh -"')
     args = parser.parse_args()
+    if args.local:
+        args.out_sh = '-'
+        args.no_py_env = True
     with open(args.in_yml, 'rt') as fobj:
         travis_dict = yaml.load(fobj)
     out_sh = (splitext(args.in_yml)[0] + '.sh' if args.out_sh is None
@@ -37,8 +46,19 @@ def main():
         warnings.warn('Could not get travis vars from file')
     parts += ['# install'] + get_yaml_entry(travis_dict, 'install')
     parts += ['# test'] + get_yaml_entry(travis_dict, 'script')
+    if args.no_py_env:
+        parts = [part for part in parts
+                 if not part.startswith('get_python_environment')]
+        parts = ['# Variables usually set by `get_python_environment`',
+                 'export PIP_CMD=pip',
+                 'export PYTHON_EXE=python',
+                 'export VIRTUALENV_CMD=virtualenv'] + parts
+    content = '\n'.join(parts)
+    if out_sh == '-':
+        print(content)
+        return
     with open(out_sh, 'wt') as fobj:
-        fobj.write('\n'.join(parts) + '\n')
+        fobj.write(content)
     print('Written ' + out_sh)
 
 
