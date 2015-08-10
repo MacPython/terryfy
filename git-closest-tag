@@ -99,6 +99,7 @@ def main():
         n_after = n_commits_exclude_include(merge_base, tag_commit)
         if n_after > max_post_common:
             closest_tag = tag
+            max_post_common = n_after
     print(closest_tag)
 
 
