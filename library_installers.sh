@@ -60,7 +60,7 @@ function set_from_prefix {
     export CPATH=$BUILD_PREFIX/include
     mkdir -p $BUILD_PREFIX/lib
     export LIBRARY_PATH=$BUILD_PREFIX/lib
-    export DYLD_LIBRARY_PATH=$LIBRARY_PATH
+    export DYLD_FALLBACK_LIBRARY_PATH=$LIBRARY_PATH
     export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig
 }
 
