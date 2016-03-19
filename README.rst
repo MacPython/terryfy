@@ -15,8 +15,8 @@ waf_
 See `matplotlib-wheels <https://github.com/MacPython/matplotlib-wheels>`_ for an
 example of using terryfy for a complicated build.
 
-.. _python.org: http://python.org/download/
-.. _Macports: http://www.macports.org
+.. _python.org: https://www.python.org/downloads/
+.. _Macports: https://www.macports.org
 .. _homebrew: http://brew.sh
-.. _virtualenv: http://virtualenv.readthedocs.org/en/latest/virtualenv.html
-.. _waf: https://code.google.com/p/waf
+.. _virtualenv: http://virtualenv.readthedocs.org/en/latest/
+.. _waf: https://github.com/waf-project/waf
