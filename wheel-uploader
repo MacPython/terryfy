@@ -55,7 +55,8 @@ def main():
         Option("-t", "--wheel-type",
                action="store", type='string', default="macosx",
                help="Platform type of wheels to download "
-               "[default %default], one of 'macosx', 'win', 'linux'"))
+               "[default %default], one of 'macosx', 'win', 'manylinux1',"
+               "'linux'"))
     parser.add_option(
         Option("-c", "--clobber",
                action="store_true",
@@ -64,6 +65,10 @@ def main():
         Option("-n", "--no-twine",
                action="store_true",
                help="Do not upload wheels with twine"))
+    parser.add_option(
+        Option("-s", "--sign",
+               action="store_true",
+               help="Sign wheels before upload"))
     parser.add_option(
         Option("-v", "--verbose",
                action="store_true",
@@ -82,6 +87,7 @@ def main():
         check_call(['twine', '-h'], stdout=PIPE)
     except OSError:
         raise RuntimeError('Please install "twine" utility')
+    twine_opts = ['--sign'] if opts.sign else []
     wheel_names = get_wheel_names(wheel_url_dir)
     copied_wheels = []
     found_wheels = []
@@ -103,17 +109,16 @@ def main():
             print("Downloading {0} to {1}".format(wheel_url, wheel_path))
         urlretrieve(wheel_url, wheel_path)
         copied_wheels.append(wheel_path)
-    if found_wheels:
-        if opts.no_twine:
-            if opts.verbose:
-                print("Found wheels but not uploading because of "
-                        "--no-twine flag\n{0}".format(
-                        '\n'.join(found_wheels)))
-        else:
-            check_call(['twine', 'upload'] + found_wheels)
-    elif opts.verbose:
-        print('Found no wheels at {0} for {1} and type {2}'.format(
+    if len (found_wheels) == 0:
+        raise RuntimeError('Found no wheels at {0} for {1} and type {2}'.format(
             opts.wheel_url_dir, wheel_root, opts.wheel_type))
+    if opts.no_twine:
+        if opts.verbose:
+            print("Found wheels but not uploading because of "
+                    "--no-twine flag\n{0}".format(
+                    '\n'.join(found_wheels)))
+        return
+    check_call(['twine', 'upload'] + twine_opts + found_wheels)
 
 
 if __name__ == '__main__':
