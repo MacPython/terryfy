@@ -28,14 +28,17 @@ def get_wheel_names(url):
     """ Get wheel names from HTML directory listing
     """
     html = urlopen(url).read()
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html.parser')
     # This is almost certainly specific to the Rackspace directory
     cells = soup.findAll('td', attrs='colname', text=WHEEL_RE)
     if cells:
         return [cell.text for cell in cells]
     # Works for e.g. Apache directory listing, looking in contents of links
     cells = soup.findAll('a', text=WHEEL_RE)
-    return [cell.text for cell in cells]
+    if cells:
+        return [cell.text for cell in cells]
+    cells = soup.findAll(text=WHEEL_RE)
+    return [str(cell) for cell in cells]
 
 
 def main():
