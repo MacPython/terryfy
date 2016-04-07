@@ -15,6 +15,45 @@ NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
 DOWNLOADS_SDIR=downloads
 WORKING_SDIR=working
 
+# As of 7 April 2016 - latest Python of this version with binary
+# download.
+LATEST_2p7=2.7.11
+LATEST_2p6=2.6.6
+LATEST_3p2=3.2.5
+LATEST_3p3=3.3.5
+LATEST_3p4=3.4.4
+LATEST_3p5=3.5.1
+
+
+function fill_pyver {
+    # Convert major or major.minor format to major.minor.micro
+    #
+    # Hence:
+    # 2 -> 2.7.11  (depending on LATEST_2p7 value)
+    # 2.7 -> 2.7.11  (depending on LATEST_2p7 value)
+    local ver=$1
+    check_var $ver
+    if [[ $ver =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+        # Major.minor.micro format already
+        echo $ver
+    elif [ $ver == 2 ] || [ $ver == "2.7" ]; then
+        echo $LATEST_2p7
+    elif [ $ver == "2.6" ]; then
+        echo $LATEST_2p6
+    elif [ $ver == 3 ] || [ $ver == "3.5" ]; then
+        echo $LATEST_3p5
+    elif [ $ver == "3.4" ]; then
+        echo $LATEST_3p4
+    elif [ $ver == "3.3" ]; then
+        echo $LATEST_3p3
+    elif [ $ver == "3.2" ]; then
+        echo $LATEST_3p2
+    else
+        echo "Can't fill version $ver"
+        exit 1
+    fi
+}
+
 
 function require_success {
     local status=$?
@@ -156,10 +195,10 @@ function get_pip_sudo {
 function install_macpython {
     # Installs Python.org Python
     # Parameter $version
-    # Version given in major.minor.micro e.g  "3.4.1"
+    # Version given in major or major.minor or major.minor.micro e.g
+    # "3" or "3.4" or "3.4.1".
     # sets $PYTHON_EXE variable to python executable
-    local py_version=$1
-    check_var $py_version
+    local py_version=$(fill_pyver $1)
     local inst_ext=$(pyinst_ext_for_version $py_version)
     local py_inst=python-$py_version-macosx10.6.$inst_ext
     local inst_path=$DOWNLOADS_SDIR/$py_inst
