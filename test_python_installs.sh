@@ -29,7 +29,7 @@ python_m=${python_version:0:1}
 
 case $INSTALL_TYPE in
 macpython)
-    if [ "$python_version" != "$VERSION" ]; then
+    if [ "$python_version" != $(fill_pyver $VERSION) ]; then
         echo "Wrong macpython python version"
         RET=1
     fi
