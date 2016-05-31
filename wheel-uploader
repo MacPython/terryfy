@@ -73,6 +73,9 @@ def main():
                action="store_true",
                help="Sign wheels before upload"))
     parser.add_option(
+        Option("-r", "--repository",
+               help="Repository to upload to [defaults to pypi]"))
+    parser.add_option(
         Option("-v", "--verbose",
                action="store_true",
                help="Give more feedback"))
@@ -91,6 +94,8 @@ def main():
     except OSError:
         raise RuntimeError('Please install "twine" utility')
     twine_opts = ['--sign'] if opts.sign else []
+    if opts.repository:
+        twine_opts += ['--repository=' + opts.repository]
     wheel_names = get_wheel_names(wheel_url_dir)
     copied_wheels = []
     found_wheels = []
