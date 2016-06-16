@@ -1,9 +1,13 @@
 #!/bin/bash
 # Use with ``source travis_tools.sh``
 
-MACPYTHON_URL=https://www.python.org/ftp/python
-MACPYTHON_PY_PREFIX=/Library/Frameworks/Python.framework/Versions
-GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
+# Get our own location on this filesystem
+TERRYFY_DIR=$(dirname "${BASH_SOURCE[0]}")
+
+# Get multibuild utilities
+git submodule update --init
+source $TERRYFY_DIR/multibuild/osx_utils.sh
+
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
 MACPORTS_PKG=MacPorts-2.3.3-10.9-Mavericks.pkg
 MACPORTS_PREFIX=/opt/local
@@ -12,47 +16,6 @@ MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # https://lists.macosforge.org/pipermail/macports-users/2014-June/035672.html
 PORT_INSTALL="sudo port -q install"
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
-DOWNLOADS_SDIR=downloads
-WORKING_SDIR=working
-
-# As of 7 April 2016 - latest Python of this version with binary
-# download.
-LATEST_2p7=2.7.11
-LATEST_2p6=2.6.6
-LATEST_3p2=3.2.5
-LATEST_3p3=3.3.5
-LATEST_3p4=3.4.4
-LATEST_3p5=3.5.1
-
-
-function fill_pyver {
-    # Convert major or major.minor format to major.minor.micro
-    #
-    # Hence:
-    # 2 -> 2.7.11  (depending on LATEST_2p7 value)
-    # 2.7 -> 2.7.11  (depending on LATEST_2p7 value)
-    local ver=$1
-    check_var $ver
-    if [[ $ver =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-        # Major.minor.micro format already
-        echo $ver
-    elif [ $ver == 2 ] || [ $ver == "2.7" ]; then
-        echo $LATEST_2p7
-    elif [ $ver == "2.6" ]; then
-        echo $LATEST_2p6
-    elif [ $ver == 3 ] || [ $ver == "3.5" ]; then
-        echo $LATEST_3p5
-    elif [ $ver == "3.4" ]; then
-        echo $LATEST_3p4
-    elif [ $ver == "3.3" ]; then
-        echo $LATEST_3p3
-    elif [ $ver == "3.2" ]; then
-        echo $LATEST_3p2
-    else
-        echo "Can't fill version $ver"
-        exit 1
-    fi
-}
 
 
 function require_success {
@@ -62,64 +25,6 @@ function require_success {
         echo $message
         exit $status
     fi
-}
-
-
-function check_python {
-    if [ -z "$PYTHON_EXE" ]; then
-        echo "PYTHON_EXE variable not defined"
-        exit 1
-    fi
-}
-
-
-function check_pip {
-    if [ -z "$PIP_CMD" ]; then
-        echo "PIP_CMD variable not defined"
-        exit 1
-    fi
-}
-
-
-function check_var {
-    if [ -z "$1" ]; then
-        echo "required variable not defined"
-        exit 1
-    fi
-}
-
-
-function abspath {
-    python -c "import os; print(os.path.abspath('$1'))"
-}
-
-
-function realpath {
-    python -c "import os; print(os.path.realpath('$1'))"
-}
-
-
-function get_py_digit {
-    check_python
-    $PYTHON_EXE -c "import sys; print(sys.version_info[0])"
-}
-
-
-function get_py_mm {
-    check_python
-    $PYTHON_EXE -c "import sys; print('{0}.{1}'.format(*sys.version_info[0:2]))"
-}
-
-
-function get_py_mm_nodot {
-    check_python
-    $PYTHON_EXE -c "import sys; print('{0}{1}'.format(*sys.version_info[0:2]))"
-}
-
-
-function get_py_prefix {
-    check_python
-    $PYTHON_EXE -c "import sys; print(sys.prefix)"
 }
 
 
@@ -149,39 +54,6 @@ function pyver_ge {
 }
 
 
-function lex_ver {
-    # Echoes dot-separated version string padded with zeros
-    # Thus:
-    # 3.2.1 -> 003002001
-    # 3     -> 003000000
-    check_var $1
-    echo $1 | awk -F "." '{printf "%03d%03d%03d", $1, $2, $3}'
-}
-
-
-function pyinst_ext_for_version {
-    # echo "pkg" or "dmg" depending on the passed Python version
-    # Parameters
-    #   $py_version (python version in major.minor.extra format)
-    local py_version=$1
-    check_var $py_version
-    local py_0=${py_version:0:1}
-    if [ $py_0 -eq 2 ]; then
-        if [ $(lex_ver $py_version) -ge $(lex_ver 2.7.9) ]; then
-            echo "pkg"
-        else
-            echo "dmg"
-        fi
-    elif [ $py_0 -ge 3 ]; then
-        if [ $(lex_ver $py_version) -ge $(lex_ver 3.4.2) ]; then
-            echo "pkg"
-        else
-            echo "dmg"
-        fi
-    fi
-}
-
-
 function get_pip_sudo {
     # Echo "sudo" if PIP_CMD starts with sudo
     # Useful for checking if Python installations need sudo
@@ -189,79 +61,6 @@ function get_pip_sudo {
     if [ "${PIP_CMD:0:4}" == "sudo" ]; then
         echo "sudo"
     fi
-}
-
-
-function install_macpython {
-    # Installs Python.org Python
-    # Parameter $version
-    # Version given in major or major.minor or major.minor.micro e.g
-    # "3" or "3.4" or "3.4.1".
-    # sets $PYTHON_EXE variable to python executable
-    local py_version=$(fill_pyver $1)
-    local inst_ext=$(pyinst_ext_for_version $py_version)
-    local py_inst=python-$py_version-macosx10.6.$inst_ext
-    local inst_path=$DOWNLOADS_SDIR/$py_inst
-    mkdir -p $DOWNLOADS_SDIR
-    curl $MACPYTHON_URL/$py_version/${py_inst} > $inst_path
-    require_success "Failed to download mac python $py_version"
-    if [ "$inst_ext" == "dmg" ]; then
-        hdiutil attach $inst_path -mountpoint /Volumes/Python
-        inst_path=/Volumes/Python/Python.mpkg
-    fi
-    sudo installer -pkg $inst_path -target /
-    require_success "Failed to install Python.org Python $py_version"
-    local py_mm=${py_version:0:3}
-    PYTHON_EXE=$MACPYTHON_PY_PREFIX/$py_mm/bin/python$py_mm
-}
-
-
-function install_pip {
-    # Generic install pip
-    # Gets needed version from version implied by $PYTHON_EXE
-    # Installs pip into python given by $PYTHON_EXE
-    # Assumes pip will be installed into same directory as $PYTHON_EXE
-    check_python
-    mkdir -p $DOWNLOADS_SDIR
-    curl $GET_PIP_URL > $DOWNLOADS_SDIR/get-pip.py
-    require_success "failed to download get-pip"
-    # Travis VMS now install pip for system python by default - force install
-    # even if installed already
-    sudo $PYTHON_EXE $DOWNLOADS_SDIR/get-pip.py --ignore-installed
-    require_success "Failed to install pip"
-    local py_mm=`get_py_mm`
-    PIP_CMD="sudo `dirname $PYTHON_EXE`/pip$py_mm"
-}
-
-
-function install_virtualenv {
-    # Generic install of virtualenv
-    # Installs virtualenv into python given by $PYTHON_EXE
-    # Assumes virtualenv will be installed into same directory as $PYTHON_EXE
-    check_pip
-    # Travis VMS install virtualenv for system python by default - force
-    # install even if installed already
-    $PIP_CMD install virtualenv --ignore-installed
-    require_success "Failed to install virtualenv"
-    check_python
-    VIRTUALENV_CMD="`dirname $PYTHON_EXE`/virtualenv"
-}
-
-
-function make_workon_venv {
-    # Make a virtualenv in given directory ('venv' default)
-    # Set $PYTHON_EXE, $PIP_CMD to virtualenv versions
-    # Parameter $venv_dir
-    #    directory for virtualenv
-    local venv_dir=$1
-    if [ -z "$venv_dir" ]; then
-        venv_dir="venv"
-    fi
-    venv_dir=`abspath $venv_dir`
-    check_python
-    $VIRTUALENV_CMD --python=$PYTHON_EXE $venv_dir
-    PYTHON_EXE=$venv_dir/bin/python
-    PIP_CMD=$venv_dir/bin/pip
 }
 
 
@@ -411,24 +210,14 @@ function get_python_environment {
     local install_type=$1
     local version=$2
     local venv_dir=$3
-    # Remove travis installs of virtualenv and pip
-    if [ "$(sudo which virtualenv)" == /usr/local/bin/virtualenv ]; then
-        sudo pip uninstall -y virtualenv;
-    fi
-    if [ "$(sudo which pip)" == /usr/local/bin/pip ]; then
-        sudo pip uninstall -y pip;
-    fi
     # Install python, pip, maybe virtualenv for different systems
     case $install_type in
     macpython)
-        install_macpython $version
-        install_pip
-        if [ -n "$venv_dir" ]; then
-            install_virtualenv
-            make_workon_venv $venv_dir
-        fi
+        get_macpython_environment $version $venv_dir
+        return
         ;;
     macports)
+        remove_travis_ve_pip
         install_macports
         macports_install_python $version
         macports_install_pip
@@ -439,6 +228,7 @@ function get_python_environment {
         ;;
     homebrew)
         # Homebrew already installed on travis worker
+        remove_travis_ve_pip
         brew update
         brew_install_python $version
         brew_set_pip_cmd
@@ -449,6 +239,7 @@ function get_python_environment {
         ;;
     system)
         PYTHON_EXE="/usr/bin/python"
+        remove_travis_ve_pip
         system_install_pip
         if [ -n "$venv_dir" ]; then
             system_install_virtualenv
@@ -460,9 +251,7 @@ function get_python_environment {
         exit 1
         ;;
     esac
-    # Put python binary on path and export
-    export PATH="`dirname $PYTHON_EXE`:$PATH"
-    export PYTHON_EXE PIP_CMD
+    set_py_vars
 }
 
 
