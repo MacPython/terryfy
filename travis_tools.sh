@@ -5,7 +5,7 @@
 TERRYFY_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 # Get multibuild utilities
-git submodule update --init
+(cd $TERRYFY_DIR && git submodule update --init)
 source $TERRYFY_DIR/multibuild/osx_utils.sh
 
 MACPORTS_URL=https://distfiles.macports.org/MacPorts
