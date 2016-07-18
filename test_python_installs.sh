@@ -29,7 +29,9 @@ python_m=${python_version:0:1}
 
 case $INSTALL_TYPE in
 macpython)
-    if [ "$python_version" != $(fill_pyver $VERSION) ]; then
+    # Allow for versions with suffixes like a3 etc
+    exp_version=$(strip_ver_suffix $(fill_pyver $VERSION))
+    if [ "$python_version" != "$exp_version" ]; then
         echo "Wrong macpython python version"
         RET=1
     fi
