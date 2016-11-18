@@ -8,8 +8,10 @@ TERRYFY_DIR=$(dirname "${BASH_SOURCE[0]}")
 (cd $TERRYFY_DIR && git submodule update --init)
 source $TERRYFY_DIR/multibuild/osx_utils.sh
 
-MACPORTS_URL=https://distfiles.macports.org/MacPorts
-MACPORTS_PKG=MacPorts-2.3.3-10.9-Mavericks.pkg
+# For OSX image 6.4
+MACPORTS_VERSION=2.3.5
+MACPORTS_URL=https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION
+MACPORTS_PKG=MacPorts-$MACPORTS_VERSION-10.10-Yosemite.pkg
 MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # -q to avoid this:
