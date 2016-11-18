@@ -17,6 +17,10 @@ MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 PORT_INSTALL="sudo port -q install"
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
 
+# Work round bug in travis xcode image described at
+# https://github.com/direnv/direnv/issues/210
+shell_session_update() { :; }
+
 
 function require_success {
     local status=$?
@@ -125,9 +129,8 @@ function brew_install_python {
     if [[ "$py_digit" == "3" ]] ; then
         brew install python3
     else
+        brew uninstall --force --ignore-dependencies python
         brew install python
-        # Now easy_install and pip are in /usr/local we need to force link
-        brew link --overwrite python
     fi
     require_success "Failed to install python"
     PYTHON_EXE=/usr/local/bin/python$py_digit
