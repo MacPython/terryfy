@@ -8,7 +8,8 @@ TERRYFY_DIR=$(dirname "${BASH_SOURCE[0]}")
 (cd $TERRYFY_DIR && git submodule update --init)
 source $TERRYFY_DIR/multibuild/osx_utils.sh
 
-# For OSX image 6.4
+# For OSX image 7.3 - currently the default
+# https://docs.travis-ci.com/user/osx-ci-environment
 MACPORTS_VERSION=2.3.5
 MACPORTS_URL=https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION
 MACPORTS_PKG=MacPorts-$MACPORTS_VERSION-10.11-ElCapitan.pkg
