@@ -8,11 +8,8 @@ TERRYFY_DIR=$(dirname "${BASH_SOURCE[0]}")
 (cd $TERRYFY_DIR && git submodule update --init)
 source $TERRYFY_DIR/multibuild/osx_utils.sh
 
-# For OSX image 7.3 - currently the default
-# https://docs.travis-ci.com/user/osx-ci-environment
 MACPORTS_VERSION=2.3.5
 MACPORTS_URL=https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION
-MACPORTS_PKG=MacPorts-$MACPORTS_VERSION-10.11-ElCapitan.pkg
 MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # -q to avoid this:
@@ -23,6 +20,31 @@ NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
 # Work round bug in travis xcode image described at
 # https://github.com/direnv/direnv/issues/210
 shell_session_update() { :; }
+
+
+function get_osx_version {
+    # Echo OSX version
+    sw_vers | grep ProductVersion | awk '{print $2}'
+}
+
+
+function osx_version2version_name {
+    # Report OSX version + name as used by MacPorts
+    local version=$1
+    local lexed=$(lex_ver $version)
+    local pruned="${lexed:0:6}"
+    if [ $pruned == "010006" ]; then echo "10.6-SnowLeopard";
+    elif [ $pruned == "010007" ]; then echo "10.7-Lion";
+    elif [ $pruned == "010008" ]; then echo "10.8-MountainLion";
+    elif [ $pruned == "010009" ]; then echo "10.9-Mavericks";
+    elif [ $pruned == "010010" ]; then echo "10.10-Yosemite";
+    elif [ $pruned == "010011" ]; then echo "10.11-ElCapitan";
+    elif [ $pruned == "010012" ]; then echo "10.12-Sierra";
+    else
+        echo "Did not recognize OSX version $version"
+        exit 1
+    fi
+}
 
 
 function require_success {
@@ -73,9 +95,12 @@ function get_pip_sudo {
 
 function install_macports {
     # Initialize macports, put macports on PATH
-    local macports_path=$DOWNLOADS_SDIR/$MACPORTS_PKG
+    local osx_version=$(get_osx_version)
+    local vers_name=$(osx_version2version_name $osx_version)
+    local macports_pkg=MacPorts-$MACPORTS_VERSION-${vers_name}.pkg
+    local macports_path=$DOWNLOADS_SDIR/$macports_pkg
     mkdir -p $DOWNLOADS_SDIR
-    curl -L $MACPORTS_URL/$MACPORTS_PKG > $macports_path
+    curl -L $MACPORTS_URL/$macports_pkg > $macports_path
     require_success "failed to download macports"
     sudo installer -pkg $macports_path -target /
     require_success "failed to install macports"
