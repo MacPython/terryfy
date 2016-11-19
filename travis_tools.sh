@@ -4,18 +4,54 @@
 # Get our own location on this filesystem
 TERRYFY_DIR=$(dirname "${BASH_SOURCE[0]}")
 
+# Work round bug in travis xcode image described at
+# https://github.com/direnv/direnv/issues/210
+function is_function {
+    # Echo "true" if input argument string is a function
+    # Allow errors during "set -e" blocks.
+    (set +e; echo $($(declare -Ff "$1") > /dev/null && echo true))
+}
+
+if [ -z "$(is_function "shell_session_update")" ]; then
+    shell_session_update() { :; }
+fi
+
 # Get multibuild utilities
 (cd $TERRYFY_DIR && git submodule update --init)
 source $TERRYFY_DIR/multibuild/osx_utils.sh
 
-MACPORTS_URL=https://distfiles.macports.org/MacPorts
-MACPORTS_PKG=MacPorts-2.3.3-10.9-Mavericks.pkg
+MACPORTS_VERSION=2.3.5
+MACPORTS_URL=https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION
 MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # -q to avoid this:
 # https://lists.macosforge.org/pipermail/macports-users/2014-June/035672.html
 PORT_INSTALL="sudo port -q install"
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
+
+function get_osx_version {
+    # Echo OSX version
+    sw_vers | grep ProductVersion | awk '{print $2}'
+}
+
+
+function osx_version2version_name {
+    # Report OSX version + name as used by MacPorts
+    local version=$1
+    local lexed=$(lex_ver $version)
+    local pruned="${lexed:0:6}"
+    if [ $pruned == "010006" ]; then echo "10.6-SnowLeopard";
+    elif [ $pruned == "010007" ]; then echo "10.7-Lion";
+    elif [ $pruned == "010008" ]; then echo "10.8-MountainLion";
+    elif [ $pruned == "010009" ]; then echo "10.9-Mavericks";
+    elif [ $pruned == "010010" ]; then echo "10.10-Yosemite";
+    elif [ $pruned == "010011" ]; then echo "10.11-ElCapitan";
+    elif [ $pruned == "010012" ]; then echo "10.12-Sierra";
+    else
+        echo "Did not recognize OSX version $version"
+        exit 1
+    fi
+}
 
 
 function require_success {
@@ -66,9 +102,12 @@ function get_pip_sudo {
 
 function install_macports {
     # Initialize macports, put macports on PATH
-    local macports_path=$DOWNLOADS_SDIR/$MACPORTS_PKG
+    local osx_version=$(get_osx_version)
+    local vers_name=$(osx_version2version_name $osx_version)
+    local macports_pkg=MacPorts-$MACPORTS_VERSION-${vers_name}.pkg
+    local macports_path=$DOWNLOADS_SDIR/$macports_pkg
     mkdir -p $DOWNLOADS_SDIR
-    curl $MACPORTS_URL/$MACPORTS_PKG > $macports_path
+    curl -L $MACPORTS_URL/$macports_pkg > $macports_path
     require_success "failed to download macports"
     sudo installer -pkg $macports_path -target /
     require_success "failed to install macports"
@@ -125,9 +164,8 @@ function brew_install_python {
     if [[ "$py_digit" == "3" ]] ; then
         brew install python3
     else
+        brew uninstall --force --ignore-dependencies python
         brew install python
-        # Now easy_install and pip are in /usr/local we need to force link
-        brew link --overwrite python
     fi
     require_success "Failed to install python"
     PYTHON_EXE=/usr/local/bin/python$py_digit

@@ -8,5 +8,6 @@ source test_pyver_ge.sh
 source test_fill_pyver.sh
 source test_git_utils.sh
 source test_library_installers.sh
+source test_osx_versions.sh
 # Set the final return code
 (exit $RET)
