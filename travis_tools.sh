@@ -4,6 +4,18 @@
 # Get our own location on this filesystem
 TERRYFY_DIR=$(dirname "${BASH_SOURCE[0]}")
 
+# Work round bug in travis xcode image described at
+# https://github.com/direnv/direnv/issues/210
+function is_function {
+    # Echo "true" if input argument string is a function
+    # Allow errors during "set -e" blocks.
+    (set +e; echo $($(declare -Ff "$1") > /dev/null && echo true))
+}
+
+if [ -z "$(is_function "shell_session_update")" ]; then
+    shell_session_update() { :; }
+fi
+
 # Get multibuild utilities
 (cd $TERRYFY_DIR && git submodule update --init)
 source $TERRYFY_DIR/multibuild/osx_utils.sh
@@ -16,11 +28,6 @@ MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # https://lists.macosforge.org/pipermail/macports-users/2014-June/035672.html
 PORT_INSTALL="sudo port -q install"
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
-
-# Work round bug in travis xcode image described at
-# https://github.com/direnv/direnv/issues/210
-shell_session_update() { :; }
-
 
 function get_osx_version {
     # Echo OSX version
