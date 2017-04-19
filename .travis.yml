@@ -11,7 +11,7 @@ env:
     - INSTALL_TYPE='macpython' VERSION=3.4.4 VENV=venv
     - INSTALL_TYPE='macpython' VERSION=3.5
     - INSTALL_TYPE='macpython' VERSION=3.5.2 VENV=venv
-    - INSTALL_TYPE='macpython' VERSION=3.6.0a3 VENV=venv
+    - INSTALL_TYPE='macpython' VERSION=3.6.1 VENV=venv
     - INSTALL_TYPE='macports' VERSION=2.7
     - INSTALL_TYPE='macports' VERSION=2.7 VENV=venv
     - INSTALL_TYPE='macports' VERSION=3.4
