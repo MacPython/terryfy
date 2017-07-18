@@ -112,7 +112,7 @@ function install_macports {
     sudo installer -pkg $macports_path -target /
     require_success "failed to install macports"
     PATH=$MACPORTS_PREFIX/bin:$PATH
-    sudo port -v selfupdate
+    sudo port -d selfupdate
 }
 
 
