@@ -58,8 +58,8 @@ def main():
         Option("-t", "--wheel-type",
                action="store", type='string', default="macosx",
                help="Platform type of wheels to download "
-               "[default %default], one of 'macosx', 'win', 'manylinux1',"
-               "'linux'"))
+               "[default %default], one of 'all', 'macosx', 'win', "
+               "'manylinux1', 'linux'"))
     parser.add_option(
         Option("-c", "--clobber",
                action="store_true",
@@ -104,7 +104,7 @@ def main():
             continue
         root, ext = splitext(wheel_name)
         project, version, pyv, pycv, plat = root.split('-')
-        if not opts.wheel_type in plat:
+        if opts.wheel_type != 'all' and not opts.wheel_type in plat:
             continue
         wheel_url = wheel_url_dir + wheel_name
         wheel_path = pjoin(wheel_dir, wheel_name)
