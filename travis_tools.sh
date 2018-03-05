@@ -166,6 +166,8 @@ function brew_install_python {
     else
         brew uninstall --force --ignore-dependencies python
         brew install python@2
+        export PATH="/usr/local/opt/python@2/bin:$PATH"
+        echo 'export PATH="/usr/local/opt/python@2/bin:$PATH"' >> ~/.bash_profile
     fi
     require_success "Failed to install python"
     PYTHON_EXE=/usr/local/bin/python$py_digit
