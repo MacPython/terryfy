@@ -162,10 +162,10 @@ function brew_install_python {
     local py_version=$1
     local py_digit=${py_version:0:1}
     if [[ "$py_digit" == "3" ]] ; then
-        brew install python3
+        brew upgrade python
     else
         brew uninstall --force --ignore-dependencies python
-        brew install python
+        brew install python@2
     fi
     require_success "Failed to install python"
     PYTHON_EXE=/usr/local/bin/python$py_digit
