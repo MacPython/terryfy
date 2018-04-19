@@ -110,7 +110,7 @@ else # not virtualenv
 fi
 
 # Check sudo
-if [ -n "$VENV" ] || [ "$INSTALL_TYPE" == "homebrew" ]; then
+if [ -n "$VENV" ] ; then
     # Sudo should be empty
     if [ -n "`get_pip_sudo`" ]; then
         echo "pip sudo should be empty"
