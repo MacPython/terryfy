@@ -101,7 +101,7 @@ else # not virtualenv
             echo "Wrong homebrew python cmd"
             RET=1
         fi
-        if [ "$PIP_CMD" != "/usr/local/bin/pip$python_m" ]; then
+        if [ "$PIP_CMD" != "sudo /usr/local/bin/pip$python_m" ]; then
             echo "Wrong homebrew pip"
             RET=1
         fi
