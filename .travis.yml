@@ -21,7 +21,8 @@ env:
     - INSTALL_TYPE='homebrew' VERSION=3
     - INSTALL_TYPE='homebrew' VERSION=3 VENV=venv
     # Versions for system are placeholders (and for testing)
-    - INSTALL_TYPE='system' VERSION=2.7
+    # Non-venv can't work for system installs now - no permissions to install
+    # into system drectories, even with sudo.
     - INSTALL_TYPE='system' VERSION=2.7 VENV=venv
 
 install:
