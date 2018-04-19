@@ -205,7 +205,7 @@ function patch_sys_python {
 function system_install_pip {
     # Install pip into system python
     curl -LO $GET_PIP_URL
-    sudo python get_pip.py
+    sudo python get-pip.py
     PIP_CMD="sudo /usr/local/bin/pip"
 }
 
