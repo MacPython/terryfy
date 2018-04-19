@@ -163,17 +163,11 @@ function brew_install_python {
     local py_digit=${py_version:0:1}
     if [[ "$py_digit" == "3" ]] ; then
         brew upgrade python
-        echo "hello testing... 1 2 3"
         ln -s /usr/local/bin/python3 /usr/local/bin/python
     else
         brew uninstall --force --ignore-dependencies python
         brew install python@2
         brew link python@2 --force
-#         export PATH="/usr/local/opt/python@2/bin:$PATH"
-#         echo 'export PATH="/usr/local/opt/python@2/bin:$PATH"' >> ~/.bash_profile
-#         rm -f /usr/local/bin/python2 /usr/local/bin/pip
-#         ln -s /usr/local/opt/python@2/bin/python /usr/local/bin/python2
-#         ln -s /usr/local/opt/python@2/bin /usr/local/bin/pip        
     fi
     require_success "Failed to install python"
     PYTHON_EXE=/usr/local/bin/python$py_digit
