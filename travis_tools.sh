@@ -47,6 +47,7 @@ function osx_version2version_name {
     elif [ $pruned == "010010" ]; then echo "10.10-Yosemite";
     elif [ $pruned == "010011" ]; then echo "10.11-ElCapitan";
     elif [ $pruned == "010012" ]; then echo "10.12-Sierra";
+    elif [ $pruned == "010013" ]; then echo "10.13-HighSierra";
     else
         echo "Did not recognize OSX version $version"
         exit 1
