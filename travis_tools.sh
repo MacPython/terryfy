@@ -28,6 +28,8 @@ MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # https://lists.macosforge.org/pipermail/macports-users/2014-June/035672.html
 PORT_INSTALL="sudo port -q install"
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
+GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
+
 
 function get_osx_version {
     # Echo OSX version
@@ -202,7 +204,8 @@ function patch_sys_python {
 
 function system_install_pip {
     # Install pip into system python
-    sudo easy_install pip
+    curl -LO $GET_PIP_URL
+    sudo python get_pip.py
     PIP_CMD="sudo /usr/local/bin/pip"
 }
 
@@ -276,6 +279,8 @@ function get_python_environment {
         if [ -n "$venv_dir" ]; then
             install_virtualenv
             make_workon_venv $venv_dir
+        else  # Need sudo for pip installs
+            PIP_CMD="sudo $PIP_CMD"
         fi
         ;;
     system)
