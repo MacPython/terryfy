@@ -20,7 +20,7 @@ env:
 #   - INSTALL_TYPE='macports' VERSION=3.8
 #   - INSTALL_TYPE='macports' VERSION=3.8 VENV=venv
 #   - INSTALL_TYPE='homebrew' VERSION=2
-#   - INSTALL_TYPE='homebrew' VERSION=2 VENV=venv
+    - INSTALL_TYPE='homebrew' VERSION=2 VENV=venv
 #   - INSTALL_TYPE='homebrew' VERSION=3
     - INSTALL_TYPE='homebrew' VERSION=3 VENV=venv
     # Versions for system are placeholders (and for testing)
@@ -30,7 +30,6 @@ env:
 
 install:
   - source ./travis_tools.sh
-  - set -ex
   - get_python_environment $INSTALL_TYPE $VERSION $VENV
 
 script:
