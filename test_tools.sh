@@ -7,8 +7,6 @@ source test_python_installs.sh
 echo "RET is $RET"
 source test_pyver_ge.sh
 echo "RET is $RET"
-source test_fill_pyver.sh
-echo "RET is $RET"
 source test_git_utils.sh
 echo "RET is $RET"
 source test_library_installers.sh
