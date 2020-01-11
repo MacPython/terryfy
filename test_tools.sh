@@ -4,13 +4,9 @@ RET=0
 # Allow errors during tests
 set +e
 source test_python_installs.sh
-echo "RET is $RET"
 source test_pyver_ge.sh
-echo "RET is $RET"
 source test_git_utils.sh
-echo "RET is $RET"
 source test_library_installers.sh
-echo "RET is $RET"
 source test_osx_versions.sh
 # Set the final return code
 (exit $RET)
