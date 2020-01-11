@@ -168,7 +168,7 @@ function brew_install_python {
         brew upgrade python
         ln -s /usr/local/bin/python3 /usr/local/bin/python
     else
-        brew uninstall --force --ignore-dependencies python
+        brew uninstall --force --ignore-dependencies python@2
         brew install python@2
         brew link python@2 --force
     fi
