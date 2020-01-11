@@ -35,5 +35,5 @@ install:
 script:
   - set -v
   - source test_tools.sh
-  - $PIP_CMD install nose
-  - nosetests test_travisparse.py
+  - $PIP_CMD install pytest
+  - pytest test_travisparse.py
