@@ -6,16 +6,19 @@ env:
     - INSTALL_TYPE='macpython' VERSION=2.7.12
     - INSTALL_TYPE='macpython' VERSION=2.7
     - INSTALL_TYPE='macpython' VERSION=2.7.12 VENV=venv
-    # Python.org 3.3 installer won't install on default 10.11 travis image
-    - INSTALL_TYPE='macpython' VERSION=3.4.4
-    - INSTALL_TYPE='macpython' VERSION=3.4.4 VENV=venv
     - INSTALL_TYPE='macpython' VERSION=3.5
     - INSTALL_TYPE='macpython' VERSION=3.5.2 VENV=venv
     - INSTALL_TYPE='macpython' VERSION=3.6.1 VENV=venv
+    - INSTALL_TYPE='macpython' VERSION=3.7 VENV=venv
+    - INSTALL_TYPE='macpython' VERSION=3.8 VENV=venv
     - INSTALL_TYPE='macports' VERSION=2.7
     - INSTALL_TYPE='macports' VERSION=2.7 VENV=venv
-    - INSTALL_TYPE='macports' VERSION=3.4
-    - INSTALL_TYPE='macports' VERSION=3.4 VENV=venv
+    - INSTALL_TYPE='macports' VERSION=3.6
+    - INSTALL_TYPE='macports' VERSION=3.6 VENV=venv
+    - INSTALL_TYPE='macports' VERSION=3.7
+    - INSTALL_TYPE='macports' VERSION=3.7 VENV=venv
+    - INSTALL_TYPE='macports' VERSION=3.8
+    - INSTALL_TYPE='macports' VERSION=3.8 VENV=venv
     - INSTALL_TYPE='homebrew' VERSION=2
     - INSTALL_TYPE='homebrew' VERSION=2 VENV=venv
     - INSTALL_TYPE='homebrew' VERSION=3

@@ -20,7 +20,7 @@ fi
 (cd $TERRYFY_DIR && git submodule update --init)
 source $TERRYFY_DIR/multibuild/osx_utils.sh
 
-MACPORTS_VERSION=2.4.1
+MACPORTS_VERSION=${MACPORTS_VERSION:-2.6.2}
 MACPORTS_URL=https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION
 MACPORTS_PREFIX=/opt/local
 MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
