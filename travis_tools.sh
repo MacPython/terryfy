@@ -28,7 +28,8 @@ MACPORTS_PY_PREFIX=$MACPORTS_PREFIX$MACPYTHON_PY_PREFIX
 # https://lists.macosforge.org/pipermail/macports-users/2014-June/035672.html
 PORT_INSTALL="sudo port -q install"
 NIPY_WHEELHOUSE=https://nipy.bic.berkeley.edu/scipy_installers
-GET_PIP_URL=https://bootstrap.pypa.io/get-pip.py
+GET_PIP=get-pip.py
+GET_PIP_URL=https://bootstrap.pypa.io/${GET_PIP}
 
 
 function get_osx_version {
@@ -201,24 +202,6 @@ function patch_sys_python {
 }
 
 
-function system_install_pip {
-    # Install pip into system python
-    curl -LO $GET_PIP_URL
-    sudo python get-pip.py
-    PIP_CMD="sudo /usr/local/bin/pip"
-}
-
-
-function system_install_virtualenv {
-    # Install virtualenv into system python
-    # Needs $PIP_CMD
-    check_pip
-    $PIP_CMD install virtualenv
-    require_success "Failed to install virtualenv"
-    VIRTUALENV_CMD="/usr/local/bin/virtualenv"
-}
-
-
 function rename_wheels {
     local wheelhouse=$1
     check_var $wheelhouse
@@ -284,10 +267,13 @@ function get_python_environment {
         ;;
     system)
         PYTHON_EXE="/usr/bin/python"
+        PIP_CMD="${PYTHON_EXE} -m pip"
         remove_travis_ve_pip
-        system_install_pip
+        curl -LO $GET_PIP_URL
+        $PYTHON_EXE $GET_PIP --user
         if [ -n "$venv_dir" ]; then
-            system_install_virtualenv
+            $PIP_CMD install --user virtualenv
+            # Resets PYTHON_EXE, PIP_CMD to virtualenv versions.
             make_workon_venv $venv_dir
         fi
         ;;
